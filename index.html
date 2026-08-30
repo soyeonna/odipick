@@ -314,6 +314,10 @@ section.blk{margin-top:26px}
 .gu:focus{outline:none}
 .gu:focus-visible{outline:none; stroke:var(--brand); stroke-width:2.6}
 .gu.on{fill:var(--brand); stroke:var(--brand)}
+.gcity{font-family:"Gothic A1",sans-serif; font-size:15px; font-weight:900; fill:var(--ink);
+  text-anchor:middle; letter-spacing:-.02em}
+.gnear{font-family:"IBM Plex Sans KR",sans-serif; font-size:11px; font-weight:500;
+  fill:var(--ink3); text-anchor:middle; opacity:.55}
 .gt{font-family:"Gothic A1",sans-serif; font-size:14px; font-weight:800; fill:var(--ink);
   text-anchor:middle; dominant-baseline:middle; cursor:pointer; user-select:none;
   stroke:var(--card); stroke-width:3px; paint-order:stroke fill}
@@ -1115,7 +1119,7 @@ function buildMap(host, big){
   var ns='http://www.w3.org/2000/svg';
   host.innerHTML='';
   var svg=document.createElementNS(ns,'svg');
-  svg.setAttribute('viewBox',GU_BOX); svg.setAttribute('class','gsvg');
+  svg.setAttribute('viewBox', big?GU_BOX:'-34 -22 368 430'); svg.setAttribute('class','gsvg');
   svg.setAttribute('role','img'); svg.setAttribute('aria-label','대전 지역 지도');
   if(big) svg.style.maxWidth='min(86vw, 420px)';
   Object.keys(GU_SHAPES).forEach(function(g){
@@ -1160,6 +1164,20 @@ function buildMap(host, big){
     pins.appendChild(g2);
   });
   svg.appendChild(pins);
+  // 대전 표시 + 주변 도시 (방향만 맞춘 안내 라벨)
+  var cap=document.createElementNS(ns,'text');
+  cap.setAttribute('x', GU_PROJ.w/2); cap.setAttribute('y', -4);
+  cap.setAttribute('class','gcity'); cap.textContent='대전광역시';
+  svg.appendChild(cap);
+  [['세종', 0.16, -0.02],['청주', 0.95, 0.10],['공주', -0.10, 0.42],
+   ['논산', 0.10, 1.03],['옥천', 1.02, 0.72],['금산', 0.62, 1.05]].forEach(function(n){
+    var t2=document.createElementNS(ns,'text');
+    t2.setAttribute('x', (GU_PROJ.w*n[1]).toFixed(0));
+    t2.setAttribute('y', (GU_PROJ.h*n[2]).toFixed(0));
+    t2.setAttribute('class','gnear'); t2.textContent=n[0];
+    svg.appendChild(t2);
+  });
+
   Object.keys(GU_SHAPES).forEach(function(g){
     var t=document.createElementNS(ns,'text');
     t.setAttribute('x',GU_LABEL[g][0]); t.setAttribute('y',GU_LABEL[g][1]);
