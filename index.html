@@ -1046,7 +1046,9 @@ function openDetail(p){
     (p.v?'<div class="dsec"><h3>이 상황에 추천하는 이유</h3><div class="dbox">'+p.v+'</div></div>':'')+
     (cau?'<div class="dsec"><h3>방문 전 확인할 점</h3><div class="dbox" style="background:var(--warn-w);color:var(--warn)">'+cau+'</div></div>':'')+
     (p.ig?'<div class="dsec"><h3>대전공주 영상</h3>'+
-      '<a class="btn p" style="width:100%" href="https://www.instagram.com/reel/'+p.ig+'/" target="_blank" rel="noopener">릴스 보기</a></div>':'')+
+      '<a class="btn p" style="width:100%" href="https://www.instagram.com/reel/'+p.ig+'/" target="_blank" rel="noopener">릴스 보기</a></div>'
+     :(p.src==='reel'?'<div class="dsec"><h3>대전공주 영상</h3>'+
+      '<a class="btn s" style="width:100%" href="'+IG+'" target="_blank" rel="noopener">대전공주 계정에서 찾아보기</a></div>':''))+
     '<div class="dsec"><h3>매장 정보</h3><dl class="dl">'+
       rows.map(function(r){ return '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>'; }).join('')+'</dl></div>'+
     '<p class="srcline">정보 출처 · '+srcLabel(p)+(p.checkedAt?' · 마지막 확인 '+p.checkedAt:'')+
