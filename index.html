@@ -196,6 +196,17 @@ section.blk{margin-top:26px}
 .fc.z{opacity:.4}
 
 /* ── 상세 ── */
+.vcard{display:flex; align-items:center; gap:12px; background:var(--sub); border-radius:14px;
+  padding:10px 12px; text-decoration:none; color:inherit}
+.vcard:active{transform:scale(.99)}
+.vcard img{width:52px; height:66px; border-radius:9px; object-fit:cover; flex-shrink:0}
+.vcard .vph{width:52px; height:66px; border-radius:9px; background:var(--brand-w);
+  display:grid; place-items:center; color:var(--brand); flex-shrink:0}
+.vcard .vb{flex:1; min-width:0}
+.vcard .vb b{display:block; font-size:14.5px; font-weight:700}
+.vcard .vb span{font-size:12.5px; color:var(--ink2)}
+.vcard .vplay{width:30px; height:30px; border-radius:50%; background:var(--brand); color:var(--on-brand);
+  display:grid; place-items:center; flex-shrink:0}
 .dhero{margin:0 -16px 14px; background:var(--sub); aspect-ratio:4/3; overflow:hidden; position:relative}
 .dhero img{width:100%; height:100%; object-fit:cover}
 .dtitle{font-size:23px; font-weight:900; letter-spacing:-.03em; line-height:1.3}
@@ -1034,8 +1045,7 @@ function openDetail(p){
     ['반려동물',f.pet?'동반 가능':null],['전화',p.phone]].filter(function(r){ return r[1]; });
   var cau=cautionOf(p);
   var hs=photoOf(p);
-  var hero = hs ? '<div class="dhero"><img src="'+hs+'" alt="'+p.n+' 사진"></div>'
-                : '<div class="dhero noimg" aria-hidden="true">'+catIcon(p)+'</div>';
+  var hero = '';   // 상단 대표 이미지는 쓰지 않는다 — 가게 정보가 먼저
   var mood=(p.mood||[]).map(function(m){ return '<span class="hit" style="background:var(--sub);color:var(--ink2)">'+m+'</span>'; }).join('');
   openSheet(
     hero+
@@ -1045,10 +1055,12 @@ function openDetail(p){
     (mood?'<div class="hits" style="margin-top:8px">'+mood+'</div>':'')+
     (p.v?'<div class="dsec"><h3>이 상황에 추천하는 이유</h3><div class="dbox">'+p.v+'</div></div>':'')+
     (cau?'<div class="dsec"><h3>방문 전 확인할 점</h3><div class="dbox" style="background:var(--warn-w);color:var(--warn)">'+cau+'</div></div>':'')+
-    (p.ig?'<div class="dsec"><h3>대전공주 영상</h3>'+
-      '<a class="btn p" style="width:100%" href="https://www.instagram.com/reel/'+p.ig+'/" target="_blank" rel="noopener">릴스 보기</a></div>'
-     :(p.src==='reel'?'<div class="dsec"><h3>대전공주 영상</h3>'+
-      '<a class="btn s" style="width:100%" href="'+IG+'" target="_blank" rel="noopener">대전공주 계정에서 찾아보기</a></div>':''))+
+    (p.src==='reel'?'<div class="dsec"><h3>대전공주 영상</h3>'+
+      '<a class="vcard" href="'+(p.ig?'https://www.instagram.com/reel/'+p.ig+'/':IG)+'" target="_blank" rel="noopener">'+
+        (hs?'<img src="'+hs+'" alt="'+p.n+' 영상">':'<span class="vph">'+catIcon(p)+'</span>')+
+        '<span class="vb"><b>'+(p.ig?'이 가게 릴스 보기':'대전공주 계정에서 보기')+'</b>'+
+        '<span>대전공주가 직접 다녀왔어요</span></span>'+
+        '<span class="vplay">'+ic(I.play,13)+'</span></a></div>':'')+
     '<div class="dsec"><h3>매장 정보</h3><dl class="dl">'+
       rows.map(function(r){ return '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>'; }).join('')+'</dl></div>'+
     '<p class="srcline">정보 출처 · '+srcLabel(p)+(p.checkedAt?' · 마지막 확인 '+p.checkedAt:'')+
