@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>오디픽 데이터 입력</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;700;800;900&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#FFF7FA;--sf:#fff;--sf2:#FDF0F5;--ink:#20131A;--ink2:#5A4550;--ink3:#96808C;
+ --line:#F0DEE7;--line2:#E3CBD8;--brand:#F2417E;--wash:#FFEBF3;--bink:#C21F5B;--ok:#0E7A54;--amber:#B06A05}
+@media(prefers-color-scheme:dark){:root{--bg:#140F13;--sf:#1D161B;--sf2:#271D24;--ink:#F8EEF3;--ink2:#CDB8C4;
+ --ink3:#94808B;--line:#2E2229;--line2:#3E2E38;--brand:#FF5F9B;--wash:#38161F;--bink:#FF9EC2;--ok:#5FC79A;--amber:#FBBF24}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans KR","Apple SD Gothic Neo",system-ui,sans-serif;line-height:1.6}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+h1,h2,h3{font-family:"Gothic A1",sans-serif;margin:0;letter-spacing:-.03em}
+:focus-visible{outline:2.5px solid var(--brand);outline-offset:2px;border-radius:8px}
+.top{position:sticky;top:0;z-index:9;background:var(--bg);border-bottom:1px solid var(--line);
+ padding:14px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.top h1{font-size:18px;font-weight:900}
+.top .sub{font-size:12px;color:var(--ink3)}
+.prog{margin-left:auto;display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ink3)}
+.pbar{width:120px;height:6px;border-radius:4px;background:var(--line);overflow:hidden}
+.pbar i{display:block;height:100%;background:var(--ok)}
+.btn{border-radius:10px;padding:9px 15px;font-weight:700;font-size:13.5px;font-family:"Gothic A1",sans-serif}
+.btn.p{background:var(--brand);color:#fff}
+.btn.s{background:var(--sf);border:1px solid var(--line2);color:var(--ink2)}
+.layout{display:grid;grid-template-columns:270px 1fr;gap:0;min-height:calc(100vh - 60px)}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.side{border-right:0;border-bottom:1px solid var(--line);max-height:300px}}
+.side{border-right:1px solid var(--line);overflow-y:auto;padding:12px}
+.item{width:100%;text-align:left;border-radius:10px;padding:10px 12px;display:flex;gap:9px;align-items:center;
+ font-size:13.5px;color:var(--ink2);border:1px solid transparent}
+.item:hover{background:var(--sf2)}
+.item.on{background:var(--wash);border-color:var(--brand);color:var(--bink);font-weight:700}
+.item .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .pc{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink3)}
+.item.on .pc{color:var(--bink)}
+.dotx{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.main{padding:22px 24px 70px;max-width:720px}
+.f{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+.f>label{font-size:11px;font-family:"IBM Plex Mono",monospace;letter-spacing:.12em;color:var(--ink3)}
+.f input[type=text],.f input[type=number],.f select,.f textarea{
+ background:var(--sf);border:1.5px solid var(--line2);border-radius:11px;padding:11px 13px;font-size:14.5px;width:100%}
+.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--brand)}
+.f .hint{font-size:11.5px;color:var(--ink3)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.row{grid-template-columns:1fr}}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.ch{border:1px solid var(--line2);background:var(--sf);border-radius:9px;padding:6px 12px;font-size:13px;color:var(--ink2)}
+.ch[aria-pressed=true]{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.tri{display:flex;flex-direction:column;gap:5px}
+.tri .lb{font-size:13px;color:var(--ink2)}
+.tri .seg{display:flex;border:1px solid var(--line2);border-radius:10px;overflow:hidden;background:var(--sf)}
+.tri .seg button{flex:1;padding:8px 4px;font-size:12.5px;color:var(--ink3);border-right:1px solid var(--line2)}
+.tri .seg button:last-child{border-right:0}
+.tri .seg button[aria-pressed=true]{background:var(--brand);color:#fff;font-weight:700}
+.facs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.out{margin-top:26px;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-direction:column;gap:10px}
+.out textarea{min-height:150px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;line-height:1.5}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.note{background:var(--wash);border-left:3px solid var(--brand);border-radius:0 10px 10px 0;
+ padding:13px 15px;font-size:12.5px;color:var(--ink2);margin-bottom:20px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:var(--ink);
+ color:var(--bg);padding:11px 20px;border-radius:22px;font-size:13.5px;font-weight:600;
+ transition:transform .3s cubic-bezier(.2,.8,.25,1);z-index:99}
+.toast.on{transform:translateX(-50%)}
+</style></head><body>
+
+<div class="top">
+  <h1>오디픽 데이터 입력</h1><span class="sub">채운 만큼 검색이 됩니다</span>
+  <span class="prog"><span id="pt">0 / 0 완료</span><span class="pbar"><i id="pb"></i></span></span>
+  <button class="btn s" id="addBtn">+ 가게 추가</button>
+</div>
+
+<div class="layout">
+  <aside class="side" id="side"></aside>
+  <main class="main">
+    <div class="note"><b>비워두면 "미확인"으로 남습니다.</b> 모르는 건 억지로 채우지 마세요 — 틀린 정보가 빈칸보다 나쁩니다. 릴스 영상을 다시 보면서 채우면 대부분 나옵니다.</div>
+    <div id="form"></div>
+    <div class="out">
+      <h3 style="font-size:15px">내보내기</h3>
+      <div class="acts">
+        <button class="btn p" id="dl">places.json 저장</button>
+        <button class="btn s" id="cp">JSON 복사</button>
+        <button class="btn s" id="ld">불러오기</button>
+      </div>
+      <span class="hint" style="font-size:12px;color:var(--ink3)">저장한 파일을 <code>claude-work/odipick/</code> 에 넣고 알려주시면 사이트에 반영합니다. 입력 내용은 브라우저에 자동 저장돼서 창을 닫아도 남습니다.</span>
+      <textarea id="json" spellcheck="false"></textarea>
+    </div>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+var CATS=['고기','카페','술집','한식','면','디저트','해산물','분식','무한','야식'];
+var SITS=['회식','데이트','가족','혼밥','혼술','친구모임','기념일','가성비','디저트','술자리','애견동반','신규'];
+var GUS=['서구','유성구','중구','동구','대덕구','대전근교'];
+var FACS=[['room','룸'],['parking','주차'],['group','단체석'],['late','늦게까지'],['reserve','예약가능'],['pet','애견동반']];
+var BUDS=['~1만','~2만','~3만','4만+'];
+
+var SEED=[
+ {n:"신선한우마을 본점",cat:"한우·고깃집",cats:["고기"],area:"도마동",gu:"서구",hours:"16:00–24:00",budget:3,sit:["가성비"],fac:{},cap:null,ig:null,v:"49,000원에 한우 특수모듬. 배 터지게 먹는 동네 찐맛집"},
+ {n:"대엽",cat:"한식",cats:["한식"],area:"",gu:null,hours:null,budget:null,sit:["신규"],fac:{},cap:null,ig:null,v:"새로 생긴 집. 송진우 배우가 알바로 나왔던 곳"},
+ {n:"메리캐리",cat:"카페·디저트",cats:["카페","디저트"],area:"자양동",gu:"동구",hours:null,budget:1,sit:["디저트"],fac:{reserve:true},cap:null,ig:null,v:"쫀득하고 얇은 피. 모찌 6,500~9,500원. 예약 권장"},
+ {n:"우아한정원",cat:"고깃집·무한리필",cats:["고기","무한"],area:"용산동",gu:"유성구",hours:null,budget:2,sit:["가성비"],fac:{},cap:null,ig:null,v:"유러피안 쌈채소 무한리필"},
+ {n:"간소리 봉명점",cat:"술집",cats:["술집"],area:"봉명동",gu:"유성구",hours:null,budget:null,sit:["혼술","술자리"],fac:{},cap:null,ig:null,v:"대전 최초로 생긴 혼술바"},
+ {n:"숯토리",cat:"꼬치·술집",cats:["술집","야식"],area:"봉명동",gu:"유성구",hours:null,budget:null,sit:["술자리"],fac:{},cap:null,ig:null,v:"전국 최초 엉덩이살 꼬치"},
+ {n:"88포장마차",cat:"포차",cats:["술집","야식"],area:"둔산동",gu:"서구",hours:null,budget:null,sit:["술자리"],fac:{},cap:null,ig:null,v:"대창닭발"},
+ {n:"찰싹",cat:"고깃집",cats:["고기"],area:"괴정동",gu:"서구",hours:null,budget:null,sit:[],fac:{},cap:null,ig:null,v:"현시점 난리난 조합, 숙성고기쌈"},
+ {n:"제주술상",cat:"한식·술집",cats:["한식","술집"],area:"둔산동",gu:"서구",hours:null,budget:null,sit:["술자리"],fac:{},cap:null,ig:null,v:"12첩 제주술상"},
+ {n:"선화동 평양냉면집",cat:"면요리",cats:["면"],area:"선화동",gu:"중구",hours:null,budget:null,sit:[],fac:{},cap:null,ig:null,v:"평양냉면"},
+ {n:"명헌만간장게장 대천점",cat:"게장·무한리필",cats:["해산물","무한"],area:"남곡동 · 보령",gu:"대전근교",hours:"10:30–21:00",budget:3,sit:["가성비"],fac:{},cap:null,ig:null,v:"32,900원 숯게장 무한리필"},
+ {n:"노릇노릇",cat:"바베큐",cats:["고기"],area:"축산리 · 세종",gu:"대전근교",hours:"화–일 12:00–22:00",budget:null,sit:["애견동반"],fac:{pet:true,room:true},cap:null,ig:null,v:"개별 텐트에 포토존. 애견동반 감성 바베큐장"}
+];
+
+var P, cur=0;
+try{ P=JSON.parse(localStorage.getItem('odipick_admin')||'null'); }catch(e){ P=null; }
+if(!Array.isArray(P)||!P.length) P=JSON.parse(JSON.stringify(SEED));
+
+function save(){ try{ localStorage.setItem('odipick_admin',JSON.stringify(P)); }catch(e){}
+  document.getElementById('json').value=JSON.stringify(P,null,1); drawSide(); }
+function pct(p){ var h=0,t=8;
+  if(p.n)h++; if(p.cats&&p.cats.length)h++; if(p.gu)h++; if(p.area)h++;
+  if(p.cap!=null)h++; if(p.budget!=null)h++;
+  if(Object.keys(p.fac||{}).length>=3)h++; if(p.ig)h++;
+  return Math.round(h/t*100); }
+function toast(m){ var t=document.getElementById('toast'); t.textContent=m; t.classList.add('on');
+  setTimeout(function(){ t.classList.remove('on'); },1800); }
+
+function drawSide(){
+  var el=document.getElementById('side'); el.innerHTML='';
+  var done=0;
+  P.forEach(function(p,i){
+    var v=pct(p); if(v>=88) done++;
+    var b=document.createElement('button'); b.className='item'+(i===cur?' on':'');
+    var col=v>=88?'var(--ok)':(v>=45?'var(--amber)':'var(--line2)');
+    b.innerHTML='<span class="dotx" style="background:'+col+'"></span>'+
+      '<span class="nm">'+(p.n||'(이름 없음)')+'</span><span class="pc">'+v+'%</span>';
+    b.onclick=function(){ cur=i; draw(); };
+    el.appendChild(b);
+  });
+  document.getElementById('pt').textContent=done+' / '+P.length+' 완료';
+  document.getElementById('pb').style.width=(P.length?done/P.length*100:0)+'%';
+}
+
+function fld(label,hint,inner){
+  return '<div class="f"><label>'+label+'</label>'+inner+(hint?'<span class="hint">'+hint+'</span>':'')+'</div>'; }
+
+function draw(){
+  var p=P[cur]; if(!p){ document.getElementById('form').innerHTML=''; drawSide(); return; }
+  var f=document.getElementById('form');
+  f.innerHTML=
+   fld('가게 이름','', '<input type="text" id="i_n" value="'+(p.n||'').replace(/"/g,'&quot;')+'">')
+  +'<div class="row">'
+   +fld('구','', '<select id="i_gu"><option value="">선택 안 함</option>'+GUS.map(function(g){
+      return '<option'+(p.gu===g?' selected':'')+'>'+g+'</option>';}).join('')+'</select>')
+   +fld('동네','예: 둔산동', '<input type="text" id="i_area" value="'+(p.area||'')+'">')
+  +'</div>'
+  +fld('분류','여러 개 고를 수 있습니다','<div class="chips" id="c_cats">'+CATS.map(function(c){
+      return '<button class="ch" type="button" aria-pressed="'+((p.cats||[]).indexOf(c)>-1)+'">'+c+'</button>';}).join('')+'</div>')
+  +fld('상황','이 가게가 어떤 자리에 맞는지','<div class="chips" id="c_sit">'+SITS.map(function(c){
+      return '<button class="ch" type="button" aria-pressed="'+((p.sit||[]).indexOf(c)>-1)+'">'+c+'</button>';}).join('')+'</div>')
+  +fld('시설','모르면 미확인으로 두세요','<div class="facs" id="c_fac">'+FACS.map(function(fa){
+      var v=(p.fac||{})[fa[0]];
+      return '<div class="tri" data-k="'+fa[0]+'"><span class="lb">'+fa[1]+'</span><div class="seg">'
+       +'<button type="button" data-v="1" aria-pressed="'+(v===true)+'">있음</button>'
+       +'<button type="button" data-v="0" aria-pressed="'+(v===false)+'">없음</button>'
+       +'<button type="button" data-v="" aria-pressed="'+(v===undefined)+'">미확인</button></div></div>';}).join('')+'</div>')
+  +'<div class="row">'
+   +fld('최대 인원','숫자만. 모르면 비워두세요','<input type="number" id="i_cap" min="1" value="'+(p.cap==null?'':p.cap)+'">')
+   +fld('1인 예산','','<select id="i_bud"><option value="">미확인</option>'+BUDS.map(function(b,i){
+      return '<option value="'+(i+1)+'"'+(p.budget===i+1?' selected':'')+'>'+b+'</option>';}).join('')+'</select>')
+  +'</div>'
+  +fld('영업시간','예: 16:00–24:00','<input type="text" id="i_hours" value="'+(p.hours||'')+'">')
+  +fld('공주 판정','한 줄로. 이게 카드에 제일 크게 보입니다','<textarea id="i_v" rows="2">'+(p.v||'')+'</textarea>')
+  +fld('릴스 링크','인스타 릴스 URL을 그대로 붙여넣으세요','<input type="text" id="i_ig" value="'+(p.ig?'https://www.instagram.com/reel/'+p.ig+'/':'')+'">')
+  +'<div class="acts"><button class="btn s" id="delBtn">이 가게 삭제</button></div>';
+
+  var bind=function(id,key,conv){ var e=document.getElementById(id); if(!e) return;
+    e.oninput=e.onchange=function(){ p[key]=conv?conv(e.value):(e.value||null); save(); }; };
+  bind('i_n','n'); bind('i_area','area'); bind('i_hours','hours'); bind('i_v','v');
+  bind('i_gu','gu'); 
+  bind('i_cap','cap',function(v){ return v===''?null:parseInt(v,10); });
+  bind('i_bud','budget',function(v){ return v===''?null:parseInt(v,10); });
+  bind('i_ig','ig',function(v){ var m=String(v).match(/\/(?:reel|reels|p)\/([^/?#]+)/); return m?m[1]:(v.trim()||null); });
+
+  ['c_cats','c_sit'].forEach(function(id){
+    var key=id==='c_cats'?'cats':'sit';
+    document.getElementById(id).querySelectorAll('.ch').forEach(function(b){
+      b.onclick=function(){ p[key]=p[key]||[]; var t=b.textContent, i=p[key].indexOf(t);
+        if(i>-1){p[key].splice(i,1); b.setAttribute('aria-pressed','false');}
+        else{p[key].push(t); b.setAttribute('aria-pressed','true');} save(); };
+    });
+  });
+  document.getElementById('c_fac').querySelectorAll('.tri').forEach(function(t){
+    var k=t.dataset.k;
+    t.querySelectorAll('button').forEach(function(b){
+      b.onclick=function(){ p.fac=p.fac||{};
+        if(b.dataset.v==='') delete p.fac[k]; else p.fac[k]=b.dataset.v==='1';
+        t.querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed', String(x===b)); });
+        save(); };
+    });
+  });
+  document.getElementById('delBtn').onclick=function(){
+    if(!confirm('"'+(p.n||'이 항목')+'" 을(를) 목록에서 지울까요?')) return;
+    P.splice(cur,1); cur=Math.max(0,cur-1); save(); draw(); };
+  drawSide();
+}
+
+document.getElementById('addBtn').onclick=function(){
+  P.push({n:'',cat:'',cats:[],area:'',gu:null,hours:null,budget:null,sit:[],fac:{},cap:null,ig:null,v:''});
+  cur=P.length-1; save(); draw(); window.scrollTo(0,0); };
+document.getElementById('dl').onclick=function(){
+  var blob=new Blob([JSON.stringify(P,null,1)],{type:'application/json'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='places.json'; a.click(); URL.revokeObjectURL(a.href); toast('places.json 저장됨'); };
+document.getElementById('cp').onclick=function(){
+  var t=document.getElementById('json'); t.select();
+  navigator.clipboard.writeText(t.value).then(function(){ toast('복사했습니다'); },
+    function(){ document.execCommand('copy'); toast('복사했습니다'); }); };
+document.getElementById('ld').onclick=function(){
+  try{ var v=JSON.parse(document.getElementById('json').value);
+    if(!Array.isArray(v)) throw 0; P=v; cur=0; save(); draw(); toast('불러왔습니다'); }
+  catch(e){ toast('JSON 형식이 아닙니다'); } };
+
+save(); draw();
+</script></body></html>
