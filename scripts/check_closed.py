@@ -43,17 +43,22 @@ def main():
         n = p.get("n")
         if not n:
             continue
-        docs = kakao(f"대전 {n}", key)
-        if not docs:
-            docs = kakao(n, key)
+        dong = re.match(r"(\S+동)", str(p.get("area") or ""))
+        tries = []
+        if dong: tries.append(f"대전 {dong.group(1)} {n}")
+        tries += [f"대전 {n}", n]
+        docs = []
+        for q in tries:
+            docs = kakao(q, key)
+            if docs: break
         if not docs:
             p["closed"] = True
             gone.append(n)
         else:
             p.pop("closed", None)
             addr = docs[0].get("road_address_name") or docs[0].get("address_name") or ""
-            dong = re.search(r"(\S+동)", p.get("area") or "")
-            if dong and dong.group(1) not in addr:
+            d2 = re.search(r"(\S+동)", p.get("area") or "")
+            if d2 and d2.group(1) not in addr:
                 moved.append(f"{n} → {addr}")
         if i % 50 == 0:
             print(f"  {i}/{len(P)} …", flush=True)
