@@ -64,6 +64,9 @@ def shop_of(caption):
     m = re.search(r"📍\s*([^\n(（]{1,30})", caption)
     name = m.group(1).strip() if m else ""
     # 지점 이름은 뗀다: 대전둔산점 / 봉명본점 / 시청점 / 대전점 …
+    name = re.sub(r"@\S+", "", name)                     # @아이디 제거
+    name = re.sub(r"#\S+", "", name)                     # #해시태그 제거
+    name = name.strip(" '\u2018\u2019\"\u201c\u201d~ㅣ|·,")   # 따옴표·구분자 제거
     name = re.sub(r"\s*(대전)?\S{0,6}(본점|지점|점)\s*$", "", name).strip()
     a = re.search(r"대전\s*\S+구\s*(\S+동)", caption)
     area = a.group(1) if a else ""
@@ -100,6 +103,8 @@ def desc_of(caption, name):
     # 대표 메뉴 붙이기
     m = re.search(r"💖\s*영상 속 메뉴\s*\n(.+)", caption)
     menu = re.sub(r"\s*[\d,]+\s*(원|웡).*$", "", m.group(1).strip())[:20] if m else ""
+    if body in ("맛집", "카페", "술집") and not menu:
+        return ""                                        # "맛집" 한 단어는 정보가 없다
     return " · ".join([x for x in (body, menu) if x])
 
 
