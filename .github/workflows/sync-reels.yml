@@ -12,37 +12,25 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
         with:
-          node-version: '20'
+          python-version: '3.12'
+
+      - name: 필요한 것 설치
+        run: pip install --quiet pillow
 
       - name: 릴스 가져오기
-        env:
-          IG_TOKEN: ${{ secrets.IG_TOKEN }}
-        run: node scripts/sync-reels.mjs
+        run: python3 scripts/sync_reels_public.py
 
       - name: 바뀐 게 있으면 커밋
         run: |
-          if [ -n "$(git status --porcelain index.html)" ]; then
+          if [ -n "$(git status --porcelain index.html data/reels_public.json)" ]; then
             git config user.name  "odipick-bot"
             git config user.email "bot@odipick.local"
-            git add index.html
+            git add index.html data/reels_public.json
             git commit -m "릴스 동기화 $(date +%Y-%m-%d)"
             git push
           else
             echo "변경 없음"
           fi
-
-  refresh-token:
-    runs-on: ubuntu-latest
-    if: github.event.schedule == '0 21 * * *'
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: 토큰 만료일 확인
-        env:
-          IG_TOKEN: ${{ secrets.IG_TOKEN }}
-        run: node scripts/refresh-token.mjs

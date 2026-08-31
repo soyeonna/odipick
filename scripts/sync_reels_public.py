@@ -1,0 +1,176 @@
+#!/usr/bin/env python3
+"""
+릴스 자동 가져오기 — 토큰도 로그인도 메타 개발자 앱도 필요 없다.
+
+인스타그램이 공개 프로필용으로 내려주는 정보를 그대로 읽는다.
+최근 12개는 한 번에, --all 을 붙이면 과거 것까지 넘겨가며 가져온다.
+
+  python3 scripts/sync_reels_public.py           # 최근 것만 확인해서 새 릴스 추가
+  python3 scripts/sync_reels_public.py --all     # 과거 릴스까지 전부
+  python3 scripts/sync_reels_public.py --dry     # 실제로 안 고치고 뭐가 바뀔지만 보여줌
+
+손으로 다듬어 둔 문구는 절대 덮어쓰지 않는다. 없는 릴스만 새로 넣는다.
+"""
+import json, re, sys, time, html as H, base64, io, os
+import subprocess
+
+USER = "_princesspick_"
+HTML_FILE = "index.html"
+DATA_FILE = "data/reels_public.json"
+UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+      "(KHTML, like Gecko) Chrome/126 Safari/537.36")
+APP_ID = "936619743392459"
+THUMB_W = 320
+
+
+def get(url, headers=None, binary=False):
+    """맥에 파이썬 인증서가 없어도 되도록 curl 로 받는다."""
+    cmd = ["curl", "-sS", "--fail", "--max-time", "30", "-A", UA]
+    for k, v in (headers or {}).items():
+        cmd += ["-H", f"{k}: {v}"]
+    cmd.append(url)
+    raw = subprocess.run(cmd, capture_output=True, check=True).stdout
+    return raw if binary else raw.decode("utf-8", "ignore")
+
+
+def fetch_page(after=None):
+    """공개 프로필 정보 한 페이지."""
+    if after is None:
+        url = f"https://www.instagram.com/api/v1/users/web_profile_info/?username={USER}"
+    else:
+        # 이어보기: 같은 endpoint 가 커서를 받아준다
+        url = (f"https://www.instagram.com/api/v1/users/web_profile_info/"
+               f"?username={USER}&max_id={after}")
+    d = json.loads(get(url, {"x-ig-app-id": APP_ID}))
+    return d["data"]["user"]["edge_owner_to_timeline_media"]
+
+
+def caption_of(node):
+    e = node["edge_media_to_caption"]["edges"]
+    return e[0]["node"]["text"] if e else ""
+
+
+def hook_of(caption):
+    """캡션 첫 줄에서 후킹 문구만."""
+    for line in caption.split("\n"):
+        s = re.sub(r"#[^\s#]+", "", line).strip()
+        s = s.strip("‼️❗️❕!·-–— ")
+        if len(s) >= 4:
+            return s[:40]
+    return ""
+
+
+def shop_of(caption):
+    """📍 뒤에 가게 이름, 주소 괄호에서 동 이름."""
+    m = re.search(r"📍\s*([^\n(（]{1,30})", caption)
+    name = m.group(1).strip() if m else ""
+    a = re.search(r"대전\s*\S+구\s*(\S+동)", caption)
+    area = a.group(1) if a else ""
+    return f"{area} {name}".strip() if name else ""
+
+
+def thumb_b64(url):
+    """썸네일을 작게 줄여 파일 안에 심는다."""
+    try:
+        from PIL import Image
+        im = Image.open(io.BytesIO(get(url, binary=True))).convert("RGB")
+        w, h = im.size
+        im = im.resize((THUMB_W, int(h * THUMB_W / w)), Image.LANCZOS)
+        buf = io.BytesIO()
+        im.save(buf, "JPEG", quality=70, optimize=True)
+        return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
+    except Exception:
+        return None
+
+
+def block(html, tag):
+    m = re.search(rf'<script id="{tag}" type="application/json">([\s\S]*?)</script>', html)
+    if not m:
+        sys.exit(f"index.html 안에서 {tag} 블록을 못 찾았습니다.")
+    return json.loads(m.group(1)), m
+
+
+def put(html, tag, data):
+    new = (f'<script id="{tag}" type="application/json">\n'
+           + json.dumps(data, ensure_ascii=False, indent=1) + "\n</script>")
+    return re.sub(rf'<script id="{tag}" type="application/json">[\s\S]*?</script>',
+                  lambda _: new, html, count=1)
+
+
+def main():
+    want_all = "--all" in sys.argv
+    dry = "--dry" in sys.argv
+
+    nodes, after, page = [], None, 0
+    while True:
+        e = fetch_page(after)
+        nodes += [x["node"] for x in e["edges"]]
+        page += 1
+        if not want_all or not e["page_info"]["has_next_page"]:
+            break
+        after = e["page_info"]["end_cursor"]
+        time.sleep(2)
+    print(f"인스타그램에서 게시물 {len(nodes)}개 확인 (페이지 {page})")
+
+    reels = [n for n in nodes if n.get("is_video")]
+
+    # 분석용 원본 저장
+    os.makedirs("data", exist_ok=True)
+    full = [{
+        "code": n["shortcode"],
+        "at": n["taken_at_timestamp"],
+        "views": n.get("video_view_count"),
+        "likes": n["edge_liked_by"]["count"],
+        "comments": n["edge_media_to_comment"]["count"],
+        "caption": caption_of(n),
+    } for n in reels]
+    prev = {}
+    if os.path.exists(DATA_FILE):
+        prev = {r["code"]: r for r in json.load(open(DATA_FILE, encoding="utf-8"))}
+    for r in full:
+        prev[r["code"]] = r
+    merged = sorted(prev.values(), key=lambda r: r["at"], reverse=True)
+    if not dry:
+        json.dump(merged, open(DATA_FILE, "w", encoding="utf-8"),
+                  ensure_ascii=False, indent=1)
+
+    # index.html 에 새 릴스만 추가
+    html = open(HTML_FILE, encoding="utf-8").read()
+    rd, _ = block(html, "reels")
+    thumbs, _ = block(html, "thumbs")
+    have = {i["code"] for i in rd["items"]}
+
+    added = []
+    for n in reels:
+        c = n["shortcode"]
+        if c in have:
+            continue
+        cap = caption_of(n)
+        item = {"code": c, "hook": hook_of(cap), "shop": shop_of(cap)}
+        if c not in thumbs:
+            t = thumb_b64(n["display_url"])
+            if t:
+                thumbs[c] = t
+        added.append(item)
+
+    if not added:
+        print("새로 추가할 릴스 없음. 이미 최신입니다.")
+    else:
+        rd["items"] = added + rd["items"]
+        rd["syncedAt"] = time.strftime("%Y-%m-%dT%H:%M:%S")
+        rd["source"] = "instagram-public"
+        print(f"\n새 릴스 {len(added)}개:")
+        for a in added:
+            print(f"  · {a['shop'] or '가게이름 확인필요'} — {a['hook']}")
+        if not dry:
+            html = put(html, "reels", rd)
+            html = put(html, "thumbs", thumbs)
+            open(HTML_FILE, "w", encoding="utf-8").write(html)
+
+    print(f"\n분석용 데이터: 릴스 {len(merged)}개 기록 ({DATA_FILE})")
+    if dry:
+        print("※ --dry 라서 실제로는 아무것도 안 고쳤습니다.")
+
+
+if __name__ == "__main__":
+    main()
