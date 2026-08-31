@@ -44,11 +44,16 @@ inner=re.sub(r'<title>[\s\S]*?</title>\s*','',src,count=1)
 
 # 사진을 파일로 분리
 os.makedirs("dist/img",exist_ok=True)
+os.makedirs("img",exist_ok=True)
 m=re.search(r'(<script id="thumbs" type="application/json">\s*)(\{[\s\S]*?\})(\s*</script>)', inner)
 T=json.loads(m.group(2))
 paths={}
 for k,v in T.items():
-    if not v.startswith("data:image/"): paths[k]=v; continue
+    if not v.startswith("data:image/"):
+        # 이미 파일 경로면 그 파일을 dist 로 복사한다
+        if v.startswith("img/") and os.path.exists(v):
+            shutil.copy(v, f"dist/{v}")
+        paths[k]=v; continue
     b64=v.split(",",1)[1]
     with open(f"dist/img/{k}.jpg","wb") as f: f.write(base64.b64decode(b64))
     paths[k]=f"img/{k}.jpg"
