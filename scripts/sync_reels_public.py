@@ -33,14 +33,13 @@ def get(url, headers=None, binary=False):
     return raw if binary else raw.decode("utf-8", "ignore")
 
 
-def fetch_page(after=None):
-    """공개 프로필 정보 한 페이지."""
-    if after is None:
-        url = f"https://www.instagram.com/api/v1/users/web_profile_info/?username={USER}"
-    else:
-        # 이어보기: 같은 endpoint 가 커서를 받아준다
-        url = (f"https://www.instagram.com/api/v1/users/web_profile_info/"
-               f"?username={USER}&max_id={after}")
+def fetch_page():
+    """공개 프로필 정보. 최근 12개까지만 내려온다.
+
+    과거 것까지 넘겨보는 통로는 로그인을 요구해서 쓸 수 없다.
+    대신 매일 자동으로 도니까 새 릴스는 빠짐없이 들어온다.
+    """
+    url = f"https://www.instagram.com/api/v1/users/web_profile_info/?username={USER}"
     d = json.loads(get(url, {"x-ig-app-id": APP_ID}))
     return d["data"]["user"]["edge_owner_to_timeline_media"]
 
@@ -133,19 +132,13 @@ def put(html, tag, data):
 
 
 def main():
-    want_all = "--all" in sys.argv
     dry = "--dry" in sys.argv
+    if "--all" in sys.argv:
+        print("※ --all 은 쓸 수 없습니다. 인스타그램이 과거 게시물은 로그인 없이 안 내줍니다.")
 
-    nodes, after, page = [], None, 0
-    while True:
-        e = fetch_page(after)
-        nodes += [x["node"] for x in e["edges"]]
-        page += 1
-        if not want_all or not e["page_info"]["has_next_page"]:
-            break
-        after = e["page_info"]["end_cursor"]
-        time.sleep(2)
-    print(f"인스타그램에서 게시물 {len(nodes)}개 확인 (페이지 {page})")
+    e = fetch_page()
+    nodes = [x["node"] for x in e["edges"]]
+    print(f"인스타그램에서 최근 게시물 {len(nodes)}개 확인")
 
     reels = [n for n in nodes if n.get("is_video")]
 
