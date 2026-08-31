@@ -162,7 +162,7 @@ section.blk{margin-top:26px}
 .card:active{transform:scale(.99)}
 .thumb{width:78px; aspect-ratio:3/4; height:auto; border-radius:12px; object-fit:cover;
   flex-shrink:0; background:var(--sub); align-self:flex-start}
-.thumb.ph2{display:grid; place-items:center; min-height:104px; color:var(--brand);
+.thumb.ph2{display:grid; place-items:center; min-height:104px; color:var(--brand); position:relative; overflow:hidden;
   background:var(--brand-w); border:1px solid var(--line)}
 .thumb.ph2 svg{opacity:.75}
 .dhero.noimg{display:grid; place-items:center; aspect-ratio:16/7; background:var(--brand-w); color:var(--brand)}
@@ -361,8 +361,8 @@ section.blk{margin-top:26px}
 .gu:focus{outline:none}
 .gu:focus-visible{outline:none; stroke:var(--brand); stroke-width:2.6}
 .gu.on{fill:var(--brand); stroke:var(--brand)}
-.gcity{font-family:"IBM Plex Sans KR",sans-serif; font-size:10px; font-weight:600; fill:var(--ink3);
-  text-anchor:middle; letter-spacing:.08em; opacity:.6}
+.gcity{font-family:Georgia,"Times New Roman",serif; font-style:italic; font-size:12px; font-weight:400;
+  fill:var(--brand); text-anchor:middle; letter-spacing:.3em; opacity:.45; text-transform:uppercase}
 .gnear{font-family:"IBM Plex Sans KR",sans-serif; font-size:11px; font-weight:500;
   fill:var(--ink3); text-anchor:middle; opacity:.55}
 .gt{font-family:"Gothic A1",sans-serif; font-size:14px; font-weight:800; fill:var(--ink);
@@ -456,7 +456,7 @@ footer{margin-top:34px; padding:18px 0 8px; border-top:1px solid var(--line);
   <section class="blk">
     <div class="blkh"><h2>대전 맛지도</h2></div>
     <div class="sorts" id="themerow" style="margin-bottom:10px"></div>
-    <p class="blkp">테마를 고르면 지도에 번호로 표시돼요.</p>
+    <p class="blkp"></p>
     <div id="homeMap"></div>
     <div id="homeResults"></div>
     <div style="display:flex;gap:8px;margin-top:12px">
@@ -898,7 +898,9 @@ function cardEl(r,i){
   var p=r.p;
   var b=document.createElement('button'); b.className='card'; b.type='button';
   var tsrc=photoOf(p);
-  var th = tsrc ? '<img class="thumb" src="'+tsrc+'" alt="'+p.n+' 사진" loading="lazy">'
+  var th = tsrc ? '<span class="thumb ph2"><img src="'+tsrc+'" alt="'+p.n+' 사진" loading="lazy" '+
+                  'style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" '+
+                  'onerror="this.remove()">'+catIcon(p)+'</span>'
                 : '<span class="thumb ph2" aria-hidden="true">'+catIcon(p)+'</span>';
   var meta=[p.cat,p.area].filter(Boolean).join(' · ');
   if(NEAR){ var kmm=kmTo(p);
@@ -1563,13 +1565,7 @@ function aiRows(){
 
 
 /* ── 대전 맛지도: 테마를 고르면 실제 위치에 번호로 찍힌다 ── */
-var THEMES=[
- {t:'전체', k:null},
- {t:'디저트', f:function(x){return (x.cats||[]).indexOf('디저트')>-1||(x.cats||[]).indexOf('카페')>-1;}},
- {t:'데이트', f:function(x){return (x.sit||[]).indexOf('데이트')>-1 && x.src==='reel';}},
- {t:'칼국수', re:/칼국수/},
- {t:'노포', f:function(x){return (x.cats||[]).indexOf('노포')>-1;}}
-];
+var THEMES=[{t:'전체', k:null}];
 var THEME=null;
 function themeShops(th){
   var arr=P.filter(function(x){
@@ -1622,18 +1618,7 @@ function drawTheme(){
 }
 (function(){
   var row=document.getElementById('themerow'); if(!row) return;
-  THEMES.forEach(function(th){
-    var b=document.createElement('button'); b.className='srt'; b.type='button';
-    b.textContent=th.t;
-    b.setAttribute('aria-pressed', String(th.k===null&&!THEME));
-    b.addEventListener('click',function(){
-      THEME = th.re||th.cat ? th : null;
-      row.querySelectorAll('.srt').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
-      b.setAttribute('aria-pressed','true');
-      A.gu=[]; drawTheme();
-    });
-    row.appendChild(b);
-  });
+  /* 테마 탭은 식당 구분이 안 돼 제거 (2026-09-01 소연님 지시) */
 })();
 
 
