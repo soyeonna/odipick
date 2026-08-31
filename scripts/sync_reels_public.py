@@ -61,11 +61,16 @@ def hook_of(caption):
 
 
 def shop_of(caption):
-    """📍 뒤에 가게 이름, 주소 괄호에서 동 이름."""
+    """📍 뒤에 가게 이름, 주소 괄호에서 동 이름. 형식은 "동이름 가게이름"."""
     m = re.search(r"📍\s*([^\n(（]{1,30})", caption)
     name = m.group(1).strip() if m else ""
+    # 지점 이름은 뗀다: 대전둔산점 / 봉명본점 / 시청점 / 대전점 …
+    name = re.sub(r"\s*(대전)?\S{0,6}(본점|지점|점)\s*$", "", name).strip()
     a = re.search(r"대전\s*\S+구\s*(\S+동)", caption)
     area = a.group(1) if a else ""
+    if not area:  # 주소가 없으면 해시태그에서 동 이름
+        h = re.search(r"#(\S*?동)맛집|#대전(\S*?동)", caption)
+        area = next((g for g in (h.groups() if h else ()) if g), "")
     return f"{area} {name}".strip() if name else ""
 
 
