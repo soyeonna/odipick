@@ -281,7 +281,12 @@ section.blk{margin-top:26px}
 .rt{flex-shrink:0; width:41vw; max-width:150px; aspect-ratio:3/4; border-radius:12px; overflow:hidden;
   position:relative; background:var(--sub); scroll-snap-align:start}
 .rt img{width:100%; height:100%; object-fit:cover; display:block}
-.rt .pl{position:absolute; right:7px; bottom:7px; width:24px; height:24px; border-radius:50%;
+.rt .rc{position:absolute; left:0; right:0; bottom:0; padding:20px 8px 8px; text-align:left;
+  background:linear-gradient(transparent,rgba(0,0,0,.82)); color:#fff; font-size:9.5px; line-height:1.3;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.rt .rc b{display:block; font-size:11px; font-weight:700; margin-bottom:2px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.rt .pl{position:absolute; right:7px; top:7px; width:24px; height:24px; border-radius:50%;
   background:rgba(255,255,255,.92); color:var(--brand-d); display:grid; place-items:center}
 .rt .pl svg{width:12px; height:12px}
 
@@ -408,70 +413,83 @@ footer{margin-top:34px; padding:18px 0 8px; border-top:1px solid var(--line);
   {
    "code": "Dcsm7GCBkDc",
    "hook": "딱 지금만 먹을 수 있는 제철 무화과케이크 떴음",
-   "shop": "둔산동 꾸드뱅베이커스하우스"
+   "shop": "둔산동 꾸드뱅베이커스하우스",
+   "desc": "대전 빵집 3대장 · 케이크 맛집"
   },
   {
    "code": "DcqFC55htKK",
    "hook": "🎉 시여사 신메뉴 출시 기념 10명 댓글 이벤트 🎉",
-   "shop": "둔산동 시장을여는사람들"
+   "shop": "둔산동 시장을여는사람들",
+   "desc": "시장 컨셉 대형 술집 · 초대형 안주"
   },
   {
    "code": "DcVbzHphz1V",
    "hook": "일본 정통방식으로 구워낸 양대박 엉덩이꼬치",
-   "shop": "봉명동 숯토리"
+   "shop": "봉명동 숯토리",
+   "desc": "일본식 숯불 꼬치 이자카야 · 엉덩이꼬치"
   },
   {
    "code": "DcQSJM_hxRy",
    "hook": "왁뿌볼 1,100원 맥주 830원 초저렴 물류단지",
-   "shop": "도마동 대원종합물류"
+   "shop": "도마동 대원종합물류",
+   "desc": "초저가 물류단지 아울렛 · 맥주 830원"
   },
   {
    "code": "DcIkB3jhjHH",
    "hook": "15,000원 12첩 제주도 백반 술상 무제한",
-   "shop": "탄방동 단소"
+   "shop": "탄방동 단소",
+   "desc": "12첩 제주 백반 술상 15,000원 무제한"
   },
   {
    "code": "DcF9lT7hOQ-",
    "hook": "3mm숙성삼겹살로 쌈 싸먹는 신박한 조합",
-   "shop": "괴정동 찰싹"
+   "shop": "괴정동 찰싹",
+   "desc": "3mm 숙성삼겹살 쌈 전문 고깃집"
   },
   {
    "code": "DcFXVfNhxZ3",
    "hook": "평양냉면 6,000원 근본인 곳 찾음",
-   "shop": "선화동 남영동양문"
+   "shop": "선화동 남영동양문",
+   "desc": "숯불갈비집 · 평양냉면 6,000원"
   },
   {
    "code": "DcdKTlphQgP",
    "hook": "서울에 한정선 있다면 대전엔 여기",
    "shop": "자양동 메리캐리",
-   "ph": "17875757403543849"
+   "ph": "17875757403543849",
+   "desc": "대전 모찌 성지 · 얇은 피 생모찌"
   },
   {
    "code": "Dcm1JzEBx8y",
    "hook": "49,000원 한우 배터지게 먹는 찐맛집",
-   "shop": "도마동 신선한우마을"
+   "shop": "도마동 신선한우마을",
+   "desc": "한우 특수부위 49,000원 · 줄 서는 동네 한우집"
   },
   {
    "code": "DclZNbuB0OG",
    "hook": "속보 대전에 송진우 배우님 알바하러 오심",
    "shop": "봉명동 대엽",
-   "ph": "18065146298754220"
+   "ph": "18065146298754220",
+   "desc": "평양술밥 내는 한식주점"
   },
   {
    "code": "DcS26HABznt",
    "hook": "고백 역대급 유러피안 쌈채소 무한리필",
    "shop": "용산동 우아한정원",
-   "ph": "17977770792084005"
+   "ph": "17977770792084005",
+   "desc": "대전 최초 유러피안 쌈채소 무한리필 고깃집"
   },
   {
    "code": "DbVH16EJGJY",
    "hook": "대전 최초로 생긴 혼술바",
-   "shop": "봉명동 잔소리"
+   "shop": "봉명동 잔소리",
+   "desc": "대전 최초로 생긴 혼술 전용 바"
   },
   {
    "code": "DcfuR9-BU99",
    "hook": "방송 나오고 대란인 두피관리",
-   "shop": "둔산동 홍스두피"
+   "shop": "둔산동 홍스두피",
+   "desc": "두피관리·탈모 전문 에스테틱"
   }
  ]
 }
@@ -1479,13 +1497,15 @@ function logMiss(){
 }
 
 /* ── 릴스 ── */
+var E=function(s){return String(s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
 var shelf=document.getElementById('shelf');
 RD.items.forEach(function(r){
   var a=document.createElement('button'); a.className='rt'; a.type='button';
   a.setAttribute('aria-label',(r.shop||'대전공주')+' 릴스 보기');
   var rs=thumbOf(r.code)||thumbOf(r.ph);
+  var cap=r.desc?('<span class="rc"><b>'+E(r.shop)+'</b>'+E(r.desc)+'</span>'):'';
   a.innerHTML=(rs?'<img src="'+rs+'" alt="'+(r.shop||'대전공주 릴스')+'" loading="lazy">':'')+
-    '<span class="pl">'+ic(I.play,12)+'</span>';
+    cap+'<span class="pl">'+ic(I.play,12)+'</span>';
   a.addEventListener('click',function(){ goInsta('https://www.instagram.com/reel/'+r.code+'/'); });
   shelf.appendChild(a);
 });

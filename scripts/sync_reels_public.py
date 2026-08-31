@@ -74,6 +74,36 @@ def shop_of(caption):
     return f"{area} {name}".strip() if name else ""
 
 
+CATS = ('빵집','베이커리','케이크','디저트','고깃집','냉면','국밥','스시','파스타',
+        '이자카야','포차','와인바','술집','횟집','브런치','분식','치킨','피자','카페','맛집')
+REP = r'(?:3대장|삼대장|3대|성지|원조|1위|최초|유일|유명|웨이팅|노포|줄서|끝판왕)'
+
+
+def desc_of(caption, name):
+    """가게 특성 한 줄. 릴스 후킹이 아니라 '이 집이 어떤 곳인지'."""
+    # 평판 표현이 있으면 그걸 쓴다
+    body = ""
+    for line in caption.split("\n")[:6]:
+        if re.search(REP, line):
+            t = re.sub(r"#\S+", "", line)
+            t = re.sub(r"^[^ㅣ|]{0,6}[ㅣ|]", "", t)          # 내돈내산ㅣ, 가족외식ㅣ 떼기
+            t = re.sub(r"[‼❗❕!,🤍💖✨🎉📍⏰☎️️]", "", t).strip()
+            t = re.sub(r"^(개인적으로|진짜|여기|완전|솔직히|속보)\s*", "", t)
+            t = re.sub(r"(라고 생각하는|이라고 생각하는|인정하는).*$", "", t).strip()
+            if name:
+                t = re.sub(rf"\s*{re.escape(name)}.*$", "", t).strip()
+            if 6 <= len(t) <= 28:
+                body = t
+                break
+    if not body:  # 없으면 해시태그 업종
+        tags = [re.sub(r"^(대전|\S*?동)", "", x) for x in re.findall(r"#(\S+)", caption)]
+        body = next((c for c in CATS if c in tags), "")
+    # 대표 메뉴 붙이기
+    m = re.search(r"💖\s*영상 속 메뉴\s*\n(.+)", caption)
+    menu = re.sub(r"\s*[\d,]+\s*(원|웡).*$", "", m.group(1).strip())[:20] if m else ""
+    return " · ".join([x for x in (body, menu) if x])
+
+
 def thumb_b64(url):
     """썸네일을 작게 줄여 파일 안에 심는다."""
     try:
@@ -151,7 +181,10 @@ def main():
         if c in have:
             continue
         cap = caption_of(n)
-        item = {"code": c, "hook": hook_of(cap), "shop": shop_of(cap)}
+        shop = shop_of(cap)
+        name = shop.split(" ", 1)[-1] if shop else ""
+        item = {"code": c, "hook": hook_of(cap), "shop": shop,
+                "desc": desc_of(cap, name)}
         if c not in thumbs:
             t = thumb_b64(n["display_url"])
             if t:
