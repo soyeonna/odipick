@@ -52,8 +52,8 @@ for r in rows:
     if '음식' not in lcls: continue          # 음식 대분류만
     scls=(r.get('indsSclsNm') or r.get('indsMclsNm') or '').strip()
     if re.search(r'유흥|단란|노래|룸살롱|무도|구내|급식', scls): continue
-    if re.search(r'구내|급식|연구소|연구원|사업소|공장|어린이집|유치원|학교|병원|청사|복지관|수련원', name): continue
     name=(r.get('bizesNm') or '').strip()
+    if re.search(r'구내|급식|연구소|연구원|사업소|공장|어린이집|유치원|학교|병원|청사|복지관|수련원', name): continue
     if not name or len(name)>25: continue
     cats=next((c for pat,c in CATMAP if re.search(pat, scls+' '+(r.get('indsMclsNm') or ''))), ["한식"])
     dong=(r.get('bjdongNm') or r.get('ldongNm') or '').strip() or (r.get('adongNm') or '').strip()
