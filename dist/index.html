@@ -615,7 +615,7 @@ var RULES=[[/10\s*명|열\s*명|단체|대\s*인원/,'cap','10명+'],[/[5-9]\s*�
  [/고급|근사|분위기\s*있/,'mood','고급스러운'],[/테라스|루프탑|야외/,'mood','테라스'],
  [/지금\s*영업|열려|영업\s*중|오픈했/,'open','1'],
  [/대전공주|공주\s*픽|진짜\s*맛집|광고\s*말고|영상에\s*나온/,'src','reel'],
- [/신상|새로\s*생긴|새로\s*오픈|오픈|최초|신규/,'cats','신상'],[/한식|백반|한정식|국밥/,'cats','한식'],
+ [/신상|새로\s*생긴|새로\s*오픈|오픈|최초|신규/,'cats','신상'],[/여행|관광|타지인?|놀러\s*(왔|온)|투어|꼭\s*가야/,'travel','1'],[/한식|백반|한정식|국밥/,'cats','한식'],
  [/국수|냉면|칼국수|국밥|백반|한정식|두루치기/,'cats','한식'],
  [/분식|떡볶이|김밥|튀김/,'cats','분식'],
  
@@ -761,7 +761,7 @@ function kmTo(p){
   var a=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(NEAR.lat*Math.PI/180)*Math.cos(p.lat*Math.PI/180)*Math.sin(dLo/2)*Math.sin(dLo/2);
   return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
-var A={cats:[],sit:[],cap:[],fac:[],budget:[],gu:[],src:[],mood:[],open:[],avoid:[]};
+var A={cats:[],sit:[],cap:[],fac:[],budget:[],gu:[],src:[],mood:[],open:[],avoid:[],travel:[]};
 var KEYS=Object.keys(A);
 var SORT='rec';
 
@@ -831,6 +831,7 @@ function score(p){
   A.budget.forEach(function(b){ cond(p.budget==null?null:(p.budget<=BUD[b]?1:0),'예산 적합'); });
   A.cap.forEach(function(c){ cond(p.cap==null?null:(p.cap>=CAP[c]?1:0),c); });
   A.src.forEach(function(v){ cond(p.src===v?1:0,'공주픽'); });
+  A.travel.forEach(function(){ cond(p.travel?1:0,'대전여행'); });
   A.open.forEach(function(){ var o=openNow(p); cond(o==null?null:(o?1:0),'지금 영업 중'); });
   if(NEAR){
     var km=kmTo(p);
@@ -857,6 +858,7 @@ function score(p){
   if(DONGQ && String(p.area||'').indexOf(DONGQ)===0) sc+=40;   // 그 동네가 1순위, 근처는 그다음
   if(p.featured && A.sit.indexOf(p.featured)>-1) sc+=500;   // 그 상황을 골랐을 때만 1순위
   if(p.jjin) sc += (p.src==='reel' ? 30 : 22);   // 찐 대전 맛집 — 공주가 다녀온 곳 먼저
+  if(A.travel.length && (p.cats||[]).indexOf('노포')>-1) sc+=40;   // 여행자에겐 노포부터
   if(A.sit.indexOf('데이트')>-1 && p.featured!=='데이트'){
     var dm=(p.mood||[]).some(function(m){ return ['예쁜','조용한','고급스러운','아늑한','테라스'].indexOf(m)>-1; });
     if(!dm) sc-=6;                               // 분위기 근거 없는 곳은 데이트 추천에서 뒤로
@@ -905,11 +907,11 @@ function syncAll(){
 }
 
 /* ── 분석된 조건 칩 ── */
-var LABEL={open:'지금 영업 중',src:'대전공주 PICK'};
+var LABEL={open:'지금 영업 중',src:'대전공주 PICK',travel:'🧳 대전여행'};
 function drawCond(){
   var el=document.getElementById('cond'); if(!el) return;
   var items=[];
-  ['gu','sit','mood','cats','cap','budget','fac','open','src','avoid'].forEach(function(k){
+  ['gu','sit','mood','cats','cap','budget','fac','open','src','avoid','travel'].forEach(function(k){
     A[k].forEach(function(v){ items.push([k,v,LABEL[k]||(k==='avoid'?v+' 제외':v)]); });
   });
   el.innerHTML='';
@@ -1114,10 +1116,11 @@ function mustCheck(p){
   }
   if(PARTY!=null && p.cap!=null && p.cap<PARTY) return '인원 수용 불가';
   if(A.gu.length && A.gu.indexOf(p.gu)<0 && !DONGQ) return '지역 밖';
+  if(A.travel.length && !p.travel) return '여행 목록 아님';
   return null;
 }
 function mustActive(){
-  return !!(A.cats.length||DONGQ||VISIT!=null||MEAL||A.fac.length||BUDMAX!=null||PARTY!=null||A.gu.length);
+  return !!(A.cats.length||DONGQ||VISIT!=null||MEAL||A.fac.length||BUDMAX!=null||PARTY!=null||A.gu.length||A.travel.length);
 }
 function needleHay(p){ return p.n+' '+(p.cat||'')+' '+(p.v||'')+' '+(p.kcat||''); }
 function results(){
@@ -1193,7 +1196,8 @@ function cardEl(r,i){
    '<div class="cbody">'+
      '<div class="crow1">'+(i<3?'<span class="rank'+(i===0?' n1':'')+'">'+(i+1)+'</span>':'')+
        '<span class="nm">'+p.n+'</span>'+
-       (p.src==='reel'?'<span class="pick">👑 공주픽</span>':'')+'</div>'+
+       (p.src==='reel'?'<span class="pick">👑 공주픽</span>':'')+
+       (p.travel?'<span class="pick" style="background:var(--ok-w);color:var(--ok)">🧳 대전여행</span>':'')+'</div>'+
      '<div class="meta">'+meta+(bud?' · '+bud:'')+'</div>'+
      '<div class="crow1">'+statusOf(p)+'</div>'+
      (p.v?'<div class="why">'+vLines(p.v)+'</div>':'')+
@@ -1463,7 +1467,8 @@ function openDetail(p){
   openSheet(
     hero+
     '<h2 class="dtitle">'+p.n+'</h2>'+
-    '<div class="crow1" style="margin-top:6px">'+(p.src==='reel'?'<span class="pick">👑 공주픽</span>':'')+statusOf(p)+'</div>'+
+    '<div class="crow1" style="margin-top:6px">'+(p.src==='reel'?'<span class="pick">👑 공주픽</span>':'')+
+      (p.travel?'<span class="pick" style="background:var(--ok-w);color:var(--ok)">🧳 대전여행</span>':'')+statusOf(p)+'</div>'+
     '<div class="dmeta">'+[p.cat,p.area].filter(Boolean).join(' · ')+'</div>'+
     (mood?'<div class="hits" style="margin-top:8px">'+mood+'</div>':'')+
     (p.v?'<div class="dsec"><h3>이 상황에 추천하는 이유</h3><div class="dbox">'+vLines(p.v)+'</div></div>':'')+
@@ -1962,6 +1967,7 @@ function rowCount(set){
     }).length;
   }
   return pool.filter(function(x){
+    if(set.travel && !x.travel) return false;
     if(set.sit && !set.sit.some(function(s){ return (x.sit||[]).indexOf(s)>-1; })) return false;
     if(set.cats && !set.cats.some(function(c){ return (x.cats||[]).indexOf(c)>-1; })) return false;
     if(set.mood && !set.mood.some(function(mo){ return (x.mood||[]).indexOf(mo)>-1; })) return false;
@@ -1991,6 +1997,7 @@ function aiRows(){
    5:{mood:['테라스']},6:{cats:['한식']},7:{cats:['한식']},8:{q:'대하 수산 물회 조개'},
    9:{q:'전어 대하 수산 참치 물회 조개 회뜨는'},10:{q:'전어 대하 수산 참치 물회 조개 회뜨는'},11:{cats:['한식']},12:{cats:['한식']}};
   rows.push({i:I.spark,t1:SEA[mo],t2:'계절에 맞는 곳을 골랐어요',set:SEASET[mo]});
+  rows.push({i:I.map,t1:'대전 여행 왔다면 여기부터',t2:'대전공주 보증 코스',set:{travel:['1']}});
   if(day===5||day===6) rows.push({i:I.friends,t1:'주말엔 모임 자리',t2:'여럿이 가기 좋은 곳',set:{sit:['친구모임']}});
   else rows.push({i:I.heart,t1:'오늘 데이트 코스 찾기',t2:'분위기 좋은 곳만 모아보기',set:{sit:['데이트'],mood:['예쁜']}});
   // 실제 데이터에 3곳 이상 있는 추천만 살리고, 몇 곳인지도 보여준다
