@@ -56,7 +56,7 @@ for r in rows:
     name=(r.get('bizesNm') or '').strip()
     if not name or len(name)>25: continue
     cats=next((c for pat,c in CATMAP if re.search(pat, scls+' '+(r.get('indsMclsNm') or ''))), ["한식"])
-    dong=(r.get('adongNm') or '').strip()
+    dong=(r.get('bjdongNm') or r.get('ldongNm') or '').strip() or (r.get('adongNm') or '').strip()
     gu=(r.get('signguNm') or '').strip() or None
     try: lat=float(r.get('lat')); lng=float(r.get('lon'))
     except: lat=lng=None
