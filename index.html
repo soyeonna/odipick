@@ -1612,8 +1612,9 @@ function drawKakao(kk){
   var img=new kk.maps.MarkerImage(PIN_IMG, new kk.maps.Size(26,28),
     {offset:new kk.maps.Point(13,28)});
   kmarkers.forEach(function(m){ m.setMap(null); }); kmarkers=[];
+  // 현재 필터·검색 결과를 그대로 지도에 (공주픽만이 아니라 전부)
   var arr=results().map(function(r){ return r.p; })
-    .filter(function(x){ return x.src==='reel' && x.lat; }).slice(0,60);
+    .filter(function(x){ return x.lat; }).slice(0,300);
   var mks=arr.map(function(x){
     var mk=new kk.maps.Marker({position:new kk.maps.LatLng(x.lat,x.lng), image:img, title:x.n});
     kk.maps.event.addListener(mk,'click',function(){ mapCard(x); });
