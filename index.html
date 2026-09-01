@@ -1029,7 +1029,11 @@ function mustCheck(p){
     if(foodAsk && pt!=='rest') return '음식점 아님';
     if(A.cats.indexOf('카페')>-1||A.cats.indexOf('디저트')>-1){ if(pt!=='cafe'&&pt!=='rest') return '카페 아님'; }
     if(A.cats.indexOf('뷰티')>-1 && pt!=='beauty') return '뷰티 아님';
-    if(!A.cats.every(function(c){ return (p.cats||[]).indexOf(c)>-1 || c==='신상' || c==='노포'; })) return '종류 불일치';
+    // 종류가 여러 개 잡히면 '전부'가 아니라 '하나라도' 맞으면 통과 (빙수+냉면 검색이 0곳 되는 것 방지)
+    var real=A.cats.filter(function(c){ return c!=='신상'&&c!=='노포'; });
+    if(real.length && !real.some(function(c){ return (p.cats||[]).indexOf(c)>-1; })) return '종류 불일치';
+    if(A.cats.indexOf('노포')>-1 && (p.cats||[]).indexOf('노포')<0) return '노포 아님';
+    if(A.cats.indexOf('신상')>-1 && (p.cats||[]).indexOf('신상')<0) return '신상 아님';
   }
   if(DONGQ){
     var inD=String(p.area||'').indexOf(DONGQ)===0;
