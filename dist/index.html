@@ -76,6 +76,15 @@ header.top.stuck{border-color:var(--line)}
 .fgsc{display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; padding:2px 0}
 .fgsc::-webkit-scrollbar{display:none}
 .fgsc .srt{flex-shrink:0}
+/* 업종 그림 카드 */
+.ph3{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  min-height:104px;border:1px solid rgba(0,0,0,.04);border-radius:12px;overflow:hidden}
+.ph3e{font-size:34px;line-height:1}
+.ph3t{font-size:11px;font-weight:700;letter-spacing:.02em}
+/* 공주픽 사진 위 대전공주 로고 */
+.plogo{position:absolute;top:6px;left:50%;transform:translateX(-50%);width:26px;height:26px;
+  border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);
+  background:#fff;object-fit:cover;z-index:2}
 /* 터치 영역 확보 (엄지 기준 최소 크기) */
 .srt,.fc,.cchip{min-height:38px}
 .nb{min-height:48px}
@@ -698,6 +707,19 @@ var I={
 /* 사진이 없는 곳은 분류 아이콘으로 대신한다. 없는 사진을 지어내지 않는다. */
 var CATICON={한식:'bowl',중식:'noodle',일식:'sushi',분식:'skewer',양식:'fork',
   술집:'glass',고기:'meat',카페:'cup',디저트:'cake',뷰티:'beauty',노포:'oldhouse',신상:'spark'};
+/* 사진 없는 가게: 업종별 색+음식 그림으로 한눈에 구분 */
+var CATFACE={
+ 한식:['🍚','#FFF3E6','#E8956B'], 고기:['🥩','#FFE9E3','#D96A4E'], 중식:['🥟','#FFF0EB','#C97B4A'],
+ 일식:['🍣','#EAF4F7','#5E93A6'], 양식:['🍝','#FFF6E3','#C9A23E'], 분식:['🍢','#FFEDF2','#D96487'],
+ 카페:['☕','#F3EFE9','#8A6F52'], 디저트:['🍰','#FDEEF5','#C86D9C'], 술집:['🍶','#EEF0FA','#6B77B8'],
+ 뷰티:['💆‍♀️','#F5EEFA','#9B6FC0'], 체험:['🎨','#EDF7EF','#5E9E6F'], 나들이:['🌳','#EBF6EC','#4E8F5C'],
+ 노포:['🏮','#FBF0E4','#B07B3F'], 신상:['✨','#FDF3E7','#C99245']};
+function catFace(p){
+  var c=(p.cats||[]).filter(function(x){ return x!=='노포'&&x!=='신상'; })[0]||(p.cats||[])[0];
+  var f=CATFACE[c]||['🍽️','var(--brand-w)','var(--brand-d)'];
+  return '<span class="thumb ph3" style="background:'+f[1]+';color:'+f[2]+'" aria-hidden="true">'+
+    '<span class="ph3e">'+f[0]+'</span><span class="ph3t">'+(c||'맛집')+'</span></span>';
+}
 function catIcon(p){
   var key=(p.cats||[]).map(function(c){ return CATICON[c]; }).filter(Boolean)[0] || 'bowl';
   return ic(I2[key]||I.bowl,26);
@@ -1025,9 +1047,7 @@ function buildSorts(){
   });
   var f=document.createElement('button'); f.className='srt'; f.type='button';
   f.textContent='자세히 고르기'; f.addEventListener('click',openFilter); el.appendChild(f);
-  var rz=document.createElement('button'); rz.className='srt'; rz.type='button';
-  rz.textContent='초기화'; rz.style.color='var(--ink2)';
-  rz.addEventListener('click',clearAll); el.appendChild(rz);
+
   var v=document.createElement('button'); v.className='viewtog'; v.type='button';
   v.innerHTML=ic(I.map,15)+'지도'; v.addEventListener('click',function(){ show('map'); });
   el.appendChild(v);
@@ -1042,6 +1062,16 @@ var QUICKG=[
    {t:'가성비',k:'sit',v:'가성비'},{t:'뷰티',k:'cats',v:'뷰티'}]}
 ];
 function buildQuick(){
+  var so=document.getElementById('sorts');
+  if(so){
+    var ex=document.getElementById('rstBtn'); if(ex) ex.remove();
+    if(nActive()){
+      var rz=document.createElement('button'); rz.className='srt'; rz.type='button'; rz.id='rstBtn';
+      rz.textContent='↺ 초기화'; rz.style.cssText='color:var(--brand-d);border-color:var(--brand)';
+      rz.addEventListener('click',clearAll);
+      so.insertBefore(rz, so.firstChild);
+    }
+  }
   var el=document.getElementById('qfil'); if(!el) return;
   el.innerHTML='';
   QUICKG.forEach(function(g){
@@ -1182,8 +1212,9 @@ function cardEl(r,i){
   var tsrc=photoOf(p);
   var th = tsrc ? '<span class="thumb ph2"><img src="'+tsrc+'" alt="'+p.n+' 사진" loading="lazy" '+
                   'style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" '+
-                  'onerror="this.remove()">'+catIcon(p)+'</span>'
-                : '<span class="thumb ph2" aria-hidden="true">'+catIcon(p)+'</span>';
+                  'onerror="this.remove()">'+catIcon(p)+
+                  (p.src==='reel'&&LOGO_SRC?'<img class="plogo" src="'+LOGO_SRC+'" alt="">':'')+'</span>'
+                : catFace(p);
   var meta=[p.cat,p.area].filter(Boolean).join(' · ');
   if(NEAR){ var kmm=kmTo(p);
     if(kmm!==null) meta+=' · '+NEAR.label+'에서 '+(kmm<1?Math.round(kmm*1000)+'m':kmm.toFixed(1)+'km'); }
@@ -1855,6 +1886,7 @@ function logMiss(){
 }
 
 /* ── 릴스 ── */
+var LOGO_SRC=(function(){ var im=document.querySelector('#pbtn img'); return im?im.src:''; })();
 var E=function(s){return String(s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
 var shelf=document.getElementById('shelf');
 var SHELF_N=12;
@@ -1863,6 +1895,7 @@ function shelfCard(r){
   a.setAttribute('aria-label',(r.shop||'대전공주')+' 릴스 보기');
   var rs=thumbOf(r.code)||thumbOf(r.ph);
   var cap=r.desc?('<span class="rc"><b>'+E(r.shop)+'</b>'+E(r.desc)+'</span>'):'';
+  cap+=(LOGO_SRC?'<img class="plogo" src="'+LOGO_SRC+'" alt="">':'');
   a.innerHTML=(rs?'<img src="'+rs+'" alt="'+(r.shop||'대전공주 릴스')+'" loading="lazy">':'')+
     cap;   // 인스타 표지에 재생 표시가 이미 있어 배지 생략
   a.addEventListener('click',function(){ goInsta('https://www.instagram.com/reel/'+r.code+'/'); });
