@@ -62,7 +62,6 @@ inner=inner[:m.start()]+m.group(1)+json.dumps(paths)+m.group(3)+inner[m.end():]
 
 io.open("dist/index.html","w",encoding="utf-8").write(HEAD+inner+"\n</body>\n</html>\n")
 shutil.copy("pin_clean.png","dist/favicon.png")
-if os.path.exists("bridge.html"): shutil.copy("bridge.html","dist/bridge.html")
 os.makedirs("dist/data",exist_ok=True)
 if os.path.exists("img/princess-mark.png"):
     shutil.copy("img/princess-mark.png","dist/img/princess-mark.png")
