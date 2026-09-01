@@ -63,6 +63,8 @@ inner=inner[:m.start()]+m.group(1)+json.dumps(paths)+m.group(3)+inner[m.end():]
 io.open("dist/index.html","w",encoding="utf-8").write(HEAD+inner+"\n</body>\n</html>\n")
 shutil.copy("pin_clean.png","dist/favicon.png")
 os.makedirs("dist/data",exist_ok=True)
+if os.path.exists("img/princess-mark.png"):
+    shutil.copy("img/princess-mark.png","dist/img/princess-mark.png")
 if os.path.exists("data/public-places.json"):
     shutil.copy("data/public-places.json","dist/data/public-places.json")
 size=os.path.getsize("dist/index.html")

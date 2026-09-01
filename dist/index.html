@@ -82,9 +82,9 @@ header.top.stuck{border-color:var(--line)}
 .ph3e{font-size:34px;line-height:1}
 .ph3t{font-size:11px;font-weight:700;letter-spacing:.02em}
 /* 공주픽 사진 위 대전공주 로고 */
-.plogo{position:absolute;top:6px;left:50%;transform:translateX(-50%);width:26px;height:26px;
-  border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);
-  background:#fff;object-fit:cover;z-index:2}
+img.plogo, .rt img.plogo{position:absolute;top:5px;left:50%;right:auto;bottom:auto;
+  transform:translateX(-50%);width:22px !important;height:auto !important;object-fit:contain;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.35));z-index:2;border-radius:0;background:none}
 /* 터치 영역 확보 (엄지 기준 최소 크기) */
 .srt,.fc,.cchip{min-height:38px}
 .nb{min-height:48px}
@@ -1886,7 +1886,7 @@ function logMiss(){
 }
 
 /* ── 릴스 ── */
-var LOGO_SRC=(function(){ var im=document.querySelector('#pbtn img'); return im?im.src:''; })();
+var LOGO_SRC='img/princess-mark.png';   // 대전공주 캐릭터 마크 (배경 없음)
 var E=function(s){return String(s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
 var shelf=document.getElementById('shelf');
 var SHELF_N=12;
