@@ -52,10 +52,13 @@ def main():
             docs = kakao(q, key)
             if docs: break
         if not docs:
-            p["closed"] = True
-            gone.append(n)
+            # 자동으로는 '의심'만 남긴다. 폐업 확정(closed)은 사람이 한다.
+            # 카카오 번호가 있거나 이미 사람이 확인한 곳은 건드리지 않는다.
+            if not p.get("kid") and not p.get("closedConfirmed"):
+                p["suspect"] = True
+                gone.append(n)
         else:
-            p.pop("closed", None)
+            p.pop("suspect", None)
             addr = docs[0].get("road_address_name") or docs[0].get("address_name") or ""
             d2 = re.search(r"(\S+동)", p.get("area") or "")
             if d2 and d2.group(1) not in addr:
@@ -74,7 +77,7 @@ def main():
         blk = ('<script id="places" type="application/json">\n'
                + json.dumps(P, ensure_ascii=False, separators=(",", ":")) + '\n</script>')
         open(HTML, "w", encoding="utf-8").write(html[:m.start()] + blk + html[m.end():])
-        print("\nindex.html 에 표시했습니다. (closed: true)")
+        print("\nindex.html 에 의심 표시만 했습니다. 폐업 확정은 소연님 확인 후.")
 
 
 if __name__ == "__main__":
