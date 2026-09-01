@@ -1415,6 +1415,21 @@ body.addEventListener('click',function(e){
       return '<button class="fc" type="button" data-rp="'+o[0]+'">'+o[1]+'</button>'; }).join('');
     box.hidden=false; rb.hidden=true; return;
   }
+  var kb=e.target.closest('#knowBtn');
+  if(kb){
+    var kx=document.getElementById('knowBox');
+    kx.innerHTML=[['quiet','조용한 편이에요'],['parking','주차 돼요'],['solo','혼밥하기 좋아요'],
+      ['group','단체 돼요'],['good','맛집이에요 추천!']].map(function(o){
+      return '<button class="fc" type="button" data-know="'+o[0]+'">'+o[1]+'</button>'; }).join('');
+    kx.hidden=false; kb.hidden=true; return;
+  }
+  var kn=e.target.closest('[data-know]');
+  if(kn){
+    var nm3=(document.querySelector('.dtitle')||{}).innerText||'';
+    supaSend('user_reports',{report_type:'info_'+kn.dataset.know, value:nm3.trim()});
+    document.getElementById('knowBox').innerHTML='<span style="color:var(--ok);font-size:13px">고마워요! 확인되면 카드에 반영할게요 💗</span>';
+    return;
+  }
   var rp=e.target.closest('[data-rp]');
   if(rp){
     var nm2=(document.querySelector('.dtitle')||{}).innerText||'';
@@ -1516,6 +1531,15 @@ function openDetail(p){
       }).join('')+'</div>':'')+
     '<div class="dsec"><h3>매장 정보</h3><dl class="dl">'+
       rows.map(function(r){ return '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>'; }).join('')+'</dl></div>'+
+    (p.src==='public'?
+      '<div class="dsec">'+
+        '<a class="btn" style="width:100%;background:#FEE500;color:#191919;font-weight:700" '+
+          'href="'+(p.kurl||('https://map.kakao.com/?q='+encodeURIComponent('대전 '+(String(p.area||'').split(' ')[0]||'')+' '+p.n)))+'" '+
+          'target="_blank" rel="noopener">💬 카카오맵에서 사진·리뷰 보기</a>'+
+        '<button class="btn o" id="knowBtn" style="width:100%;margin-top:8px">잘 아는 곳이에요 — 정보 알려주기</button>'+
+        '<div id="knowBox" hidden style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>'+
+        '<p class="srcline" style="margin-top:8px">아직 확인 전인 가게예요. 사진과 후기는 카카오맵에서 볼 수 있어요.</p>'+
+      '</div>':'')+
     '<div class="dsec"><button class="btn o" id="rpBtn" style="width:100%">잘못된 정보 신고</button>'+
       '<div id="rpBox" hidden style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div></div>'+
     similarBlock(p)+
