@@ -637,6 +637,28 @@ function thumbOf(code){ return (code && THUMBS[code]) || null; }
 function photoOf(p){ return thumbOf(p.cv) || thumbOf(p.ig) || thumbOf(p.ph); }   // 직접 등록 커버 > 인스타 커버 > 영상 프레임
 
 var IG='https://www.instagram.com/_princesspick_/';
+/* ── 전체 아카이브(공공데이터 2만3천곳) — 첫 화면 무게에 영향 없게 나중에 몰래 불러온다 */
+var PUB_LOADED=false;
+function loadArchive(){
+  if(PUB_LOADED) return; PUB_LOADED=true;
+  try{
+    fetch('data/public-places.json').then(function(r){ return r.json(); }).then(function(list){
+      var have={};
+      P.forEach(function(p){ have[String(p.n).replace(/\s/g,'')+(String(p.area||'').split(' ')[0]||'')]=1; });
+      var add=[];
+      list.forEach(function(x){
+        var k=String(x.n).replace(/\s/g,'')+(x.area||'');
+        if(have[k]) return; have[k]=1;
+        add.push(x);
+      });
+      P.push.apply(P,add);
+      _DONGC={};   // 동 중심 좌표 다시 계산
+    }).catch(function(){ PUB_LOADED=false; });
+  }catch(e){ PUB_LOADED=false; }
+}
+if('requestIdleCallback' in window) requestIdleCallback(loadArchive,{timeout:6000});
+else setTimeout(loadArchive,4000);
+
 /* 데이터베이스 연결 — 공개용 키(쓰기 전용 규칙 적용됨) */
 var SUPA={u:'https://ntmzjsozgxjepwhxsniu.supabase.co',k:'sb_publishable_nrg1ZgAnvhvAODdGHQmN4w_vfzO5_bb'};
 function supaSend(table,row){
@@ -1366,6 +1388,7 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeSheet
 /* ── 매장 상세 ── */
 function srcLabel(p){
   if(p.src==='reel') return '대전공주 확인';
+  if(p.src==='public') return '공공데이터 (상세 정보 확인 전)';
   if(p.lat) return '지도 정보';
   return '확인 필요';
 }
