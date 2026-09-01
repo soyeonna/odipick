@@ -50,14 +50,17 @@ header.top.stuck{border-color:var(--line)}
 .fgsc{display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; padding:2px 0}
 .fgsc::-webkit-scrollbar{display:none}
 .fgsc .srt{flex-shrink:0}
-/* 업종 그림 카드 */
-.ph3{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
-  min-height:104px;border:1px solid rgba(0,0,0,.04);border-radius:12px;overflow:hidden}
-.ph3e{font-size:34px;line-height:1}
-.ph3t{font-size:11px;font-weight:700;letter-spacing:.02em}
+/* 사진 없는 가게: 이름이 주인공인 글자 카드 */
+.ph4{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  min-height:104px;padding:8px 6px;text-align:center;border-radius:12px;overflow:hidden;
+  background:linear-gradient(165deg,#FFF8FB 0%,#FFEAF2 100%);border:1px solid #FFDFEA}
+.p4c{font-style:normal;font-size:10px;font-weight:700;color:var(--brand-d);letter-spacing:.08em}
+.p4n{font-size:12.5px;font-weight:800;color:#53414B;line-height:1.3;word-break:keep-all;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.p4d{font-size:10.5px;color:var(--ink3);font-weight:500}
 /* 공주픽 사진 위 대전공주 로고 */
 img.plogo, .rt img.plogo{position:absolute;top:5px;left:50%;right:auto;bottom:auto;
-  transform:translateX(-50%);width:22px !important;height:auto !important;object-fit:contain;
+  transform:translateX(-50%);width:14px !important;height:auto !important;object-fit:contain;
   filter:drop-shadow(0 1px 2px rgba(0,0,0,.35));z-index:2;border-radius:0;background:none}
 /* 터치 영역 확보 (엄지 기준 최소 크기) */
 .srt,.fc,.cchip{min-height:38px}
@@ -689,10 +692,12 @@ var CATFACE={
  뷰티:['💆‍♀️','#F5EEFA','#9B6FC0'], 체험:['🎨','#EDF7EF','#5E9E6F'], 나들이:['🌳','#EBF6EC','#4E8F5C'],
  노포:['🏮','#FBF0E4','#B07B3F'], 신상:['✨','#FDF3E7','#C99245']};
 function catFace(p){
-  var c=(p.cats||[]).filter(function(x){ return x!=='노포'&&x!=='신상'; })[0]||(p.cats||[])[0];
-  var f=CATFACE[c]||['🍽️','var(--brand-w)','var(--brand-d)'];
-  return '<span class="thumb ph3" style="background:'+f[1]+';color:'+f[2]+'" aria-hidden="true">'+
-    '<span class="ph3e">'+f[0]+'</span><span class="ph3t">'+(c||'맛집')+'</span></span>';
+  var c=(p.cats||[]).filter(function(x){ return x!=='노포'&&x!=='신상'; })[0]||(p.cats||[])[0]||'맛집';
+  var dong=String(p.area||'').split(' ')[0]||p.gu||'';
+  return '<span class="thumb ph4" aria-hidden="true">'+
+    '<i class="p4c">'+c+'</i>'+
+    '<b class="p4n">'+E(p.n)+'</b>'+
+    (dong?'<span class="p4d">'+E(dong)+'</span>':'')+'</span>';
 }
 function catIcon(p){
   var key=(p.cats||[]).map(function(c){ return CATICON[c]; }).filter(Boolean)[0] || 'bowl';
