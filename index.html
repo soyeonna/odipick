@@ -847,7 +847,7 @@ function score(p){
   A.cap.forEach(function(c){ cond(p.cap==null?null:(p.cap>=CAP[c]?1:0),c); });
   A.src.forEach(function(v){ cond(p.src===v?1:0,'공주픽'); });
   A.travel.forEach(function(){ cond(p.travel?1:0,'대전여행'); });
-  A.open.forEach(function(){ var o=openNow(p); cond(o==null?null:(o?1:0),'지금 영업 중'); });
+  A.open.forEach(function(){ var o=openNow(p); cond(o==null?null:(o?1:0),'영업 중'); });
   if(NEAR){
     var km=kmTo(p);
     cond(km===null?null:(km<=1.2?1:(km<=2.5?null:0)), NEAR.label+' 근처');
@@ -928,7 +928,7 @@ function syncAll(){
 }
 
 /* ── 분석된 조건 칩 ── */
-var LABEL={open:'지금 영업 중',src:'대전공주 PICK',travel:'🧳 대전여행'};
+var LABEL={open:'영업 중',src:'대전공주 PICK',travel:'🧳 대전여행'};
 function drawCond(){
   var el=document.getElementById('cond'); if(!el) return;
   var items=[];
@@ -1033,7 +1033,7 @@ function parse(t){
 }
 
 /* ── 정렬 ── */
-var SORTS=[{k:'rec',t:'추천순'},{k:'open',t:'지금 영업 중'},{k:'pick',t:'대전공주 PICK'},{k:'info',t:'정보 많은 순'}];
+var SORTS=[{k:'rec',t:'추천순'},{k:'open',t:'영업 중'},{k:'pick',t:'대전공주 PICK'},{k:'info',t:'정보 많은 순'}];
 function buildSorts(){
   var el=document.getElementById('sorts'); el.innerHTML='';
   SORTS.forEach(function(s){
@@ -2044,10 +2044,10 @@ function aiRows(){
     else if(WX.t>=27) rows.push({i:I.spark,t1:'더운 날, 시원한 한 그릇',t2:'냉면·물회·빙수',set:{q:'냉면 물회 콩국수 빙수 소바'}});
     else if(WX.t<=6) rows.push({i:I.bowl,t1:'추운 날엔 국물이 답',t2:'국밥·전골·탕 맛집',set:{q:'국밥 전골 탕 칼국수'}});
   }
-  if(h>=17&&h<22) rows.push({i:I.glass,t1:'저녁엔 분위기 좋은 한잔',t2:'지금 문 연 술집·안주 맛집',set:{sit:['술자리'],open:['1']}});
-  else if(h>=11&&h<14) rows.push({i:I.bowl,t1:'점심엔 든든한 한 그릇',t2:'지금 영업 중인 밥집',set:{cats:['한식'],open:['1']}});
+  if(h>=17&&h<22) rows.push({i:I.glass,t1:'저녁엔 분위기 좋은 한잔',t2:'문 연 술집·안주 맛집',set:{sit:['술자리'],open:['1']}});
+  else if(h>=11&&h<14) rows.push({i:I.bowl,t1:'점심엔 든든한 한 그릇',t2:'영업 중인 밥집',set:{cats:['한식'],open:['1']}});
   else if(h>=14&&h<17) rows.push({i:I.cup||I.bowl,t1:'오후엔 커피 한잔',t2:'분위기 좋은 카페·디저트',set:{cats:['카페']}});
-  else rows.push({i:I.clock,t1:'늦은 밤, 지금 문 연 곳',t2:'새벽까지 하는 야식·포차',set:{open:['1'],cats:['술집']}});
+  else rows.push({i:I.clock,t1:'늦은 밤 문 연 곳',t2:'새벽까지 하는 야식·포차',set:{open:['1'],cats:['술집']}});
   var SEA={1:'뜨끈한 국물이 당기는 계절',2:'뜨끈한 국물이 당기는 계절',3:'봄나들이 데이트 맛집',
    4:'봄나들이 데이트 맛집',5:'야외 테라스가 좋은 날',6:'시원한 면 요리의 계절',
    7:'시원한 면 요리의 계절',8:'더위 끝, 입맛 돌아오는 계절',9:'전어·대하가 제철',
