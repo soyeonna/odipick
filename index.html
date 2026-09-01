@@ -605,6 +605,13 @@ function thumbOf(code){ return (code && THUMBS[code]) || null; }
 function photoOf(p){ return thumbOf(p.cv) || thumbOf(p.ig) || thumbOf(p.ph); }   // 직접 등록 커버 > 인스타 커버 > 영상 프레임
 
 var IG='https://www.instagram.com/_princesspick_/';
+/* 데이터베이스 연결 — 공개용 키(쓰기 전용 규칙 적용됨) */
+var SUPA={u:'https://ntmzjsozgxjepwhxsniu.supabase.co',k:'sb_publishable_nrg1ZgAnvhvAODdGHQmN4w_vfzO5_bb'};
+function supaSend(table,row){
+  try{ fetch(SUPA.u+'/rest/v1/'+table,{method:'POST',
+    headers:{'apikey':SUPA.k,'Authorization':'Bearer '+SUPA.k,'Content-Type':'application/json'},
+    body:JSON.stringify(row)}).catch(function(){}); }catch(e){}
+}
 
 /* ── 아이콘 ── */
 var SW='stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none"';
@@ -1188,7 +1195,11 @@ function runSearch(text){
   }
   goResults();
   LOADING=true; render();
-  setTimeout(function(){ LOADING=false; SHOW=12; render(); }, 520);
+  setTimeout(function(){ LOADING=false; SHOW=12; render();
+    try{ supaSend('recommendation_logs',{query:t||null,
+      parsed_conditions:{gu:A.gu,cats:A.cats,sit:A.sit,fac:A.fac,dong:DONGQ,visit:VISIT,party:PARTY,budmax:BUDMAX},
+      result_count:results().length}); }catch(e){}
+  }, 520);
 }
 function goResults(){
   show('result');
@@ -1272,8 +1283,23 @@ function closeSheet(after){
 }
 scrim.addEventListener('click',closeSheet);
 body.addEventListener('click',function(e){
-  var b=e.target.closest('[data-sim]'); if(!b) return;
-  var x=P[+b.dataset.sim]; if(x) openDetail(x);
+  var s=e.target.closest('[data-sim]');
+  if(s){ var x=P[+s.dataset.sim]; if(x) openDetail(x); return; }
+  var rb=e.target.closest('#rpBtn');
+  if(rb){
+    var box=document.getElementById('rpBox');
+    var nm=(document.querySelector('.dtitle')||{}).innerText||'';
+    box.innerHTML=[['closed','폐업했어요'],['hours','영업시간이 달라요'],['parking','주차 정보가 틀려요'],
+      ['price','가격이 달라요'],['etc','기타 정보 오류']].map(function(o){
+      return '<button class="fc" type="button" data-rp="'+o[0]+'">'+o[1]+'</button>'; }).join('');
+    box.hidden=false; rb.hidden=true; return;
+  }
+  var rp=e.target.closest('[data-rp]');
+  if(rp){
+    var nm2=(document.querySelector('.dtitle')||{}).innerText||'';
+    supaSend('user_reports',{report_type:rp.dataset.rp, value:nm2.trim()});
+    document.getElementById('rpBox').innerHTML='<span style="color:var(--ok);font-size:13px">접수됐어요. 확인 후 고칠게요 💗</span>';
+  }
 });
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeSheet(); });
 
@@ -1367,6 +1393,8 @@ function openDetail(p){
       }).join('')+'</div>':'')+
     '<div class="dsec"><h3>매장 정보</h3><dl class="dl">'+
       rows.map(function(r){ return '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>'; }).join('')+'</dl></div>'+
+    '<div class="dsec"><button class="btn o" id="rpBtn" style="width:100%">잘못된 정보 신고</button>'+
+      '<div id="rpBox" hidden style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div></div>'+
     similarBlock(p)+
     '<p class="srcline">정보 출처 · '+srcLabel(p)+(p.checkedAt?' · 마지막 확인 '+p.checkedAt:'')+
       '<br>영업시간과 가격은 변경될 수 있으니 방문 전에 한 번 더 확인해주세요.</p>',
