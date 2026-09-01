@@ -1586,7 +1586,7 @@ function openFilter(){
   FGROUPS.forEach(function(g){
     html+='<div class="fg"><div class="fgh">'+g.l+'</div><div class="fgc">';
     g.o.forEach(function(o){
-      var n=countFor(g.k,o), label=(g.k==='open'?'지금 영업 중':o);
+      var n=countFor(g.k,o), label=(g.k==='open'?'영업 중':o);
       html+='<button class="fc'+(n?'':' z')+'" type="button" data-k="'+g.k+'" data-val="'+o+'" '+
         'aria-pressed="'+(A[g.k].indexOf(o)>-1)+'">'+label+(n?'<span class="n">'+n+'</span>':'')+'</button>';
     });
@@ -1834,7 +1834,7 @@ document.getElementById('locBtn').addEventListener('click',function(){
       '<h3>위치 권한이 꺼져 있어요</h3><p>설정에서 위치 접근을 허용하면 가까운 곳부터 보여드릴 수 있어요. 지금은 지역을 눌러 골라주세요.</p></div>'); });
 });
 var mf=document.getElementById('mapFilt');
-[{t:'👑 공주픽',k:'src',v:'reel'},{t:'지금 영업 중',k:'open',v:'1'}].forEach(function(x){
+[{t:'👑 공주픽',k:'src',v:'reel'},{t:'영업 중',k:'open',v:'1'}].forEach(function(x){
   var b=document.createElement('button'); b.className='srt'; b.type='button';
   b.textContent=x.t; b.dataset.k=x.k; b.dataset.val=x.v; b.setAttribute('aria-pressed','false');
   b.addEventListener('click',function(){ toggle(x.k,x.v); drawBigMap(); });
@@ -1956,7 +1956,7 @@ var PH=['둔산동에서 부모님과 갈 조용한 한식집, 주차 필수',
  '성심당 근처 저녁 맛집',
  '남자친구랑 조용히 술 마실 수 있는 곳',
  '4명이서 10만 원 이하 고깃집',
- '지금 영업 중인 국물 맛집',
+ '영업 중인 국물 맛집',
  '유성온천 근처 예쁜 카페'];
 var phEl=document.getElementById('ph'), pi=0, qEl=document.getElementById('q');
 phEl.textContent=PH[0];
