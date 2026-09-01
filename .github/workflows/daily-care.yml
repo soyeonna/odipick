@@ -1,0 +1,35 @@
+name: 매일 데이터 정비
+
+on:
+  schedule:
+    - cron: '30 20 * * *'   # 매일 05:30 KST (릴스 동기화 06:00 전에)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  care:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: .env 만들기 (저장소 시크릿에서)
+        run: echo "KAKAO_REST_KEY=${{ secrets.KAKAO_REST_KEY }}" > .env
+      - name: 새 매장에 카카오 번호 달기
+        run: python3 scripts/link_kakao_ids.py || true
+      - name: 폐업·정보변경 감지 (표시만, 삭제 안 함)
+        run: python3 scripts/check_closed.py --apply || true
+      - name: 바뀐 게 있으면 커밋
+        run: |
+          rm -f .env
+          if [ -n "$(git status --porcelain index.html)" ]; then
+            git config user.name "odipick-bot"; git config user.email "bot@odipick.local"
+            git add index.html
+            git commit -m "데이터 정비 $(date +%Y-%m-%d)"
+            git push
+          else
+            echo "변경 없음"
+          fi

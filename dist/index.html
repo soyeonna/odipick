@@ -1297,6 +1297,10 @@ function closeSheet(after){
   try{ history.back(); }catch(e){ if(typeof after==='function') after(); }
 }
 scrim.addEventListener('click',closeSheet);
+body.addEventListener('click',function(e){
+  var b=e.target.closest('[data-sim]'); if(!b) return;
+  var x=P[+b.dataset.sim]; if(x) openDetail(x);
+});
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeSheet(); });
 
 /* 손잡이를 끌어 높이 조절 */
@@ -1330,6 +1334,33 @@ function srcLabel(p){
   if(p.lat) return '지도 정보';
   return '확인 필요';
 }
+/* 상세 하단: 같은 동네·같은 종류의 비슷한 곳 */
+function similarBlock(p){
+  var mine=p.cats||[], dong=String(p.area||'').split(' ')[0];
+  var sim=P.filter(function(x){
+    if(x===p||x.closed) return false;
+    if(ptypeOf(x)!==ptypeOf(p)) return false;
+    return mine.some(function(c){ return c!=='노포'&&c!=='신상'&&(x.cats||[]).indexOf(c)>-1; });
+  }).map(function(x){
+    var s=0;
+    if(dong && String(x.area||'').indexOf(dong)===0) s+=3;
+    else if(x.gu===p.gu) s+=1;
+    if(x.src==='reel') s+=2;
+    if(x.likes) s+=Math.min(2,x.likes/1000);
+    return {x:x,s:s};
+  }).sort(function(a,b){ return b.s-a.s; }).slice(0,4);
+  if(!sim.length) return '';
+  return '<div class="dsec"><h3>비슷한 곳</h3><div style="display:flex;flex-direction:column;gap:6px">'+
+    sim.map(function(o){ var x=o.x;
+      return '<button class="simb" type="button" data-sim="'+P.indexOf(x)+'" '+
+        'style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;'+
+        'border:1px solid var(--line);border-radius:10px;background:var(--card);text-align:left">'+
+        '<span style="min-width:0"><b style="font-size:14px">'+x.n+'</b>'+
+        (x.src==='reel'?' <span class="pick" style="font-size:10px">👑</span>':'')+
+        '<br><span style="font-size:12px;color:var(--ink2)">'+[x.cat,x.area].filter(Boolean).join(' · ').slice(0,30)+'</span></span>'+
+        '<span style="color:var(--ink3)">'+ic(I.arrow,14)+'</span></button>';
+    }).join('')+'</div></div>';
+}
 function openDetail(p){
   var f=p.fac||{};
   var rows=[['카테고리',p.cat],['지역',p.area],
@@ -1362,6 +1393,7 @@ function openDetail(p){
       }).join('')+'</div>':'')+
     '<div class="dsec"><h3>매장 정보</h3><dl class="dl">'+
       rows.map(function(r){ return '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>'; }).join('')+'</dl></div>'+
+    similarBlock(p)+
     '<p class="srcline">정보 출처 · '+srcLabel(p)+(p.checkedAt?' · 마지막 확인 '+p.checkedAt:'')+
       '<br>영업시간과 가격은 변경될 수 있으니 방문 전에 한 번 더 확인해주세요.</p>',
     '<a class="btn s" href="'+(p.kurl||('https://map.kakao.com/?q='+encodeURIComponent((p.area||'')+' '+p.n)))+'" target="_blank" rel="noopener">지도 보기</a>'+
