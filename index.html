@@ -50,6 +50,8 @@ header.top.stuck{border-color:var(--line)}
 .fgsc{display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; padding:2px 0}
 .fgsc::-webkit-scrollbar{display:none}
 .fgsc .srt{flex-shrink:0}
+/* 하단 안내 문구 — 아주 작게 */
+.fine{display:block; margin-top:8px; font-size:10px; line-height:1.5; color:var(--ink3); opacity:.85}
 /* 사진 없는 가게 — 이미지란 없이 납작하게 */
 .card.flat{padding:12px 14px}
 .card.flat .cbody{margin-left:0}
@@ -495,7 +497,9 @@ footer{margin-top:34px; padding:18px 0 8px; border-top:1px solid var(--line);
 
 
   <footer>👑 공주픽 — 대전공주가 직접 다녀온 곳<br>
-  영업시간과 가격은 변경될 수 있으니 방문 전에 한 번 더 확인해주세요.</footer>
+  영업시간과 가격은 변경될 수 있으니 방문 전에 한 번 더 확인해주세요.
+  <span class="fine">영업시간 · 가격 · 주차 · 룸 등 매장 정보는 수집 시점 기준이며 실제와 다를 수 있습니다.
+  방문 전 매장에 직접 확인해 주세요.</span></footer>
 </div></div>
 
 <!-- 추천 결과 -->
