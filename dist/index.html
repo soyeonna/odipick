@@ -596,7 +596,7 @@ var GU_LABEL={"대덕구": [188.7, 108.0], "유성구": [93.7, 134.8], "서구":
 var RULES=[[/10\s*명|열\s*명|단체|대\s*인원/,'cap','10명+'],[/[5-9]\s*명|여럿/,'cap','5–9명'],
  [/2\s*~\s*3\s*명|두세\s*명|[34]\s*명|셋|넷/,'cap','3–4명'],[/[12]\s*명|둘|혼자|커플|단둘/,'cap','1–2명'],
  [/회식|모임|단합|송년|신년/,'sit','회식'],[/데이트|소개팅|썸/,'sit','데이트'],
- [/부모님|가족|어른|어머니|아버지|장인|시부모/,'sit','가족'],[/혼밥|혼자\s*밥/,'sit','혼밥'],
+ [/부모님|가족|어른|어머니|아버지|장인어른|장모님|시부모/,'sit','가족'],[/혼밥|혼자\s*밥/,'sit','혼밥'],
  [/혼술|혼자\s*술/,'sit','혼술'],[/친구/,'sit','친구모임'],
  [/기념일|생일|프로포즈|특별한|결혼/,'sit','기념일'],[/가성비|저렴|싼|든든/,'sit','가성비'],
 
@@ -815,7 +815,7 @@ function pct(p){ var h=0;
   if(p.sit&&p.sit.length)h++; if(p.budget!=null)h++; if(p.cap!=null)h++;
   if(p.fac&&Object.keys(p.fac).length)h++; if(p.gu)h++; if(p.hours)h++;
   return Math.round(h/6*100); }
-function nActive(){ var n=0; KEYS.forEach(function(k){ n+=A[k].length; }); return n+(NEAR?1:0)+(DONGQ?1:0)+(VISIT!=null?1:0)+(typeof NEEDLE!=='undefined'&&NEEDLE.length?1:0); }
+function nActive(){ var n=0; KEYS.forEach(function(k){ n+=A[k].length; }); return n+(NEAR?1:0)+(DONGQ?1:0)+(VISIT!=null?1:0)+(MEAL?1:0)+(typeof NEEDLE!=='undefined'&&NEEDLE.length?1:0); }
 
 /* 추천 점수 — 기존 로직 그대로 */
 function score(p){
@@ -847,6 +847,13 @@ function score(p){
     cond(got.length?1:null, got[0]||null);
   }
   var sc=hit*12-miss*7+pct(p)/20;
+  if(MEAL){
+    var mo=openAtMin(p,{lunch:750,dinner:1140,breakfast:570,late:1380}[MEAL]);
+    if(mo===true) sc+=12;                       // 그 시간 여는 게 확인된 곳 먼저
+  } else if(VISIT==null && !A.open.length){
+    var onw=openNow(p);
+    if(onw===true) sc+=6; else if(onw===false) sc-=9;   // 영업 종료가 위로 오지 않게
+  }
   if(DONGQ && String(p.area||'').indexOf(DONGQ)===0) sc+=40;   // 그 동네가 1순위, 근처는 그다음
   if(p.featured && A.sit.indexOf(p.featured)>-1) sc+=500;   // 그 상황을 골랐을 때만 1순위
   if(p.jjin) sc += (p.src==='reel' ? 30 : 22);   // 찐 대전 맛집 — 공주가 다녀온 곳 먼저
@@ -887,7 +894,7 @@ function toggle(k,v){
   if(i>-1) A[k].splice(i,1); else A[k].push(v);
   syncAll(); render(); if(document.getElementById('sc-home').classList.contains('on')) homeList();
 }
-function clearAll(){ KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; syncAll(); render(); }
+function clearAll(){ KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; syncAll(); render(); }
 function syncAll(){
   buildQuick();
   document.querySelectorAll('[data-k][data-val]').forEach(function(b){
@@ -906,7 +913,8 @@ function drawCond(){
     A[k].forEach(function(v){ items.push([k,v,LABEL[k]||(k==='avoid'?v+' 제외':v)]); });
   });
   el.innerHTML='';
-  [[DONGQ, DONGQ, function(){ DONGQ=null; }],
+  [[MEAL, {lunch:'점심',dinner:'저녁',breakfast:'아침',late:'야식'}[MEAL], function(){ MEAL=null; }],
+   [DONGQ, DONGQ, function(){ DONGQ=null; }],
    [VISIT!=null, VISIT!=null?('오늘 '+Math.floor(VISIT/60)+'시 영업'):'', function(){ VISIT=null; }],
    [PARTY!=null, PARTY+'명', function(){ PARTY=null; A.cap=[]; }],
    [BUDMAX!=null, BUDMAX!=null?('1인 ~'+Math.round(BUDMAX/10000*10)/10+'만원'):'', function(){ BUDMAX=null; A.budget=[]; }]
@@ -942,16 +950,22 @@ function drawCond(){
 /* ── 자연어 → 조건. AI 호출 없이 규칙으로 푼다 ── */
 var NEEDLE=[], DONGQ=null;      // 자유 낱말 · 동 단위 검색
 var VISIT=null, PARTY=null, BUDMAX=null;   // 방문시각(분) · 인원 · 1인 예산(원)
+var MEAL=null;   // lunch/dinner/breakfast/late — '점심'처럼 시각 없이 말해도 상식으로 알아듣는다
 var RELAX={dist:false, unkFac:false, unkHours:false, unkBud:false};
 function parse(t){
   KEYS.forEach(function(k){ A[k]=[]; });
-  NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null;
+  NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null;
   RELAX={dist:false, unkFac:false, unkHours:false, unkBud:false};
   Object.keys(LANDMARKS).forEach(function(k){
     if(t.indexOf(k)>-1) NEAR=LANDMARKS[k];
   });
   var dm=t.match(/([가-힣]{1,6}동)(?=\s|$|에|의|으로|쪽)/);
   if(dm) DONGQ=dm[1];
+  // 식사 시간대: 점심이면 밥집·그 시간 영업이 상식
+  if(/점심|런치/.test(t)) MEAL='lunch';
+  else if(/아침|조식|모닝/.test(t)) MEAL='breakfast';
+  else if(/야식/.test(t)) MEAL='late';
+  else if(/저녁|디너/.test(t) && !/\d\s*시/.test(t)) MEAL='dinner';
   // 인원: "4명" / "부모님 두 분과"(두 분 + 나 = 3)
   var pm=t.match(/(\d{1,2})\s*명/);
   if(pm) PARTY=+pm[1];
@@ -1077,6 +1091,16 @@ function mustCheck(p){
     if(o===false) return '그 시간 영업 안 함';
     if(o===null && !RELAX.unkHours) return '영업시간 미확인';
   }
+  if(MEAL){
+    var MT={lunch:12*60+30, dinner:19*60, breakfast:9*60+30, late:23*60}[MEAL];
+    if(openAtMin(p,MT)===false) return '그 시간 영업 안 함';   // 모르는 곳은 통과(순위만 뒤로)
+    if(MEAL==='lunch'||MEAL==='breakfast'){
+      if(ptypeOf(p)!=='rest' && ptypeOf(p)!=='cafe') return '밥집 아님';
+      var bz=(p.kcat||'')+' '+(p.cat||'')+' '+(p.cats||[]).join(' ');
+      if(MEAL==='lunch' && /포차|이자카야|호프|주점|와인|칵테일|펍|바\b|술집/.test(bz)
+         && !/한식|백반|국밥|칼국수|중식|일식|분식/.test(bz)) return '점심 자리 아님';
+    }
+  }
   if(A.fac.length){
     for(var i=0;i<A.fac.length;i++){
       var v=(p.fac||{})[FAC[A.fac[i]]];
@@ -1093,7 +1117,7 @@ function mustCheck(p){
   return null;
 }
 function mustActive(){
-  return !!(A.cats.length||DONGQ||VISIT!=null||A.fac.length||BUDMAX!=null||PARTY!=null||A.gu.length);
+  return !!(A.cats.length||DONGQ||VISIT!=null||MEAL||A.fac.length||BUDMAX!=null||PARTY!=null||A.gu.length);
 }
 function needleHay(p){ return p.n+' '+(p.cat||'')+' '+(p.v||'')+' '+(p.kcat||''); }
 function results(){
