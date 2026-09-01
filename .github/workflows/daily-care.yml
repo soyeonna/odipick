@@ -23,10 +23,6 @@ jobs:
           echo "SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }}" >> .env
       - name: 새 매장에 카카오 번호 달기
         run: python3 scripts/link_kakao_ids.py || true
-      - name: 릴스 표지 이어받기
-        run: |
-          pip install --quiet pillow
-          python3 scripts/fetch_covers.py || true
       - name: 폐업·정보변경 감지 (표시만, 삭제 안 함)
         run: python3 scripts/check_closed.py --apply || true
       - name: 데이터베이스에도 반영
