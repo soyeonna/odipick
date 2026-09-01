@@ -851,7 +851,7 @@ function pct(p){ var h=0;
   if(p.sit&&p.sit.length)h++; if(p.budget!=null)h++; if(p.cap!=null)h++;
   if(p.fac&&Object.keys(p.fac).length)h++; if(p.gu)h++; if(p.hours)h++;
   return Math.round(h/6*100); }
-function nActive(){ var n=0; KEYS.forEach(function(k){ n+=A[k].length; }); return n+(NEAR?1:0)+(DONGQ?1:0)+(VISIT!=null?1:0)+(MEAL?1:0)+(typeof NEEDLE!=='undefined'&&NEEDLE.length?1:0); }
+function nActive(){ var n=0; KEYS.forEach(function(k){ n+=A[k].length; }); return n+(NEAR?1:0)+(DONGQ?1:0)+(VISIT!=null?1:0)+(MEAL?1:0)+(PTF?1:0)+(typeof NEEDLE!=='undefined'&&NEEDLE.length?1:0); }
 
 /* 추천 점수 — 기존 로직 그대로 */
 function score(p){
@@ -910,7 +910,7 @@ function score(p){
 
 /* ── 빠른 상황 선택 ── */
 var SITU=[
- {t:'맛집',k:'cats',v:'한식',i:I.bowl},
+ {t:'맛집',pt:'rest',i:I.bowl},
  {t:'디저트',k:'cats',v:'디저트',i:I.cup||I.spark},
  {t:'데이트',k:'sit',v:'데이트',i:I.heart},
  {t:'신상',k:'cats',v:'신상',i:I.spark},
@@ -922,8 +922,12 @@ SITU.forEach(function(x){
   var b=document.createElement('button');
   b.className='chip'+(x.pk?' pk':''); b.type='button';
   b.innerHTML=(x.pk?'<span class="ci">👑</span>':'<span class="ci">'+ic(x.i,17)+'</span>')+x.t;
-  b.dataset.k=x.k; b.dataset.val=x.v; b.setAttribute('aria-pressed','false');
-  b.addEventListener('click',function(){ toggle(x.k,x.v); goResults(); });
+  if(x.k){ b.dataset.k=x.k; b.dataset.val=x.v; }
+  b.setAttribute('aria-pressed','false');
+  b.addEventListener('click',function(){
+    if(x.pt){ PTF=(PTF===x.pt?null:x.pt); syncAll(); render(); goResults(); return; }
+    toggle(x.k,x.v); goResults();
+  });
   situEl.appendChild(b);
 });
 
@@ -932,7 +936,7 @@ function toggle(k,v){
   if(i>-1) A[k].splice(i,1); else A[k].push(v);
   syncAll(); render(); if(document.getElementById('sc-home').classList.contains('on')) homeList();
 }
-function clearAll(){ KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; syncAll(); render(); }
+function clearAll(){ KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; PTF=null; syncAll(); render(); }
 function syncAll(){
   buildQuick();
   document.querySelectorAll('[data-k][data-val]').forEach(function(b){
@@ -951,7 +955,8 @@ function drawCond(){
     A[k].forEach(function(v){ items.push([k,v,LABEL[k]||(k==='avoid'?v+' 제외':v)]); });
   });
   el.innerHTML='';
-  [[MEAL, {lunch:'점심',dinner:'저녁',breakfast:'아침',late:'야식'}[MEAL], function(){ MEAL=null; }],
+  [[PTF, '맛집', function(){ PTF=null; }],
+   [MEAL, {lunch:'점심',dinner:'저녁',breakfast:'아침',late:'야식'}[MEAL], function(){ MEAL=null; }],
    [DONGQ, DONGQ, function(){ DONGQ=null; }],
    [VISIT!=null, VISIT!=null?('오늘 '+Math.floor(VISIT/60)+'시 영업'):'', function(){ VISIT=null; }],
    [PARTY!=null, PARTY+'명', function(){ PARTY=null; A.cap=[]; }],
@@ -988,11 +993,12 @@ function drawCond(){
 /* ── 자연어 → 조건. AI 호출 없이 규칙으로 푼다 ── */
 var NEEDLE=[], DONGQ=null;      // 자유 낱말 · 동 단위 검색
 var VISIT=null, PARTY=null, BUDMAX=null;   // 방문시각(분) · 인원 · 1인 예산(원)
+var PTF=null;   // 장소 유형 필터 — '맛집' 칩은 밥집 전체
 var MEAL=null;   // lunch/dinner/breakfast/late — '점심'처럼 시각 없이 말해도 상식으로 알아듣는다
 var RELAX={dist:false, unkFac:false, unkHours:false, unkBud:false};
 function parse(t){
   KEYS.forEach(function(k){ A[k]=[]; });
-  NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null;
+  NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null;
   RELAX={dist:false, unkFac:false, unkHours:false, unkBud:false};
   Object.keys(LANDMARKS).forEach(function(k){
     if(t.indexOf(k)>-1) NEAR=LANDMARKS[k];
@@ -1161,10 +1167,11 @@ function mustCheck(p){
   if(PARTY!=null && p.cap!=null && p.cap<PARTY) return '인원 수용 불가';
   if(A.gu.length && A.gu.indexOf(p.gu)<0 && !DONGQ) return '지역 밖';
   if(A.travel.length && !p.travel) return '여행 목록 아님';
+  if(PTF && ptypeOf(p)!==PTF) return '밥집 아님';
   return null;
 }
 function mustActive(){
-  return !!(A.cats.length||DONGQ||VISIT!=null||MEAL||A.fac.length||BUDMAX!=null||PARTY!=null||A.gu.length||A.travel.length);
+  return !!(A.cats.length||DONGQ||VISIT!=null||MEAL||PTF||A.fac.length||BUDMAX!=null||PARTY!=null||A.gu.length||A.travel.length);
 }
 function needleHay(p){ return p.n+' '+(p.cat||'')+' '+(p.v||'')+' '+(p.kcat||''); }
 function results(){
