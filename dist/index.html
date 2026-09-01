@@ -1340,7 +1340,7 @@ function statusOf2(p){
 function cardEl(r,i){
   var p=r.p;
   var b=document.createElement('button'); b.className='card'; b.type='button';
-  var tsrc=photoOf(p);
+  var tsrc=p.noCardPhoto?null:photoOf(p);   // 표지가 아닌 영상 장면은 카드에 안 쓴다
   var th = tsrc ? '<img class="thumb" src="'+tsrc+'" alt="'+p.n+' 사진" loading="lazy" '+
                   'onerror="var c=this.closest(\'.card\');if(c)c.classList.add(\'flat\');this.remove()">'
                 : '';
