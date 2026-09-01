@@ -1614,7 +1614,38 @@ function drawKakao(kk){
   kmarkers.forEach(function(m){ m.setMap(null); }); kmarkers=[];
   // 현재 필터·검색 결과를 그대로 지도에 (공주픽만이 아니라 전부)
   var arr=results().map(function(r){ return r.p; })
-    .filter(function(x){ return x.lat; }).slice(0,300);
+    .filter(function(x){ return x.lat; });
+  if(MTHEME){
+    arr=arr.filter(function(x){
+      if(MTHEME.f) return MTHEME.f(x);
+      var hay=x.n+' '+(x.cat||'')+' '+(x.v||'')+' '+(x.kcat||'');
+      return MTHEME.re.test(hay);
+    }).sort(function(a,b){
+      return (b.src==='reel')-(a.src==='reel') || (b.likes||0)-(a.likes||0);
+    }).slice(0,15);
+    // 순위 배지로 찍는다
+    kmarkers.forEach(function(m){ m.setMap(null); }); kmarkers=[];
+    arr.forEach(function(x,i){
+      var el=document.createElement('button');
+      el.type='button';
+      el.style.cssText='min-width:30px;height:30px;border-radius:50%;border:2.5px solid #fff;'+
+        'background:'+(i<3?'var(--brand-d)':'var(--brand)')+';color:#fff;font-weight:800;font-size:13px;'+
+        'box-shadow:0 2px 6px rgba(0,0,0,.25);display:grid;place-items:center;padding:0 4px';
+      el.textContent=(i+1);
+      el.addEventListener('click',function(){ mapCard(x); });
+      var ov=new kk.maps.CustomOverlay({position:new kk.maps.LatLng(x.lat,x.lng), content:el, yAnchor:1.1});
+      ov.setMap(kmap); kmarkers.push(ov);
+    });
+    var redo=document.getElementById('redoBtn');
+    redo.hidden=false; redo.innerHTML=ic(I.search,14)+MTHEME.t+' '+arr.length+'곳';
+    if(arr.length){
+      var bd=new kk.maps.LatLngBounds();
+      arr.forEach(function(x){ bd.extend(new kk.maps.LatLng(x.lat,x.lng)); });
+      kmap.setBounds(bd,60,30,60,30);
+    }
+    return;
+  }
+  arr=arr.slice(0,300);
   var mks=arr.map(function(x){
     var mk=new kk.maps.Marker({position:new kk.maps.LatLng(x.lat,x.lng), image:img, title:x.n});
     kk.maps.event.addListener(mk,'click',function(){ mapCard(x); });
@@ -1667,6 +1698,27 @@ var mf=document.getElementById('mapFilt');
   var b=document.createElement('button'); b.className='srt'; b.type='button';
   b.textContent=x.t; b.dataset.k=x.k; b.dataset.val=x.v; b.setAttribute('aria-pressed','false');
   b.addEventListener('click',function(){ toggle(x.k,x.v); drawBigMap(); });
+  mf.appendChild(b);
+});
+/* 테마 탑 — 진짜 지도 위에 순위 배지로 */
+var MTHEMES=[
+ {t:'전체'},
+ {t:'칼국수 탑',re:/칼국수/},
+ {t:'빵·디저트 탑',f:function(x){ return (x.cats||[]).indexOf('디저트')>-1; }},
+ {t:'노포 탑',f:function(x){ return (x.cats||[]).indexOf('노포')>-1; }},
+ {t:'데이트 탑',f:function(x){ return (x.sit||[]).indexOf('데이트')>-1 && x.src==='reel'; }},
+ {t:'술집 탑',f:function(x){ return (x.cats||[]).indexOf('술집')>-1; }}
+];
+var MTHEME=null;
+MTHEMES.forEach(function(th){
+  var b=document.createElement('button'); b.className='srt mth'; b.type='button';
+  b.textContent=th.t; b.setAttribute('aria-pressed',String(th===MTHEMES[0]&&!MTHEME));
+  b.addEventListener('click',function(){
+    MTHEME = th.re||th.f ? th : null;
+    document.querySelectorAll('.mth').forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+    b.setAttribute('aria-pressed','true');
+    drawBigMap();
+  });
   mf.appendChild(b);
 });
 
