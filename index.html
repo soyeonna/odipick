@@ -625,7 +625,11 @@ var P=JSON.parse(document.getElementById('places').textContent);
 var RD=JSON.parse(document.getElementById('reels').textContent);
 var THUMBS=JSON.parse(document.getElementById('thumbs').textContent);
 function thumbOf(code){ return (code && THUMBS[code]) || null; }
-function photoOf(p){ return thumbOf(p.cv) || thumbOf(p.ig) || thumbOf(p.ph); }   // 직접 등록 커버 > 인스타 커버 > 영상 프레임
+function photoOf(p){
+  var t=thumbOf(p.cv) || thumbOf(p.ig) || thumbOf(p.ph);
+  if(!t && p.igs) for(var i=0;i<p.igs.length && !t;i++) t=thumbOf(p.igs[i]);
+  return t;
+}   // 직접 등록 커버 > 인스타 커버 > 영상 프레임
 
 var IG='https://www.instagram.com/_princesspick_/';
 /* ── 전체 아카이브(공공데이터 2만3천곳) — 첫 화면 무게에 영향 없게 나중에 몰래 불러온다 */
@@ -1194,10 +1198,8 @@ function cardEl(r,i){
   var p=r.p;
   var b=document.createElement('button'); b.className='card'; b.type='button';
   var tsrc=photoOf(p);
-  var th = tsrc ? '<span class="thumb ph2"><img src="'+tsrc+'" alt="'+p.n+' 사진" loading="lazy" '+
-                  'style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" '+
-                  'onerror="this.remove()">'+catIcon(p)+
-                  (p.src==='reel'&&LOGO_SRC?'<img class="plogo" src="'+LOGO_SRC+'" alt="">':'')+'</span>'
+  var th = tsrc ? '<img class="thumb" src="'+tsrc+'" alt="'+p.n+' 사진" loading="lazy" '+
+                  'onerror="var c=this.closest(\'.card\');if(c)c.classList.add(\'flat\');this.remove()">'
                 : '';
   if(!tsrc) b.classList.add('flat');   // 사진 없으면 납작한 카드
   var meta=[p.cat,p.area].filter(Boolean).join(' · ');
@@ -1904,7 +1906,6 @@ function shelfCard(r){
   a.setAttribute('aria-label',(r.shop||'대전공주')+' 릴스 보기');
   var rs=thumbOf(r.code)||thumbOf(r.ph);
   var cap=r.desc?('<span class="rc"><b>'+E(r.shop)+'</b>'+E(r.desc)+'</span>'):'';
-  cap+=(LOGO_SRC?'<img class="plogo" src="'+LOGO_SRC+'" alt="">':'');
   a.innerHTML=(rs?'<img src="'+rs+'" alt="'+(r.shop||'대전공주 릴스')+'" loading="lazy">':'')+
     cap;   // 인스타 표지에 재생 표시가 이미 있어 배지 생략
   a.addEventListener('click',function(){ goInsta('https://www.instagram.com/reel/'+r.code+'/'); });
