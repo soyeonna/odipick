@@ -43,6 +43,7 @@ HEAD='''<!doctype html>
 inner=re.sub(r'<title>[\s\S]*?</title>\s*','',src,count=1)
 
 # 사진을 파일로 분리
+shutil.rmtree("dist/img", ignore_errors=True)   # 안 쓰는 옛 사진이 쌓이지 않게
 os.makedirs("dist/img",exist_ok=True)
 os.makedirs("img",exist_ok=True)
 m=re.search(r'(<script id="thumbs" type="application/json">\s*)(\{[\s\S]*?\})(\s*</script>)', inner)
