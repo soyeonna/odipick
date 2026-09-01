@@ -7,7 +7,9 @@ import json, re, subprocess, sys, time, urllib.parse
 key=""
 for line in open(".env",encoding="utf-8"):
     if line.strip().startswith("KAKAO_REST_KEY"): key=line.split("=",1)[1].strip()
-PROTECT={'단소','명현만간장게장','하트티라미수','참치정육점','타마','육식문화','손수베이커리','왔다떡방','동백야시장','나만의휴일'}
+PROTECT={'단소','명현만간장게장','하트티라미수','참치정육점','타마','육식문화','손수베이커리',
+         '왔다떡방','동백야시장','나만의휴일','은주','온천집','백송한우','워크업','드림김밥',
+         '친친양꼬치','부산오뎅','런던스테이지'}
 def kakao(q):
     u="https://dapi.kakao.com/v2/local/search/keyword.json?size=5&query="+urllib.parse.quote(q)
     r=subprocess.run(["curl","-sS","--max-time","15","-H",f"Authorization: KakaoAK {key}",u],capture_output=True)
