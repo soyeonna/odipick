@@ -8,9 +8,14 @@ from PIL import Image
 
 BASE="http://apis.data.go.kr/B551011/KorService2"
 W=540
-K=""
-for line in open(".env",encoding="utf-8"):
-    if line.strip().startswith("DATA_GO_KR_KEY"): K=line.split("=",1)[1].strip()
+def read_key():
+    """실행할 때마다 .env 를 다시 읽는다 (키를 새로 넣어도 바로 반영)."""
+    env={}
+    for line in open(".env",encoding="utf-8"):
+        if "=" in line and not line.strip().startswith("#"):
+            k,v=line.split("=",1); env[k.strip()]=v.strip()
+    return env.get("KTO_KEY") or env.get("DATA_GO_KR_KEY","")
+K=read_key()
 
 def call(path, **kw):
     p={"serviceKey":K,"MobileOS":"ETC","MobileApp":"odipick","_type":"json"}
@@ -46,6 +51,7 @@ def harvest():
 def main():
     loop="--loop" in sys.argv
     while True:
+        globals()["K"]=read_key()
         data=harvest()
         if data=="wait":
             print("아직 키가 반영되지 않았습니다 (승인 후 몇 분~몇 시간)", flush=True)
