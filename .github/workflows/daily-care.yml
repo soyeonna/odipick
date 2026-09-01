@@ -17,11 +17,16 @@ jobs:
         with:
           python-version: '3.12'
       - name: .env 만들기 (저장소 시크릿에서)
-        run: echo "KAKAO_REST_KEY=${{ secrets.KAKAO_REST_KEY }}" > .env
+        run: |
+          echo "KAKAO_REST_KEY=${{ secrets.KAKAO_REST_KEY }}" > .env
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env
+          echo "SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }}" >> .env
       - name: 새 매장에 카카오 번호 달기
         run: python3 scripts/link_kakao_ids.py || true
       - name: 폐업·정보변경 감지 (표시만, 삭제 안 함)
         run: python3 scripts/check_closed.py --apply || true
+      - name: 데이터베이스에도 반영
+        run: python3 scripts/migrate_to_supabase.py || true
       - name: 바뀐 게 있으면 커밋
         run: |
           rm -f .env
