@@ -5074,5 +5074,87 @@
   "photoSrc": "대전공주",
   "cover": "pic쇼넨252",
   "noDate": true
+ },
+ {
+  "n": "봉이호떡",
+  "cat": "디저트",
+  "cats": [
+   "디저트",
+   "카페",
+   "노포"
+  ],
+  "area": "은행동",
+  "gu": "중구",
+  "hours": null,
+  "budget": 1,
+  "sit": [
+   "가성비",
+   "혼밥",
+   "친구모임"
+  ],
+  "fac": {},
+  "cap": 4,
+  "v": "은행동 명물 길거리 호떡. 성심당 가는 길에 하나",
+  "src": "local",
+  "nopo": true,
+  "travel": 1,
+  "jjin": true,
+  "noCardPhoto": true
+ },
+ {
+  "n": "공주분식",
+  "cat": "분식",
+  "cats": [
+   "분식",
+   "노포"
+  ],
+  "area": "대흥동",
+  "gu": "중구",
+  "hours": null,
+  "budget": 1,
+  "sit": [
+   "가성비",
+   "혼밥",
+   "친구모임"
+  ],
+  "fac": {},
+  "cap": 4,
+  "v": "대흥동 쫄면 노포. 새콤달콤 쫄면 한 그릇",
+  "src": "local",
+  "nopo": true,
+  "travel": 1,
+  "jjin": true,
+  "noCardPhoto": true
+ },
+ {
+  "n": "홍운장",
+  "cat": "중식",
+  "cats": [
+   "중식",
+   "노포"
+  ],
+  "area": "도마동",
+  "gu": "서구",
+  "hours": null,
+  "budget": 1,
+  "sit": [
+   "가성비",
+   "혼밥",
+   "친구모임"
+  ],
+  "fac": {},
+  "cap": 4,
+  "v": "도마동 짬뽕 노포. 불맛 짬뽕 한 그릇",
+  "src": "local",
+  "nopo": true,
+  "travel": 1,
+  "jjin": true,
+  "noCardPhoto": true,
+  "kid": "11196224",
+  "kurl": "http://place.map.kakao.com/11196224",
+  "lat": 36.3170817046516,
+  "lng": 127.374073671485,
+  "phone": "042-523-4791",
+  "kcat": "음식점 > 중식 > 중국요리"
  }
 ]
