@@ -1903,7 +1903,7 @@ function svAttach(card,p){
     im.onerror=function(){ im.remove(); card.classList.add('flat'); };
     card.classList.remove('flat'); card.insertBefore(im,card.firstChild);
     var m=card.querySelector('.meta'); if(m) m.insertAdjacentHTML('beforeend',' · <span style="color:var(--ink3)">사진: Google 스트리트뷰</span>'); }
-  if(SV_CACHE[k]===true){ put(); return; } if(SV_CACHE[k]===false) return;
+  if(SV_CACHE[k]===true){ setTimeout(put,0); return; } if(SV_CACHE[k]===false) return;   // 카드가 화면에 붙은 뒤에 넣는다
   try{ fetch('https://maps.googleapis.com/maps/api/streetview/metadata?location='+p.lat+','+p.lng+'&key='+GOOGLE_KEY)
     .then(function(r){ return r.json(); }).then(function(j){ SV_CACHE[k]=(j.status==='OK'); if(SV_CACHE[k]) put(); }).catch(function(){}); }catch(e){}
 }
