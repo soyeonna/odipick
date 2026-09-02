@@ -4669,5 +4669,39 @@
   "photoSrc": "대전공주",
   "vAuto": 1,
   "cover": "pic필라업필라테스8340"
+ },
+ {
+  "n": "스시무희",
+  "cat": "스시, 오마카세",
+  "cats": [
+   "일식"
+  ],
+  "area": "대흥동 중앙로112번길",
+  "gu": "중구",
+  "hours": null,
+  "budget": null,
+  "sit": [
+   "가성비",
+   "기념일",
+   "데이트",
+   "친구모임"
+  ],
+  "fac": {
+   "reserve": true,
+   "corkage": true
+  },
+  "cap": 8,
+  "ig": null,
+  "link": null,
+  "v": "스시, 오마카세",
+  "nopo": false,
+  "src": "local",
+  "lat": 36.3263109,
+  "lng": 127.4229847,
+  "kcat": "음식점 > 일식 > 초밥,롤",
+  "kid": "74955792",
+  "kurl": "http://place.map.kakao.com/74955792",
+  "phone": "0507-1347-3710",
+  "jjin": true
  }
 ]
