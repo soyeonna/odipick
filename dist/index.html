@@ -1668,7 +1668,7 @@ function openDetail(p){
     '<div class="dmeta">'+[p.cat,p.area].filter(Boolean).join(' · ')+'</div>'+
     (mood?'<div class="hits" style="margin-top:8px">'+mood+'</div>':'')+
     (p.lat&&p.lng?'<div class="dsec" id="rvSec"><h3>가게 앞 로드뷰</h3><div id="rvBox" style="position:relative;height:220px;border-radius:12px;overflow:hidden;background:var(--sub)"></div><p class="srcline">카카오 로드뷰 · 촬영 시점과 지금 모습이 다를 수 있어요</p></div>':'')+
-    (p.v?'<div class="dsec"><h3>어떤 곳이에요</h3><div class="dbox">'+vLines(p.v)+'</div></div>':'')+
+    (p.v?'<div class="dsec"><h3>이런 곳이에요</h3><div class="dbox">'+vLines(p.v)+'</div></div>':'')+
     (cau?'<div class="dsec"><h3>방문 전 확인할 점</h3><div class="dbox" style="background:var(--warn-w);color:var(--warn)">'+cau+'</div></div>':'')+
     (p.src==='reel'&&(p.igs||[]).length?'<div class="dsec"><h3>대전공주 영상'+
       ((p.igs.length>1)?' <span style="color:var(--ink3);font-weight:500">'+p.igs.length+'개</span>':'')+'</h3>'+
