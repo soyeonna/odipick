@@ -57,6 +57,8 @@ for s in spec:
     if s.get("travel"): p["travel"]=1
     if s.get("top"): p["jjin"]=1
     if s.get("down"): p["down"]=1          # 뒤쪽으로
+    if s.get("pet"): p.setdefault("fac",{})["pet"]=True
+    if s.get("season"): p["season"]=1      # 제철 해산물
     if s.get("rank_near"): p["rank_near"]=s["rank_near"]   # 대전근교 순위
     if s.get("note") and not p.get("v"): p["v"]=s["note"]
     code="pic"+re.sub(r"\W","",norm(s["n"]))[:14]+str(abs(hash(s["n"]))%9999)
