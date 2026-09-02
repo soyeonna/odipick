@@ -1896,16 +1896,17 @@ var SV_CACHE={};
 function svUrl(p){ return 'https://maps.googleapis.com/maps/api/streetview?size=400x711&fov=80&location='+p.lat+','+p.lng+'&key='+GOOGLE_KEY; }
 function svAttach(card,p){
   // 사진이 없는 가게: 구글 스트리트뷰에 그 자리 사진이 있으면 가게 앞 거리 사진을 카드에 붙인다
-  if(!GOOGLE_KEY||!p.lat||!p.lng) return;
+  if(!GOOGLE_KEY||!p.lat||!p.lng||p.noSV) return;   // noSV: 소연님이 '이 가게는 거리사진 쓰지 마'라고 한 곳
   var k=p.lat+','+p.lng;
   function put(){ if(!card.isConnected) return;
     var im=document.createElement('img'); im.className='thumb'; im.loading='lazy'; im.alt=p.n+' 앞 거리 사진'; im.src=svUrl(p);
     im.onerror=function(){ im.remove(); card.classList.add('flat'); };
     card.classList.remove('flat'); card.insertBefore(im,card.firstChild);
-    var m=card.querySelector('.meta'); if(m) m.insertAdjacentHTML('beforeend',' · <span style="color:var(--ink3)">사진: Google 스트리트뷰</span>'); }
+    var m=card.querySelector('.meta'); if(m) m.insertAdjacentHTML('beforeend',' · <span style="color:var(--ink3)">Google 거리사진</span>'); }
   if(SV_CACHE[k]===true){ setTimeout(put,0); return; } if(SV_CACHE[k]===false) return;   // 카드가 화면에 붙은 뒤에 넣는다
   try{ fetch('https://maps.googleapis.com/maps/api/streetview/metadata?location='+p.lat+','+p.lng+'&key='+GOOGLE_KEY)
-    .then(function(r){ return r.json(); }).then(function(j){ SV_CACHE[k]=(j.status==='OK'); if(SV_CACHE[k]) put(); }).catch(function(){}); }catch(e){}
+    .then(function(r){ return r.json(); }).then(function(j){ SV_CACHE[k]=(j.status==='OK' && String(j.date||'')>='2016');   // 너무 오래된 거리사진(2016년 이전)은 안 쓴다
+      if(SV_CACHE[k]) put(); }).catch(function(){}); }catch(e){}
 }
 var kakaoReady=null;
 function loadKakao(){
