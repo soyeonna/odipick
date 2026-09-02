@@ -56,6 +56,8 @@ for s in spec:
     if s.get("sit"):  p["sit"]=sorted(set((p.get("sit") or [])+s["sit"]))[:5]
     if s.get("travel"): p["travel"]=1
     if s.get("top"): p["jjin"]=1
+    if s.get("down"): p["down"]=1          # 뒤쪽으로
+    if s.get("rank_near"): p["rank_near"]=s["rank_near"]   # 대전근교 순위
     if s.get("note") and not p.get("v"): p["v"]=s["note"]
     code="pic"+re.sub(r"\W","",norm(s["n"]))[:14]+str(abs(hash(s["n"]))%9999)
     to916(trim(Image.open(f[0]))).save(f"img/{code}.webp","WEBP",quality=86,method=4)
