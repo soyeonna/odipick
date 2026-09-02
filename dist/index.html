@@ -1272,6 +1272,10 @@ function results(){
   }
   var arr=pool.map(function(p){ var r=score(p); r.p=p; return r; });
   if(n && !mustActive() && NEEDLE.length===0) arr=arr.filter(function(r){ return r.hit>0; });
+  if(A.sit.length && NEEDLE.length===0){   // 상황(데이트·혼밥 등)을 골랐으면 그 상황에 맞는 곳만 — 동네 검색과 섞여도 순대집이 데이트에 끼지 않게
+    var sitOk=arr.filter(function(r){ return A.sit.some(function(s){ return (r.p.sit||[]).indexOf(s==='부모님'?'가족':s)>-1; }); });
+    if(sitOk.length) arr=sitOk;
+  }
   if(SORT==='near') arr.sort(function(a,b){ var ka=kmTo(a.p),kb=kmTo(b.p);
       return (ka==null?99:ka)-(kb==null?99:kb) || b.sc-a.sc; });
   else if(SORT==='open') arr.sort(function(a,b){ return (openNow(b.p)===true)-(openNow(a.p)===true) || b.sc-a.sc; });
