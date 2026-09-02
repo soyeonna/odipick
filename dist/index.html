@@ -1726,6 +1726,7 @@ var FGROUPS=[
 ];
 function countFor(k,o){
   return P.filter(function(x){
+    if(x.src==='public') return false;   // 공공 아카이브는 개수에 안 넣는다
     if(k==='sit') return (x.sit||[]).indexOf(o==='부모님'?'가족':o)>-1;
     if(k==='cats') return (x.cats||[]).indexOf(o)>-1;
     if(k==='mood') return (x.mood||[]).indexOf(o)>-1;
@@ -2194,7 +2195,7 @@ try{
 }catch(e){}
 /* 추천 줄 후보의 실제 결과 수 — 데이터에 없는 추천은 아예 안 보여준다 */
 function rowCount(set){
-  var pool=P.filter(function(x){ return !x.closed; });
+  var pool=P.filter(function(x){ return !x.closed && x.src!=='public'; });   // 공공 아카이브는 개수에서 뺀다
   if(set.q){
     var toks=set.q.split(/\s+/);
     return pool.filter(function(x){
