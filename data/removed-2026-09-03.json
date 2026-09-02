@@ -5034,5 +5034,45 @@
   "kurl": "http://place.map.kakao.com/1267522610",
   "photoSrc": "대전공주",
   "cover": "pic부산갈매기2844"
+ },
+ {
+  "n": "쇼넨",
+  "cat": "술집",
+  "cats": [
+   "술집"
+  ],
+  "area": "둔산동 1048",
+  "gu": "서구",
+  "hours": "월-일 17:00-4:00",
+  "budget": 2,
+  "sit": [
+   "가성비",
+   "술자리"
+  ],
+  "fac": {},
+  "cap": 4,
+  "ig": "DMmwORMyQp6",
+  "link": null,
+  "v": "전골+콘치즈타코야끼 세트 31,500원 · 빙수 100원 · 츠쿠네 6,000원",
+  "src": "reel",
+  "phone": "0507-1372-7958",
+  "ph": "pic쇼넨252",
+  "auto": true,
+  "likes": 124,
+  "kcat": "음식점 > 술집 > 일본식주점",
+  "mood": [
+   "예쁜",
+   "이국적"
+  ],
+  "kid": "190498428",
+  "kurl": "http://place.map.kakao.com/190498428",
+  "lat": 36.8111093430436,
+  "lng": 127.107081157263,
+  "igs": [
+   "DMmwORMyQp6"
+  ],
+  "photoSrc": "대전공주",
+  "cover": "pic쇼넨252",
+  "noDate": true
  }
 ]
