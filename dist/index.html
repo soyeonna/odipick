@@ -1889,7 +1889,7 @@ buildMap(document.getElementById('homeMap'), false);
 /* ── 카카오맵: 배포 환경에서 실제 지도로 전환된다.
    미리보기(claude.ai)는 외부 지도 스크립트를 차단하므로 SVG 지도가 대신 나온다. */
 var KAKAO_JS_KEY="5ae0f2c7b47e2cadb73aa52b04043153";
-var GOOGLE_KEY='';   // 구글 스트리트뷰 키 (docs/google-streetview-guide.md 참고). 비어 있으면 안 쓴다
+var GOOGLE_KEY='AIzaSyCJeDKCu8OvAUkR_e6igfY8bHd9gXxvQG8';   // 구글 스트리트뷰 키 (웹사이트 제한 걸려 있어 공개돼도 됨) (docs/google-streetview-guide.md 참고). 비어 있으면 안 쓴다
 var SV_CACHE={};
 function svUrl(p){ return 'https://maps.googleapis.com/maps/api/streetview?size=400x711&fov=80&location='+p.lat+','+p.lng+'&key='+GOOGLE_KEY; }
 function svAttach(card,p){
