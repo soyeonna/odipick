@@ -847,7 +847,7 @@ function kmTo(p){
   var a=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(NEAR.lat*Math.PI/180)*Math.cos(p.lat*Math.PI/180)*Math.sin(dLo/2)*Math.sin(dLo/2);
   return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
-var A={cats:[],sit:[],cap:[],fac:[],budget:[],gu:[],src:[],mood:[],open:[],avoid:[],travel:[]};
+var A={cats:[],sit:[],cap:[],fac:[],budget:[],gu:[],src:[],mood:[],open:[],avoid:[],travel:[],season:[]};
 var KEYS=Object.keys(A);
 var SORT='rec';
 
@@ -981,7 +981,7 @@ function score(p){
   if(p.jjin) sc += (p.src==='reel' ? 30 : 22);   // 찐 대전 맛집 — 공주가 다녀온 곳 먼저
   if(A.travel.length && (p.cats||[]).indexOf('노포')>-1) sc+=40;   // 여행자에겐 노포부터
   if(p.rank_near && A.gu.indexOf('대전근교')>-1) sc += 60 - p.rank_near*10;   // 근교 순위
-  if(p.season && NEEDLE.some(function(w){ return /전어|대하|수산|물회|조개|새우|쭈꾸미|회/.test(w); }))
+  if(p.season && (A.season.length || NEEDLE.some(function(w){ return /전어|대하|수산|물회|조개|새우|쭈꾸미|회/.test(w); })))
     sc += 35 + (p.season_rank ? 1000 - p.season_rank*50 : 0) - (p.season_last ? 1000 : 0);   // 소연님이 정한 제철 순위
   if(A.travel.length && p.travel){
     if(p.rank_travel) sc += 1000 - p.rank_travel*50;   // 소연님이 정한 대전여행 순위
@@ -1045,11 +1045,11 @@ function syncAll(){
 }
 
 /* ── 분석된 조건 칩 ── */
-var LABEL={open:'영업 중',src:'대전공주 PICK',travel:'🧳 대전여행'};
+var LABEL={open:'영업 중',src:'대전공주 PICK',travel:'🧳 대전여행',season:'제철'};
 function drawCond(){
   var el=document.getElementById('cond'); if(!el) return;
   var items=[];
-  ['gu','sit','mood','cats','cap','budget','fac','open','src','avoid','travel'].forEach(function(k){
+  ['gu','sit','mood','cats','cap','budget','fac','open','src','avoid','travel','season'].forEach(function(k){
     A[k].forEach(function(v){ items.push([k,v,LABEL[k]||(k==='avoid'?v+' 제외':v)]); });
   });
   el.innerHTML='';
@@ -1301,13 +1301,14 @@ function mustCheck(p){
   if(PARTY!=null && p.cap!=null && p.cap<PARTY) return '인원 수용 불가';
   if(A.gu.length && A.gu.indexOf(p.gu)<0 && !DONGQ) return '지역 밖';
   if(A.travel.length && !p.travel) return '여행 목록 아님';
+  if(A.season.length && !p.season) return '제철 아님';
   if(PTF==='solo'){ if((p.sit||[]).indexOf('혼밥')<0) return '혼밥 자리 아님'; }
   else if(PTF==='station'){ var st0=stationOf(p); if(!st0 || st0.km>0.6) return '역에서 멈'; }
   else if(PTF && ptypeOf(p)!==PTF && !(PTF==='bar' && p.rank_bar)) return '밥집 아님';
   return null;
 }
 function mustActive(){
-  return !!(A.cats.length||DONGQ||VISIT!=null||MEAL||PTF||A.fac.length||BUDMAX!=null||PARTY!=null||A.gu.length||A.travel.length||A.open.length);
+  return !!(A.cats.length||DONGQ||VISIT!=null||MEAL||PTF||A.fac.length||BUDMAX!=null||PARTY!=null||A.gu.length||A.travel.length||A.open.length||A.season.length);
 }
 function needleHay(p){ return p.n+' '+(p.cat||'')+' '+(p.v||'')+' '+(p.kcat||''); }
 function results(){
@@ -2296,6 +2297,7 @@ function rowCount(set){
   }
   return pool.filter(function(x){
     if(set.travel && !x.travel) return false;
+    if(set.season && !x.season) return false;
     if(set.sit && !set.sit.some(function(s){ return (x.sit||[]).indexOf(s)>-1; })) return false;
     if(set.cats && !set.cats.some(function(c){ return (x.cats||[]).indexOf(c)>-1; })) return false;
     if(set.mood && !set.mood.some(function(mo){ return (x.mood||[]).indexOf(mo)>-1; })) return false;
@@ -2322,11 +2324,12 @@ function aiRows(){
    7:'시원한 면 요리의 계절',8:'더위 끝, 입맛 돌아오는 계절',9:'전어·대하가 제철',
    10:'전어·대하가 제철',11:'따뜻한 국물의 계절',12:'따뜻한 국물의 계절'};
   var SEASET={1:{cats:['한식']},2:{cats:['한식']},3:{sit:['데이트']},4:{sit:['데이트']},
-   5:{mood:['테라스']},6:{cats:['한식']},7:{cats:['한식']},8:{q:'대하 수산 물회 조개'},
-   9:{q:'전어 대하 수산 참치 물회 조개 회뜨는'},10:{q:'전어 대하 수산 참치 물회 조개 회뜨는'},11:{cats:['한식']},12:{cats:['한식']}};
+   5:{mood:['테라스']},6:{cats:['한식']},7:{cats:['한식']},8:{season:['1']},
+   9:{season:['1']},10:{season:['1']},11:{cats:['한식']},12:{cats:['한식']}};
   rows.push({i:I.spark,t1:SEA[mo],t2:'계절에 맞는 곳을 골랐어요',set:SEASET[mo]});
   rows.push({i:I.heart,t1:'동네별 공주 코스',t2:'카페 → 밥 → 한잔, 걸어서 잇는 코스',fn:function(){ openCourses(); }});
-  rows.push({i:I.map,t1:'공주가 짠 1박2일',t2:'원도심 · 자연 · 데이트, 3가지 여행 코스',fn:function(){ openTrips(0); }});
+  // 1박2일 코스는 소연님 보완 후 공개 (openTrips 준비돼 있음)
+  // rows.push({i:I.map,t1:'공주가 짠 1박2일',t2:'원도심 · 자연 · 데이트, 3가지 여행 코스',fn:function(){ openTrips(0); }});
   rows.push({i:I.map,t1:'대전 여행 왔다면 여기부터',t2:'대전공주 보증 코스',set:{travel:['1']}});
   if(day===5||day===6) rows.push({i:I.friends,t1:'주말엔 모임 자리',t2:'여럿이 가기 좋은 곳',set:{sit:['친구모임']}});
   else rows.push({i:I.heart,t1:'오늘 데이트 코스 찾기',t2:'분위기 좋은 곳만 모아보기',set:{sit:['데이트'],mood:['예쁜']}});
