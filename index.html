@@ -1717,6 +1717,7 @@ function openDetail(p){
       (p.travel?'<span class="pick" style="background:var(--ok-w);color:var(--ok)">🧳 대전여행</span>':'')+statusOf(p)+'</div>'+
     '<div class="dmeta">'+[p.cat,p.area].filter(Boolean).join(' · ')+'</div>'+
     (mood?'<div class="hits" style="margin-top:8px">'+mood+'</div>':'')+
+    (p.lat&&courseRole(p)?'<button type="button" class="btn s" id="mkCourse" style="width:100%;margin-top:10px">🚶 이 가게로 하루 코스 짜기</button>':'')+
     (p.gphotos&&p.gphotos.length&&GOOGLE_KEY?'<div class="dsec"><h3>사진</h3><div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px">'+
       p.gphotos.slice(0,3).map(function(x){ return '<img src="'+gphotoUrl(x.name,480)+'" alt="'+E(p.n)+' 사진" loading="lazy" style="height:160px;border-radius:12px;flex:none;object-fit:cover" onerror="this.remove()">'; }).join('')+
       '</div><p class="srcline">사진: Google 방문자 · '+E(p.gphotos.slice(0,3).map(function(x){ return x.by; }).filter(Boolean).join(', '))+'</p></div>':'')+
@@ -1762,6 +1763,7 @@ function openDetail(p){
   );
   var sv=document.getElementById('svBtn');
   if(sv) sv.addEventListener('click',function(){ toggleSave(p); sv.textContent=isSaved(p)?'저장됨':'저장하기'; });
+  var mc=document.getElementById('mkCourse'); if(mc) mc.addEventListener('click',function(){ openCourses(null,p); });
   if(p.lat&&p.lng){ setTimeout(function(){ loadKakao().then(function(kk){
     var box=document.getElementById('rvBox'); if(!kk||!box){ var s0=document.getElementById('rvSec'); if(s0) s0.hidden=true; return; }
     var pos=new kk.maps.LatLng(p.lat,p.lng), rc=new kk.maps.RoadviewClient();
@@ -2296,14 +2298,75 @@ function aiRows(){
    5:{mood:['테라스']},6:{cats:['한식']},7:{cats:['한식']},8:{q:'대하 수산 물회 조개'},
    9:{q:'전어 대하 수산 참치 물회 조개 회뜨는'},10:{q:'전어 대하 수산 참치 물회 조개 회뜨는'},11:{cats:['한식']},12:{cats:['한식']}};
   rows.push({i:I.spark,t1:SEA[mo],t2:'계절에 맞는 곳을 골랐어요',set:SEASET[mo]});
+  rows.push({i:I.heart,t1:'동네별 공주 코스',t2:'카페 → 밥 → 한잔, 걸어서 잇는 코스',fn:function(){ openCourses(); }});
   rows.push({i:I.map,t1:'대전 여행 왔다면 여기부터',t2:'대전공주 보증 코스',set:{travel:['1']}});
   if(day===5||day===6) rows.push({i:I.friends,t1:'주말엔 모임 자리',t2:'여럿이 가기 좋은 곳',set:{sit:['친구모임']}});
   else rows.push({i:I.heart,t1:'오늘 데이트 코스 찾기',t2:'분위기 좋은 곳만 모아보기',set:{sit:['데이트'],mood:['예쁜']}});
   // 실제 데이터에 3곳 이상 있는 추천만 살리고, 몇 곳인지도 보여준다
-  rows.forEach(function(r){ r.n=rowCount(r.set); });
+  rows.forEach(function(r){ r.n=r.fn?99:rowCount(r.set); });
   rows=rows.filter(function(r){ return r.n>=3; });
-  rows.forEach(function(r){ r.t2=r.t2+' · '+r.n+'곳'; });
-  return rows.slice(0,4);
+  rows.forEach(function(r){ if(!r.fn) r.t2=r.t2+' · '+r.n+'곳'; });
+  return rows.slice(0,5);
+}
+/* ── 공주 코스: 같은 동네에서 카페 → 밥 → 한잔/디저트를 걸어서 잇는다 ── */
+function dongOf(p){ return String(p.area||'').split(' ')[0]; }
+function courseDongs(){
+  var cnt={};
+  P.forEach(function(p){ if(p.closed||p.src==='public'||!p.lat) return; var d=dongOf(p); if(!/동$|읍$|면$/.test(d)) return; cnt[d]=(cnt[d]||0)+1; });
+  return Object.keys(cnt).filter(function(d){ return cnt[d]>=4; }).sort(function(a,b){ return cnt[b]-cnt[a]; });
+}
+function courseRole(p){
+  var t=ptypeOf(p), c=p.cats||[];
+  if(t==='cafe') return c.indexOf('디저트')>-1?'디저트':'카페';
+  if(t==='bar'||c.indexOf('술집')>-1) return '한잔';
+  if(t==='rest') return '밥';
+  if(t==='play') return '놀기';
+  return null;
+}
+function walkMin(a,b){ return Math.max(1,Math.ceil(kmBetween(a,b)*1000/75)); }
+function coursesFor(dong, anchor){
+  var pool=P.filter(function(p){ return !p.closed && p.src!=='public' && p.lat && courseRole(p); });
+  var c=dongCenter(dong);
+  var near=pool.filter(function(p){ return dongOf(p)===dong || (c && kmBetween(c,p)<=0.6); });
+  var w=function(p){ return (p.src==='reel'?30:0)+(p.jjin?10:0)+(p.rank_date?40:0)+(p.rank_bar?20:0)+(p.travel?5:0)+(p.cover?5:0); };
+  var by=function(role){ return near.filter(function(p){ return courseRole(p)===role; }).sort(function(a,b){ return w(b)-w(a); }); };
+  var rests=by('밥'), cafes=by('카페').concat(by('디저트')), bars=by('한잔'), plays=by('놀기');
+  if(anchor){ var ar=courseRole(anchor); if(ar==='밥') rests=[anchor]; else if(ar==='한잔') bars=[anchor]; else if(ar==='놀기') plays=[anchor]; else cafes=[anchor]; }
+  var out=[], used={};
+  rests.slice(0,6).forEach(function(r){
+    if(out.length>=3) return;
+    var pick=function(list){ var best=null; list.forEach(function(x){ if(x===r||used[x.n]) return; var km=kmBetween(x,r); if(km>0.7) return; if(!best||km<best.km) best={p:x,km:km}; }); return best&&best.p; };
+    var cafe=pick(cafes), bar=pick(bars), play=pick(plays);
+    var legs=[]; if(cafe) legs.push({role:courseRole(cafe),p:cafe}); if(play) legs.push({role:'놀기',p:play}); legs.push({role:'밥',p:r}); if(bar) legs.push({role:'한잔',p:bar});
+    if(legs.length<2) return;
+    var walk=0; for(var i=1;i<legs.length;i++) walk+=walkMin(legs[i-1].p,legs[i].p);
+    legs.forEach(function(l){ used[l.p.n]=1; });
+    out.push({legs:legs,walk:walk});
+  });
+  return out;
+}
+function openCourses(dong, anchor){
+  var dongs=courseDongs();
+  if(!dong) dong = anchor ? dongOf(anchor) : dongs[0];
+  var cs=coursesFor(dong, anchor);
+  var chips=dongs.slice(0,14).map(function(d){ return '<button type="button" class="fbtn cdong" data-d="'+E(d)+'" aria-pressed="'+(d===dong)+'">'+E(d)+'</button>'; }).join('');
+  var html='<h2 class="dtitle" style="font-size:20px;margin:4px 0 6px">'+(anchor?E(anchor.n)+'로 코스 짜기':'동네별 공주 코스')+'</h2>'+
+    '<p class="srcline" style="margin:0 0 10px">카페 → 밥 → 한잔, 걸어서 다닐 수 있는 조합만 골랐어요. 대전공주가 다녀온 곳 우선.</p>'+
+    (anchor?'':'<div class="fbar" style="margin:0 0 12px">'+chips+'</div>')+
+    (cs.length? cs.map(function(c,k){
+      return '<div class="dsec" style="margin-top:10px"><h3>코스 '+(k+1)+' <span style="color:var(--ink3);font-weight:500;font-size:13px">· 이동 도보 '+c.walk+'분</span></h3>'+
+        c.legs.map(function(l,i){
+          var p=l.p, im=p.cover?thumbOf(p.cover):(p.gphotos&&p.gphotos.length&&GOOGLE_KEY?gphotoUrl(p.gphotos[0].name,200):null);
+          return (i?'<div style="color:var(--ink3);font-size:12px;padding:2px 0 2px 22px">↓ 도보 '+walkMin(c.legs[i-1].p,p)+'분</div>':'')+
+            '<button type="button" class="cleg" data-n="'+E(p.n)+'" style="display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:var(--sub);border:0;border-radius:12px;padding:8px 10px">'+
+            (im?'<img src="'+im+'" alt="" style="width:44px;height:58px;object-fit:cover;border-radius:8px;flex:none">':'<span style="width:44px;height:58px;border-radius:8px;background:var(--line);flex:none"></span>')+
+            '<span style="flex:1;min-width:0"><span style="font-size:12px;color:var(--brand);font-weight:700">'+l.role+'</span> '+(p.src==='reel'?'<span style="font-size:11px">👑</span>':'')+
+            '<br><b>'+E(p.n)+'</b><br><span style="font-size:12px;color:var(--ink2)">'+E(why1(p)||p.cat||'')+'</span></span></button>';
+        }).join('')+'</div>';
+    }).join('') : '<div class="dbox">이 동네는 아직 코스로 묶을 만큼 가게가 모이지 않았어요.</div>');
+  openSheet(html);
+  document.querySelectorAll('.cdong').forEach(function(b){ b.addEventListener('click',function(){ openCourses(b.dataset.d); }); });
+  document.querySelectorAll('.cleg').forEach(function(b){ b.addEventListener('click',function(){ var p=P.filter(function(x){ return x.n===b.dataset.n; })[0]; if(p) openDetail(p); }); });
 }
 function buildAiRows(el){
   aiRows().forEach(function(r){
@@ -2312,6 +2375,7 @@ function buildAiRows(el){
       '<span><span class="at1">'+r.t1+'</span><br><span class="at2">'+r.t2+'</span></span>'+
       '<span class="go">'+ic(I.arrow,16)+'</span>';
     b.addEventListener('click',function(){
+      if(r.fn){ r.fn(); return; }
       if(r.set.q){ runSearch(r.set.q); document.getElementById('q').value=''; return; }
       KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null;
       Object.keys(r.set).forEach(function(k){ A[k]=r.set[k].slice(); });
