@@ -25,6 +25,8 @@ jobs:
         run: python3 scripts/link_kakao_ids.py || true
       - name: 폐업·정보변경 감지 (표시만, 삭제 안 함)
         run: python3 scripts/check_closed.py --apply || true
+      - name: 구글 가게정보(영업시간·주차·평점·사진) 갱신 — 25일 지난 곳만
+        run: python3 scripts/fetch_google_places.py || true
       - name: 데이터베이스에도 반영
         run: python3 scripts/migrate_to_supabase.py || true
       - name: 바뀐 게 있으면 커밋
