@@ -1275,6 +1275,7 @@ function mustCheck(p){
          && !/한식|백반|국밥|칼국수|중식|일식|분식/.test(bz)) return '점심 자리 아님';
     }
   }
+  if(A.open.length){ var on=openNow(p); if(on===false) return '지금 영업 안 함'; if(on===null && !RELAX.unkHours) return '영업시간 미확인'; }   // '영업 중'은 확인된 곳만
   if(A.fac.length){
     for(var i=0;i<A.fac.length;i++){
       var v=(p.fac||{})[FAC[A.fac[i]]];
@@ -1295,7 +1296,7 @@ function mustCheck(p){
   return null;
 }
 function mustActive(){
-  return !!(A.cats.length||DONGQ||VISIT!=null||MEAL||PTF||A.fac.length||BUDMAX!=null||PARTY!=null||A.gu.length||A.travel.length);
+  return !!(A.cats.length||DONGQ||VISIT!=null||MEAL||PTF||A.fac.length||BUDMAX!=null||PARTY!=null||A.gu.length||A.travel.length||A.open.length);
 }
 function needleHay(p){ return p.n+' '+(p.cat||'')+' '+(p.v||'')+' '+(p.kcat||''); }
 function results(){
