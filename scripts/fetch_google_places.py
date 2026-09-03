@@ -41,7 +41,7 @@ for p in P:
         if not cands: miss.append(p['n']+('('+r['error'][:60]+')' if 'error' in r else '')); continue
         cands.sort(); pid=cands[0][1]; p['gid']=pid; p['gname']=cands[0][2]
     d=call('GET','https://places.googleapis.com/v1/places/'+pid+'?languageCode=ko',None,
-           'id,nationalPhoneNumber,regularOpeningHours,parkingOptions,rating,userRatingCount,photos,googleMapsUri,priceLevel')
+           'id,nationalPhoneNumber,regularOpeningHours,parkingOptions,rating,userRatingCount,photos,googleMapsUri,priceLevel,reservable,goodForGroups,allowsDogs,goodForChildren,outdoorSeating,takeout,delivery,restroom,menuForChildren')
     if 'error' in d or not d.get('id'): miss.append(p['n']+'(상세)'); continue
     oh=d.get('regularOpeningHours',{})
     if oh.get('weekdayDescriptions'): p['ghours']=oh['weekdayDescriptions']
@@ -62,6 +62,14 @@ for p in P:
         if p['fac'].get('parking') is None: p['fac']['parking']=bool(has)
         p['gpark']=[k for k in po if po[k]]
     if d.get('rating'): p['grating']=d['rating']; p['gcount']=d.get('userRatingCount',0)
+    # 편의 정보: 예약·단체·애견·아이·테라스·포장 (구글이 아는 곳만, 이미 손으로 적은 값은 유지)
+    fac=p.setdefault('fac',{})
+    for gk,fk in [('reservable','reserve'),('goodForGroups','group'),('allowsDogs','pet'),('goodForChildren','kids'),('takeout','takeout'),('delivery','delivery'),('restroom','restroom')]:
+        if gk in d and fac.get(fk) is None: fac[fk]=bool(d[gk])
+    if d.get('outdoorSeating'):
+        p.setdefault('mood',[]); 
+        if '테라스' not in p['mood']: p['mood'].append('테라스')
+    if 'menuForChildren' in d and fac.get('kidsmenu') is None: fac['kidsmenu']=bool(d['menuForChildren'])
     if d.get('priceLevel'): p['gprice']=d['priceLevel']
     ph=[]
     for x in (d.get('photos') or [])[:6]:
