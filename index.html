@@ -1264,6 +1264,9 @@ function needleHay(p){ return p.n+' '+(p.cat||'')+' '+(p.v||'')+' '+(p.kcat||'')
 function results(){
   var n=nActive();
   var pool=P.filter(function(p){ return p.src!=='public'; });   // 공공 아카이브는 기본 제외 (찐맛집만)
+  // 상호명을 그대로 친 경우('계룡산장')는 지역 낱말('계룡')에 걸려도 그 가게를 먼저 보여준다
+  var nameHits = NEEDLE.length ? pool.filter(function(p){ var nm=String(p.n).replace(/\s/g,''); return NEEDLE.some(function(w){ return w.length>=3 && nm.indexOf(w)>-1; }); }) : [];
+  if(nameHits.length && nameHits.length<=5){ var arr0=nameHits.map(function(p){ var r=score(p); r.p=p; r.sc+=500; return r; }); arr0.sort(function(a,b){ return b.sc-a.sc; }); return arr0; }
   if(mustActive()) pool=pool.filter(function(p){ return !mustCheck(p); });
   if(NEEDLE.length){
     var byNeedle=function(p){ var hay=needleHay(p); return NEEDLE.some(function(w){ return hay.indexOf(w)>-1; }); };
