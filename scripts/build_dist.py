@@ -18,7 +18,7 @@ HEAD='''<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>오디픽 — 오늘은 어디 가지?</title>
 <meta name="description" content="상황에 딱 맞는 곳 추천드려요">
-<meta name="theme-color" content="#FF3F7F">
+<meta name="theme-color" content="#FFFFFF">
 <meta name="format-detection" content="telephone=no">
 <meta property="og:type" content="website">
 <meta property="og:title" content="오디픽 — 오늘은 어디 가지?">
