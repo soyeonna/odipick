@@ -1731,7 +1731,7 @@ function openDetail(p){
     '<div class="dmeta">'+[p.cat,p.area].filter(Boolean).join(' · ')+'</div>'+
     (mood?'<div class="hits" style="margin-top:8px">'+mood+'</div>':'')+
     (p.gphotos&&p.gphotos.length&&GOOGLE_KEY?'<div class="dsec"><h3>사진</h3><div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px">'+
-      p.gphotos.slice(0,6).map(function(x){ return '<img src="'+gphotoUrl(x.name,600)+'" alt="'+E(p.n)+' 사진" loading="lazy" style="height:160px;border-radius:12px;flex:none;object-fit:cover" onerror="this.remove()">'; }).join('')+
+      p.gphotos.slice(0,3).map(function(x){ return '<img src="'+gphotoUrl(x.name,480)+'" alt="'+E(p.n)+' 사진" loading="lazy" style="height:160px;border-radius:12px;flex:none;object-fit:cover" onerror="this.remove()">'; }).join('')+
       '</div><p class="srcline">사진: Google 방문자 · '+E(p.gphotos.slice(0,3).map(function(x){ return x.by; }).filter(Boolean).join(', '))+'</p></div>':'')+
     (p.lat&&p.lng?'<div class="dsec" id="rvSec"><h3>가게 앞 로드뷰</h3><div id="rvBox" style="position:relative;height:220px;border-radius:12px;overflow:hidden;background:var(--sub)"></div><p class="srcline">카카오 로드뷰 · 촬영 시점과 지금 모습이 다를 수 있어요</p></div>':'')+
     (function(){ var parts=String(p.v||'').split(/\s*·\s*/).filter(Boolean);
