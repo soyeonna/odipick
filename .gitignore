@@ -4,3 +4,4 @@ node_modules/
 *.zip
 data/reels_all.json
 shots_pick/
+data/parking-src.csv
