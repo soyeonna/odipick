@@ -44,6 +44,7 @@ for p in P:
            'id,nationalPhoneNumber,regularOpeningHours,parkingOptions,rating,userRatingCount,photos,googleMapsUri,priceLevel,reservable,goodForGroups,allowsDogs,goodForChildren,outdoorSeating,takeout,delivery,restroom,menuForChildren')
     if 'error' in d or not d.get('id'): miss.append(p['n']+'(상세)'); continue
     oh=d.get('regularOpeningHours',{})
+    if p.get('hoursLock'): oh={}   # 소연님이 직접 넣은 영업시간은 구글로 덮어쓰지 않는다
     if oh.get('weekdayDescriptions'): p['ghours']=oh['weekdayDescriptions']
     if oh.get('periods'):   # 요일별 [요일(0=일), 여는 분, 닫는 분] — 영업 중 판단용
         per=[]
