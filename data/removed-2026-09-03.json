@@ -5906,5 +5906,68 @@
   "photoSrc": "대전공주",
   "cover": "pic송돈가1698",
   "jjin": true
+ },
+ {
+  "n": "이자카야 시기",
+  "cat": "일식/술집/한식",
+  "cats": [
+   "일식",
+   "술집"
+  ],
+  "area": "봉명동",
+  "gu": "유성구",
+  "hours": "매일 16:00~3:00",
+  "phone": "0507-1409-9183",
+  "budget": 4,
+  "sit": [
+   "가성비",
+   "가족",
+   "술자리"
+  ],
+  "fac": {
+   "restroom": true
+  },
+  "cap": 8,
+  "ig": "DbsPFdRpetB",
+  "link": null,
+  "mood": [
+   "고급스러운"
+  ],
+  "v": "9시 전 반값 한정세트 메뉴 73,000원",
+  "src": "reel",
+  "at": "2026-08-06",
+  "ph": "pic시기4894",
+  "likes": 256,
+  "lat": 36.35920865512191,
+  "lng": 127.34577601695598,
+  "igs": [
+   "DXL2L4XibN9",
+   "DY4AfYfJWEX",
+   "DYZDItFiVvX",
+   "DYmBYC_pfto",
+   "DZRD4CcCb_h",
+   "DaAFuD6po1W",
+   "DakHa7mpXmE",
+   "DbsPFdRpetB"
+  ],
+  "travel": 1,
+  "photoSrc": "대전공주",
+  "cover": "pic시기4894",
+  "gid": "ChIJE2uPKABLZTURPxpOr6R42-c",
+  "gname": "시기 대전봉명점",
+  "grating": 5,
+  "gcount": 1,
+  "gphotos": [
+   {
+    "name": "places/ChIJE2uPKABLZTURPxpOr6R42-c/photos/AVoNoXRjLDe3Bz9KOQ-UpMNTm5XmVNrVvjz9KRpqcNx4Mni8IJoco-chmvIGVz9OxPa2lLF45BcJll9gRj6x0vXJddUmag6diFCQBPzkChe-VsbV-mRIHBSB_MLjQ5kyufVYV3DpqlnvuRJlSPryCJ1mk-OVKjBHxkIKr374hoSjPHwJvuxYHqcmCrlsjPdC4p5PnNwtUg5_zyZXp5WyYspf6eLj8byB85g5CKRP6fDlWQ6-RZoIgtDgOV_ZIfislA-C47y3AajyzvlOJ5mrcODRhk9n9Hj-mzVnEaY0WryD5tgD6gRm4Q0SIxm097xOc9AZlSryLnSS_-2PbOHRLWQG6m3y15Dmr0BXvxlmoFFw590ZKtDPjDwrClha9mX1dqxksC97k7efkY6XbqM6cmdxigk78b0BvE1oxYhL-kf9bPePW5PgWEuzR5VhzOFCWQ",
+    "by": "잭기춘"
+   },
+   {
+    "name": "places/ChIJE2uPKABLZTURPxpOr6R42-c/photos/AVoNoXR4-xQ8uo9mXPc7BN750fqSUzertyNFbBHXrfsmClqqHsm9JYsLDTNNZ9bN9Q4BxpXS6yZ-wBlR0Rk2PUig0zIgf7YvEgbDSUmT75tpo4dpA00jwAHvVPWhH33a1xogto_ULIvlaHIl4OuKcUqofZ0i6QoHkww1sR_3U6fXnuyqUJ2q4P6ZvI41aMHLBL_4vrXpyvnobzZRK_m8HiEfFs_eDiT1To3jTqx0Nh9qLLpbczS-xxDyuk9aVxuT5qyTfHZH4poYd1gEGUhAvBAy9bw6cn2VOYdHTSFKEiOmoVgZ2q8r39waJyiSPgCEl7ZEpWLtaJVAwUcLYOGXZ40XHytKNvgcS6pEAhLukTpNpiEgW9ZfDtOaxyc0o8URpqxLzqj5dYvYUiGDEblgSuBQ40qwxB13nMbYEK37Aij3a9y0YVPLQf6aWZKh_WVswYMm",
+    "by": "잭기춘"
+   }
+  ],
+  "gmaps": "https://maps.google.com/?cid=16707079891372087871&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYASAA",
+  "gAt": "2026-09-03"
  }
 ]
