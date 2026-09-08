@@ -2339,7 +2339,7 @@ function walkMin(a,b){ return Math.max(1,Math.ceil(kmBetween(a,b)*1000/75)); }
 function coursesFor(dong, anchor){
   var pool=P.filter(function(p){ return !p.closed && p.src!=='public' && p.lat && courseRole(p); });
   var c=dongCenter(dong);
-  var near=pool.filter(function(p){ return dongOf(p)===dong || (c && kmBetween(c,p)<=0.6); });
+  var near=pool.filter(function(p){ return dongOf(p)===dong || (c && kmBetween(c,p)<=1.2); });
   var w=function(p){ return (p.src==='reel'?30:0)+(p.jjin?10:0)+(p.rank_date?40:0)+(p.rank_bar?20:0)+(p.travel?5:0)+(p.cover?5:0); };
   var by=function(role){ return near.filter(function(p){ return courseRole(p)===role; }).sort(function(a,b){ return w(b)-w(a); }); };
   var rests=by('밥'), cafes=by('카페').concat(by('디저트')), bars=by('한잔'), plays=by('놀기');
@@ -2347,7 +2347,7 @@ function coursesFor(dong, anchor){
   var out=[], used={};
   rests.slice(0,6).forEach(function(r){
     if(out.length>=3) return;
-    var pick=function(list){ var best=null; list.forEach(function(x){ if(x===r||used[x.n]) return; var km=kmBetween(x,r); if(km>0.7) return; if(!best||km<best.km) best={p:x,km:km}; }); return best&&best.p; };
+    var pick=function(list){ var best=null; list.forEach(function(x){ if(x===r||used[x.n]) return; var km=kmBetween(x,r); if(km>1.3) return; if(!best||km<best.km) best={p:x,km:km}; }); return best&&best.p; };
     var cafe=pick(cafes), bar=pick(bars), play=pick(plays);
     var legs=[]; if(cafe) legs.push({role:courseRole(cafe),p:cafe}); if(play) legs.push({role:'놀기',p:play}); legs.push({role:'밥',p:r}); if(bar) legs.push({role:'한잔',p:bar});
     if(legs.length<2) return;
@@ -2407,7 +2407,8 @@ function openCourses(dong, anchor){
             '<span style="flex:1;min-width:0"><span style="font-size:12px;color:var(--brand);font-weight:700">'+l.role+'</span> '+(p.src==='reel'?'<span style="font-size:11px">👑</span>':'')+
             '<br><b>'+E(p.n)+'</b><br><span style="font-size:12px;color:var(--ink2)">'+E(why1(p)||p.cat||'')+'</span></span></button>';
         }).join('')+'</div>';
-    }).join('') : '<div class="dbox">이 동네는 아직 코스로 묶을 만큼 가게가 모이지 않았어요.</div>');
+    }).join('') : '<div class="dbox">'+(anchor?E(anchor.n)+' 근처(도보 15분 안)에':'이 동네에')+' 함께 묶을 가게가 아직 적어요.<br>'+
+     '<span style="color:var(--ink3);font-size:13px">번화가는 코스가 잘 나오고, 외곽은 가게가 더 모여야 만들어져요.</span></div>');
   openSheet(html);
   var cb=document.getElementById('cBack');
   if(cb) cb.addEventListener('click',function(){
