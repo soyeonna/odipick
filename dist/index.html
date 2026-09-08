@@ -2192,7 +2192,8 @@ var SHELF_N=12;
 function shelfCard(r){
   var a=document.createElement('button'); a.className='rt'; a.type='button';
   a.setAttribute('aria-label',(r.shop||'대전공주')+' 릴스 보기');
-  var rs=thumbOf(r.code)||thumbOf(r.ph);
+  if(!window.IG2COVER){ window.IG2COVER={}; P.forEach(function(p){ if(!p.cover||/^\d+$/.test(p.cover)) return; (p.igs||[]).concat(p.ig?[p.ig]:[]).forEach(function(c){ IG2COVER[c]=p.cover; }); }); }
+  var rs=(IG2COVER[r.code]&&thumbOf(IG2COVER[r.code]))||thumbOf(r.code)||thumbOf(r.ph);   // 소연님이 넣은 커버가 있으면 그걸 먼저
   var cap=(r.shop||r.desc)?('<span class="rc"><b>'+E(r.shop||'')+'</b>'+
           (r.desc?'<i>'+E(r.desc)+'</i>':'')+'</span>'):'';
   a.innerHTML=(rs?'<img src="'+rs+'" alt="'+(r.shop||'대전공주 릴스')+'" loading="lazy">':'')+
