@@ -1027,7 +1027,8 @@ function drawCond(){
     A[k].forEach(function(v){ items.push([k,v,LABEL[k]||(k==='avoid'?v+' 제외':v)]); });
   });
   el.innerHTML='';
-  [[PTF, '맛집', function(){ PTF=null; }],
+  [[NEEDLE.length, NEEDLE.join('·'), function(){ NEEDLE=[]; }],
+   [PTF, '맛집', function(){ PTF=null; }],
    [MEAL, {lunch:'점심',dinner:'저녁',breakfast:'아침',late:'야식'}[MEAL], function(){ MEAL=null; }],
    [DONGQ, DONGQ, function(){ DONGQ=null; }],
    [VISIT!=null, VISIT!=null?('오늘 '+Math.floor(VISIT/60)+'시 영업'):'', function(){ VISIT=null; }],
@@ -1064,6 +1065,7 @@ function drawCond(){
 
 /* ── 자연어 → 조건. AI 호출 없이 규칙으로 푼다 ── */
 var NEEDLE=[], DONGQ=null;      // 자유 낱말 · 동 단위 검색
+var QWORDS=0;                   // 검색어 낱말 수 (상호명 우선 판단용)
 var VISIT=null, PARTY=null, BUDMAX=null;   // 방문시각(분) · 인원 · 1인 예산(원)
 var PTF=null;   // 장소 유형 필터 — '맛집' 칩은 밥집 전체
 var MEAL=null;   // lunch/dinner/breakfast/late — '점심'처럼 시각 없이 말해도 상식으로 알아듣는다
@@ -1071,6 +1073,7 @@ var RELAX={dist:false, unkFac:false, unkHours:false, unkBud:false};
 function parse(t){
   KEYS.forEach(function(k){ A[k]=[]; });
   NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null;
+  QWORDS=String(t||'').trim().split(/\s+/).filter(Boolean).length;
   RELAX={dist:false, unkFac:false, unkHours:false, unkBud:false};
   Object.keys(LANDMARKS).forEach(function(k){
     if(t.indexOf(k)>-1) NEAR=LANDMARKS[k];
@@ -1290,7 +1293,7 @@ function results(){
   var pool=P.filter(function(p){ return p.src!=='public'; });   // 공공 아카이브는 기본 제외 (찐맛집만)
   // 상호명을 그대로 친 경우('계룡산장')는 지역 낱말('계룡')에 걸려도 그 가게를 먼저 보여준다
   var nameHits = NEEDLE.length ? pool.filter(function(p){ var nm=String(p.n).replace(/\s/g,''); return NEEDLE.some(function(w){ return w.length>=3 && nm.indexOf(w)>-1; }); }) : [];
-  if(nameHits.length && nameHits.length<=5){ var arr0=nameHits.map(function(p){ var r=score(p); r.p=p; r.sc+=500; return r; }); arr0.sort(function(a,b){ return b.sc-a.sc; }); return arr0; }
+  if(nameHits.length && nameHits.length<=5 && QWORDS<=2){ var arr0=nameHits.map(function(p){ var r=score(p); r.p=p; r.sc+=500; return r; }); arr0.sort(function(a,b){ return b.sc-a.sc; }); return arr0; }
   if(mustActive()) pool=pool.filter(function(p){ return !mustCheck(p); });
   if(NEEDLE.length){
     var byNeedle=function(p){ var hay=needleHay(p); return NEEDLE.some(function(w){ return hay.indexOf(w)>-1; }); };
@@ -2262,8 +2265,8 @@ try{
 /* 추천 줄 후보의 실제 결과 수 — 데이터에 없는 추천은 아예 안 보여준다 */
 function rowCount(set){
   var pool=P.filter(function(x){ return !x.closed && x.src!=='public'; });   // 공공 아카이브는 개수에서 뺀다
-  if(set.q){
-    var toks=set.q.split(/\s+/);
+  if(set.q||set.menu){
+    var toks=set.menu||set.q.split(/\s+/);
     return pool.filter(function(x){
       var hay=x.n+' '+(x.cat||'')+' '+(x.v||'')+' '+(x.kcat||'');
       return toks.some(function(w){ return hay.indexOf(w)>-1; });
@@ -2286,8 +2289,8 @@ function aiRows(){
   var rows=[];
   if(WX && h>=10 && h<17){
     if(WX.rain) rows.push({i:I.bowl,t1:'비 오는 날엔 뜨끈한 국물',t2:'칼국수·국밥·전 맛집',set:{q:'칼국수 국밥 수제비 전골 파전'}});
-    else if(WX.t>=27) rows.push({i:I.spark,t1:'더운 날, 시원한 한 그릇',t2:'냉면·물회·빙수',set:{q:'냉면 물회 콩국수 빙수 소바'}});
-    else if(WX.t<=6) rows.push({i:I.bowl,t1:'추운 날엔 국물이 답',t2:'국밥·전골·탕 맛집',set:{q:'국밥 전골 탕 칼국수'}});
+    else if(WX.t>=27) rows.push({i:I.spark,t1:'더운 날, 시원한 한 그릇',t2:'냉면·물회·빙수',set:{menu:['냉면','물회','콩국수','빙수','소바','막국수']}});
+    else if(WX.t<=6) rows.push({i:I.bowl,t1:'추운 날엔 국물이 답',t2:'국밥·전골·탕 맛집',set:{menu:['국밥','전골','탕','칼국수','곰탕','설렁탕']}});
   }
   if(h>=17&&h<22) rows.push({i:I.glass,t1:'저녁엔 분위기 좋은 한잔',t2:'문 연 술집·안주 맛집',set:{sit:['술자리'],open:['1']}});
   else if(h>=11&&h<14) rows.push({i:I.bowl,t1:'점심엔 든든한 한 그릇',t2:'영업 중인 밥집',set:{cats:['한식'],open:['1']}});
@@ -2297,9 +2300,9 @@ function aiRows(){
    4:'봄나들이 데이트 맛집',5:'야외 테라스가 좋은 날',6:'시원한 면 요리의 계절',
    7:'시원한 면 요리의 계절',8:'더위 끝, 입맛 돌아오는 계절',9:'전어·대하가 제철',
    10:'전어·대하가 제철',11:'따뜻한 국물의 계절',12:'따뜻한 국물의 계절'};
-  var SEASET={1:{cats:['한식']},2:{cats:['한식']},3:{sit:['데이트']},4:{sit:['데이트']},
-   5:{mood:['테라스']},6:{cats:['한식']},7:{cats:['한식']},8:{season:['1']},
-   9:{season:['1']},10:{season:['1']},11:{cats:['한식']},12:{cats:['한식']}};
+  var SEASET={1:{menu:['국밥','전골','탕','칼국수','곰탕']},2:{menu:['국밥','전골','탕','칼국수','곰탕']},3:{sit:['데이트']},4:{sit:['데이트']},
+   5:{mood:['테라스']},6:{menu:['냉면','물회','콩국수','막국수','소바']},7:{menu:['냉면','물회','콩국수','막국수','소바']},8:{season:['1']},
+   9:{season:['1']},10:{season:['1']},11:{menu:['국밥','전골','탕','칼국수','곰탕']},12:{menu:['국밥','전골','탕','칼국수','곰탕']}};
   rows.push({i:I.spark,t1:SEA[mo],t2:'계절에 맞는 곳을 골랐어요',set:SEASET[mo]});
   rows.push({i:I.heart,t1:'동네별 공주 코스',t2:'카페 → 밥 → 한잔, 걸어서 잇는 코스',fn:function(){ openCourses(); }});
   // 1박2일 코스는 소연님 보완 후 공개 (openTrips 준비돼 있음)
@@ -2412,6 +2415,7 @@ function buildAiRows(el){
       '<span class="go">'+ic(I.arrow,16)+'</span>';
     b.addEventListener('click',function(){
       if(r.fn){ r.fn(); return; }
+      if(r.set.menu){ clearAll(); NEEDLE=r.set.menu.slice(); QWORDS=9; lastQuery=''; syncAll(); SHOW=12; show('result'); render(); return; }
       if(r.set.q){ runSearch(r.set.q); document.getElementById('q').value=''; return; }
       KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null;
       Object.keys(r.set).forEach(function(k){ A[k]=r.set[k].slice(); });
