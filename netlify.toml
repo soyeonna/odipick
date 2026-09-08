@@ -1,3 +1,4 @@
+# dist/ 는 저장소에 이미 빌드돼 올라가 있다 (커밋 전에 python3 scripts/build_dist.py 실행).
+# 넷리파이에서는 빌드 없이 dist/ 를 그대로 올린다 — 빌드 실패로 옛 버전이 남는 일을 막기 위해.
 [build]
-  command = "python3 scripts/build_dist.py"
   publish = "dist"
