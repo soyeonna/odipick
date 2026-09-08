@@ -1357,7 +1357,7 @@ function isSaved(p){ return SAVED.indexOf(p.n)>-1; }
 function toggleSave(p){
   var i=SAVED.indexOf(p.n);
   if(i>-1) SAVED.splice(i,1); else SAVED.push(p.n);
-  try{ sbInsert('recommendation_logs',{kind:'save',action:(i>-1?'unsave':'save'),place:p.n,at:new Date().toISOString()}); }catch(e){}   // 저장수 집계용 (나중에 순위 반영)
+  try{ sbInsert('recommendation_logs',{query:'__save__',parsed_conditions:{kind:'save',action:(i>-1?'unsave':'save'),place:p.n},result_count:0,clicked_place:p.n}); }catch(e){}   // 저장수 집계용 (나중에 순위 반영)
   try{ localStorage.setItem('odipick_saved',JSON.stringify(SAVED)); }catch(e){}
   render(); drawSaved();
 }
