@@ -4,7 +4,8 @@
 "10명 회식, 룸 있는 고깃집" 처럼 조건을 넣으면 맞는 곳을 골라준다.
 
 - 저장소: https://github.com/soyeonna/odipick
-- 배포: Netlify (`netlify.toml` → `python3 scripts/build_dist.py` 로 `dist/` 생성)
+- 배포: **깃허브 페이지 https://soyeonna.github.io/odipick** (`.github/workflows/deploy-pages.yml` 이 커밋된 `dist/` 를 올림). 커밋 전에 `python3 scripts/build_dist.py` 로 `dist/` 를 만든다
+- 넷리파이(odipick.netlify.app)는 2026-09 무료 크레딧 소진으로 배포 멈춤. 자동 배포 끄는 건 소연님이 대시보드에서. 배포 횟수를 늘리는 구조를 제안할 땐 크레딧 소모를 먼저 말할 것
 
 ---
 
