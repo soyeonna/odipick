@@ -290,6 +290,9 @@ function openAiSheet(){
 .fc.z{opacity:.4}
 
 /* ── 상세 ── */
+.shback{display:inline-flex;align-items:center;gap:5px;background:var(--sub);border:0;
+  border-radius:9px;padding:8px 13px;font-size:13.5px;font-weight:700;color:var(--ink2);margin-bottom:10px}
+.shback:active{transform:scale(.96)}
 .vcard{display:flex; align-items:center; gap:12px; background:var(--sub); border-radius:14px;
   padding:10px 12px; text-decoration:none; color:inherit}
 .vcard:active{transform:scale(.99)}
@@ -2390,7 +2393,8 @@ function openCourses(dong, anchor){
   if(!dong) dong = anchor ? dongOf(anchor) : dongs[0];
   var cs=coursesFor(dong, anchor);
   var chips=dongs.slice(0,14).map(function(d){ return '<button type="button" class="fbtn cdong" data-d="'+E(d)+'" aria-pressed="'+(d===dong)+'">'+E(d)+'</button>'; }).join('');
-  var html='<h2 class="dtitle" style="font-size:20px;margin:4px 0 6px">'+(anchor?E(anchor.n)+'로 코스 짜기':'동네별 공주 코스')+'</h2>'+
+  var html='<button type="button" class="shback" id="cBack">← 뒤로</button>'+
+    '<h2 class="dtitle" style="font-size:20px;margin:4px 0 6px">'+(anchor?E(anchor.n)+'로 코스 짜기':'동네별 공주 코스')+'</h2>'+
     '<p class="srcline" style="margin:0 0 10px">카페 → 밥 → 한잔, 걸어서 다닐 수 있는 조합만 골랐어요. 대전공주가 다녀온 곳 우선.</p>'+
     (anchor?'':'<div class="fbar" style="margin:0 0 12px">'+chips+'</div>')+
     (cs.length? cs.map(function(c,k){
@@ -2405,6 +2409,10 @@ function openCourses(dong, anchor){
         }).join('')+'</div>';
     }).join('') : '<div class="dbox">이 동네는 아직 코스로 묶을 만큼 가게가 모이지 않았어요.</div>');
   openSheet(html);
+  var cb=document.getElementById('cBack');
+  if(cb) cb.addEventListener('click',function(){
+    if(anchor) openDetail(anchor); else closeSheet();
+  });
   document.querySelectorAll('.cdong').forEach(function(b){ b.addEventListener('click',function(){ openCourses(b.dataset.d); }); });
   document.querySelectorAll('.cleg').forEach(function(b){ b.addEventListener('click',function(){ var p=P.filter(function(x){ return x.n===b.dataset.n; })[0]; if(p) openDetail(p); }); });
 }
