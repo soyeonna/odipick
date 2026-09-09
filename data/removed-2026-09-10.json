@@ -615,5 +615,142 @@
   "noAutoLink": true,
   "sitAuto": true,
   "removedWhy": "대전 중리동에 같은 이름이 없음 — 상호가 다르거나 폐업 추정"
+ },
+ {
+  "n": "우화곱창",
+  "cat": "곱창",
+  "cats": [
+   "고기"
+  ],
+  "area": "둔산동 대덕대로195번길",
+  "gu": "서구",
+  "hours": null,
+  "sit": [
+   "술자리"
+  ],
+  "fac": {
+   "parking": true,
+   "reserve": true,
+   "group": true,
+   "pet": false,
+   "kids": false,
+   "delivery": true,
+   "restroom": true,
+   "kidsmenu": false
+  },
+  "cap": 4,
+  "ig": null,
+  "link": null,
+  "v": "잡내 없는 모둠구이에 날치알볶음밥. 둔산동 곱창집",
+  "nopo": false,
+  "src": "local",
+  "lat": 36.3518156,
+  "lng": 127.3751273,
+  "mood": [
+   "야외",
+   "테라스"
+  ],
+  "kcat": "음식점 > 한식 > 육류,고기 > 곱창,막창",
+  "kid": "252815311",
+  "kurl": "http://place.map.kakao.com/252815311",
+  "phone": "042-488-1428",
+  "jjin": true,
+  "gid": "ChIJw3cIHKVLZTURPIk8Kv4YVIc",
+  "gname": "우화곱창 본점",
+  "ghours": [
+   "월요일: 오후 5:00 ~ 오전 12:00",
+   "화요일: 오후 5:00 ~ 오전 12:00",
+   "수요일: 오후 5:00 ~ 오전 12:00",
+   "목요일: 오후 5:00 ~ 오전 12:00",
+   "금요일: 오후 5:00 ~ 오전 12:00",
+   "토요일: 오후 5:00 ~ 오전 12:00",
+   "일요일: 오후 5:00 ~ 오전 12:00"
+  ],
+  "gperiods": [
+   [
+    0,
+    1020,
+    1440
+   ],
+   [
+    1,
+    1020,
+    1440
+   ],
+   [
+    2,
+    1020,
+    1440
+   ],
+   [
+    3,
+    1020,
+    1440
+   ],
+   [
+    4,
+    1020,
+    1440
+   ],
+   [
+    5,
+    1020,
+    1440
+   ],
+   [
+    6,
+    1020,
+    1440
+   ]
+  ],
+  "gpark": [
+   "freeParkingLot"
+  ],
+  "grating": 4.9,
+  "gcount": 69,
+  "gprice": "PRICE_LEVEL_MODERATE",
+  "gphotos": [
+   {
+    "name": "places/ChIJw3cIHKVLZTURPIk8Kv4YVIc/photos/AVoNoXSEAWv45a4NOtPSDXFggbEK_BJABLaDddLk_CS0wpVina-6sQJmF3g11HFWQ6eOtQTOAYKFMAsKyhIBBlM6AWtsaOm3IAt6C1DpMNoLWid57mQdMSl3OB0D4_OW8LbyeidpnuSAzWlznjDroYaVOYfMYSbaA7pIeMQ7bYlxmpWnBm-YJO24aVgi-qL5-zzHLqJ2fVtcPLnjX88yOOwUByGRPCp-Yn99y-bvPsJIF4AXF9PsUYjcUpTQP315UJqcW9aajzHt9NnWsM2I6xzXk4kUE99KFEcEjVO3sCz4r4yUNgziB_vrRznF_rs01-e5AYyzYKW51hFkPtjh8zcH8EmzK41TgiFZFbT9HYW5QBPxRZARprQXwS-10E_NL5-sohSrU075wpC31JoKLlwjPZEq3m1LHJQdRsXPDl2rEgThL6Y",
+    "by": "우화곱창 본점"
+   },
+   {
+    "name": "places/ChIJw3cIHKVLZTURPIk8Kv4YVIc/photos/AVoNoXQMila_QA9x0QrX-YCve-UU_7ofSwZDfJBRpwScuamk9FLsOPmulkIiUG2MUV7qe1aXFSTPI1UO00oIaCd5SuFKWFcHmS81MVAN8jtTQ874gttiwD-YDlG74FAwn2prATpxAJKsfbKpv9D0VPxRNs3wtDcvdhEZ8nVXT_wRzx_nKrUfMzZmW6zlUcSY2aOKLlxiTjjgGXbCdsU5NV1D0q5sg4oxmOkKnTPZ7phhVRY-k3SOIjgFI-62c7_oMSUj8KfXzHUOpCpcLW0ciQohSthHl9m213aom9APNETBl-opNd2gw-qR_3J161uD02EjBAgn72EAuZ9UrglpE8Hr0eNFZNTJJKBqkfJzvdB8yk4zw2YboEhhhOUiezNrVVEKzwHMrMlVfiCf1ako9dPxhY9B4v77H2LztUD-nrMbiDQ5XYvv",
+    "by": "우화곱창 본점"
+   },
+   {
+    "name": "places/ChIJw3cIHKVLZTURPIk8Kv4YVIc/photos/AVoNoXSKXa8RlfzBHddrajeO08JfI9Ht8ZSOQRw_SrY3MEFBA_YS0bg4DTvq1A8ZVocq04R4cfxiPyJTty1ZweLuvGVsEHJL6Sm-uk6myQfjlrFjuk3zHWtHUVk74KEwgTzJjnzRjxST44fTQFhrQ9cBAAwyFcbUxSAtR01FEGNjyB99hT1wp5J43s2xfQO9ICXxfvJYis-p23MsJ_jVq8hmXt2dJa374wXn95n9ZozNiQCjRZLYDviJzpibX6kJI7DodcI4AxPLLQjLakVfT7eMo6du_x82FYEkotW4d1ddIhTqA5_6mFyhmxevk5n3hR_YQJS1eRiYjXAe828_ncd6VeD15HqHubJWhRbruYJ7LvaiR6PtH64zFGzuDbSbMVQE3oReni1GmiLtVzTj-7UqnwctZFzsDko9TmzsZOO0ISeQ3seE",
+    "by": "우화곱창 본점"
+   },
+   {
+    "name": "places/ChIJw3cIHKVLZTURPIk8Kv4YVIc/photos/AVoNoXQW1mvuTU6gXOg7SfZd-A12r0TpBtPJ1kw6JfCrFXKZJx1kSvQmaEWV3LatgGV4ERmEf6wZ3YAZIyQ3Uj2kwLg8SlqtkjKh4YGNT4mlstpLIiFAHptYwEex9kP6cPaE7wmXsaF_u-CtzcZyaSXThgC1dj5AVWluNRdR5ifw8AnzK-lQ5bDBJLzAfoRd4IuYCnbQyzRhYtOw_pWE5pSdWTKGZUTJ3zoKANImFiHQsV9Thu7x9ujxaJFn58oUBTv468227srUxZQvk5XrggzduLLmoGHF863RJhH306qYzlF2QKTTGjXDsofIqzvhHrbPpkAEen_JCrZrBSEocWeWQNqcpOjY3OTwsfn46AgcEaE3f7Yj4ieyB9_xBXA3WklttbIL1DP2IziLjc74Psasa3_xAdAqr17D0_iqf1Q62YVDkuZwMgfTtGiDOd7VcqEV",
+    "by": "jinny"
+   },
+   {
+    "name": "places/ChIJw3cIHKVLZTURPIk8Kv4YVIc/photos/AVoNoXQdO1acejvjrOfqOtzADN-74VMIqmUL7XNJp93jwGHaaKoZOXH08Xx8oxJqHU4-FAUQm-2V-_yt3iRn9F-0J1wJZnnSt6SPkZGe8JB4sdM1OjHYB43kaZNwtH_AXz3tL2msaA3C_ubSOgPMoEsK8jQgXqWTzMyOgmgOyXOeoNN7ZAFX7glcgWqoDncIa4-yVekHdgO7fW5fiIj3PdhD8pC4xgL1BwxKqy2JqNm6iAkQTOeA5axG6QcOvX3qHNugjd5CcLeg3_4rx76X8BFIE3tMkJe_VkCslAK6BAXoxEhiXzGQfeY_Dd9_y95U5QC0iJnwIOmKHdWLIRYQJRMqHxmJvbzq2quDvbTPxVKFeUPue6vWXIZMv0z4vha9VEggKNTpPeIx42C_QM4Ggn0GPplhUuWXOHlxj34VTh35CeRzA3_WgzkScoTFR6xmThct",
+    "by": "이재천"
+   },
+   {
+    "name": "places/ChIJw3cIHKVLZTURPIk8Kv4YVIc/photos/AVoNoXQyZlDPUia3Wp_uG9I39WYNgNY_vmXVw76tmkuIFEw5D9fTSj6COEYINpOlb56djbfiSYD8oiIRSJVqMF8r7iNz26bXjY7PfZt5rYZBeYWW08Y6KRioc6O1hbVqojf0kWRRf2TRT-UfH5l7_b1BkUbkETbbvrDl24DEhEZT-sAajq_K7y-MQxwy8xs0oPnFnHD7WbgUVr2tSx4LCGt0_ff37xWjUurrO-jtfOWtKQxfmqpVoUwWBc7Q1-EHNkakREjv74-BegtUS7V_Juf-4ME447t8QJEDhVquT0rO8w7Z8btwIyyQN5D5NbiH1kfTjEGXGZg1Q4BQTk9hycvbSh1W_jzWXdNwxnaKmSUC_SrhCLiL78L-9yii0uDG02mP3IyyOsJc-CviWGV0Vghrd-Ue93dhcRXhHyr1WQ-KhPZg-7ksSti_HTofC4PatxLd",
+    "by": "이재천"
+   }
+  ],
+  "gmaps": "https://maps.google.com/?cid=9751446573073336636&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYASAA",
+  "gAt": "2026-09-03",
+  "gpl": [
+   "g우화곱창2524_0",
+   "g우화곱창2524_1",
+   "g우화곱창2524_2"
+  ],
+  "gby": [
+   "우화곱창 본점",
+   "우화곱창 본점",
+   "우화곱창 본점"
+  ],
+  "gplAt": "2026-09-08",
+  "vSrc": "리뷰 요약",
+  "budget": 3,
+  "budgetAuto": true,
+  "removedWhy": "소연님 판단으로 제외"
  }
 ]
