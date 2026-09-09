@@ -10,7 +10,7 @@ def inbox(la, lo, b): return b[0] <= la <= b[1] and b[2] <= lo <= b[3]
 def nn(s): return re.sub(r'\s', '', s or '')
 FOOD = {'한식','중식','일식','분식','양식','고기','술집','카페','디저트'}
 BAD = re.compile(r'^(교육|부동산|가정,생활|의료|금융)')
-HOOK = re.compile(r'[‼❗️]|!!|공유|저장하기|태그|팔로우|이벤트|미쳤|실화|주목')
+HOOK = re.compile(r'[‼❗️🔥💖🤍]|!!|!$|공유|저장하기|태그|팔로우|이벤트|미쳤|실화|주목|등장|떴|찾음|최초|레전드|역대급|난리|대란|무조건|찐맛집')
 bad = collections.OrderedDict()
 def add(k, v): bad.setdefault(k, []).append(v)
 
@@ -21,7 +21,8 @@ for p in P:
         add('대전여행인데 대전 밖', p['n'])
     if p.get('src') == 'reel' and not (p.get('ig') or p.get('igs') or p.get('ph')): add('공주픽인데 릴스 근거 없음', p['n'])
     if FOOD & set(p.get('cats') or []) and p.get('kcat') and BAD.match(p['kcat']): add('엉뚱한 업종 연결', p['n'])
-    if HOOK.search(p.get('v') or ''): add('릴스 문구 남음', p['n'])
+    for _k in ('v', 'sig', 'tip', 'combo'):
+        if isinstance(p.get(_k), str) and HOOK.search(p[_k]): add('릴스 문구 남음', p['n'] + f'({_k})')
     if not (p.get('v') or '').strip(): add('설명 없음', p['n'])
     if not p.get('sit'): add('상황 태그 없음', p['n'])
     if not p.get('lat'): add('좌표 없음', p['n'])
@@ -38,7 +39,7 @@ for pat, label in [(r'class="shback"', '팝업 뒤로 버튼'), (r'\.mapover\{[^
                    (r'function hashFor', '새로고침 화면 유지'), (r'function spread', '추천 다양성')]:
     if not re.search(pat, h): add('화면 기능 빠짐', label)
 
-HARD = {'대전에서 먼 좌표', '대전여행인데 대전 밖', '엉뚱한 업종 연결', '이름 중복', '카카오번호 중복', '릴스번호 중복', '화면 기능 빠짐', '공주픽인데 릴스 근거 없음'}
+HARD = {'릴스 문구 남음', '대전에서 먼 좌표', '대전여행인데 대전 밖', '엉뚱한 업종 연결', '이름 중복', '카카오번호 중복', '릴스번호 중복', '화면 기능 빠짐', '공주픽인데 릴스 근거 없음'}
 fail = False
 print(f'점검 대상 {len(P)}곳')
 for k, v in bad.items():
