@@ -164,5 +164,456 @@
   "budget": 4,
   "budgetAuto": true,
   "removedWhy": "별점 5.0에 리뷰 1,000개 — 신뢰하기 어려워 소연님 판단으로 제외"
+ },
+ {
+  "n": "남영동양문",
+  "cat": "소갈비·고기집",
+  "cats": [
+   "고기"
+  ],
+  "area": "선화동",
+  "gu": "중구",
+  "hours": "월–금 16:00–22:00",
+  "budget": 4,
+  "sit": [
+   "술자리",
+   "회식"
+  ],
+  "fac": {
+   "reserve": true,
+   "group": true,
+   "pet": false,
+   "kids": false,
+   "takeout": false,
+   "delivery": false,
+   "restroom": true,
+   "kidsmenu": false
+  },
+  "cap": 12,
+  "ig": "DcFXVfNhxZ3",
+  "link": null,
+  "v": "모둠 갈비한판과 후식 평양냉면. 선화동 소갈비집 · 갑오징어 2마리 11,000원 · 모둠 갈비한판 59,900원 · 후식 평양냉면 6,000원",
+  "phone": "0507-1380-8468",
+  "views": 10219,
+  "src": "reel",
+  "ph": "pic남영동양문5589",
+  "likes": 87,
+  "mood": [],
+  "igs": [
+   "DcFXVfNhxZ3",
+   "DaHJkdxJN1g"
+  ],
+  "photoSrc": "대전공주",
+  "cover": "DcFXVfNhxZ3",
+  "sig": "갑오징어 2마리",
+  "ghours": [
+   "월요일: 오전 11:30 ~ 오후 10:30",
+   "화요일: 오전 11:30 ~ 오후 10:30",
+   "수요일: 오전 11:30 ~ 오후 10:30",
+   "목요일: 오전 11:30 ~ 오후 10:30",
+   "금요일: 오전 11:30 ~ 오후 10:30",
+   "토요일: 오후 5:00~10:30",
+   "일요일: 오후 5:00~10:30"
+  ],
+  "gperiods": [
+   [
+    0,
+    1020,
+    1350
+   ],
+   [
+    1,
+    690,
+    1350
+   ],
+   [
+    2,
+    690,
+    1350
+   ],
+   [
+    3,
+    690,
+    1350
+   ],
+   [
+    4,
+    690,
+    1350
+   ],
+   [
+    5,
+    690,
+    1350
+   ],
+   [
+    6,
+    1020,
+    1350
+   ]
+  ],
+  "grating": 4.1,
+  "gcount": 194,
+  "gprice": "PRICE_LEVEL_MODERATE",
+  "gphotos": [
+   {
+    "name": "places/ChIJa3VYXq6jfDURyhGkuv7z9aw/photos/AVoNoXRBtjcFe4SPknk_0LvQ0t9W_QV-rRZCmTz9iCPXtcmKn0A8uIB9QAEwoofVrw7t84xKKIPXVUuK8yUxu0W2FlOcjt16wn_ljHZHOy1bystp0tVmibbyXhL5DNIvnAG251FakJCSpeVK-erKMfXm9rLsyVUrzA9MApow8U2Ou6fPCMl7zkOpLx3Qo4BBKpP4Vuk3lPHVz4mR5cumRFMh2Ipt8RAcTNtMGbr4iuLiAMfGwfjXzJgrs1Lsz86gpWBVMLLBsfFxH6RGfHhBK21g9v-PKPVxlhRJC1qjgHMDYkoISX2ux8qXyE_IiOwpjckCf7Nqs0CmBeM4vqXjEa6WyKn9ZKY7xNM0iQnOhHFF6NF7juoHQfpbwweZ0ga8KZXnaOROrY30iw-GdUdFgFiOIrs2T3sobSZx6hJOfTC9gEULTgHoh2wimdg3hBkZBToV",
+    "by": "Marvin lee"
+   },
+   {
+    "name": "places/ChIJa3VYXq6jfDURyhGkuv7z9aw/photos/AVoNoXQyYdl5mc6j58exFHCmJiHIWL0_qQnjTG_QqOsamtDqFq6FtcrCH8lSNVWR8CeDQ82Im6i_LY48lX9CMneg1l52stubYnhN5SS2ScP5o8ZsosO-dqwUzjyRtE_t7eKys3HHBgkDKYp66VLMkF_xiuL3bKsoEsgNWGg1CiUR6nYs8o8Stk3Dhn61qMuGnugHuKUSWtce9YToYmOxvEptPxtEnI4ZRquN85xNhEImQOxqdk-bftJWv1T2Y8ZQIlL2gc6MkSbPyoVDKrDFZCxvvD05Lw164GWAfVDLdeKlIEntAAVvWvY1U5mLrzvvpKCsVs8g3JrVRGMC-ArPC5zLk8JHO5US2W10B1TCb34pS8n4_8b43tDozbWXqDOAXHbrWmGYpIKYeHc09Mrq7DRIaC1DFacDPdGStw1xAyZpEiyl2g",
+    "by": "남영동양문 본점 korean BBQ Beef"
+   },
+   {
+    "name": "places/ChIJa3VYXq6jfDURyhGkuv7z9aw/photos/AVoNoXSpWzuGQ1ie4JmK9wNmoNKNEBPWbSy5cCP7CWcKFJooPvMOt0XqEwjgSE38oFdL_JnhvKrHkFbZsuTnbnzritog8YAVtGs4KfYJwKc-SsvgLpBLMfterIUKLtqC4VWCZWsogjM0W9nKt52sPChmCyojN3JwmmJUuzGldKEAbUxSbb5Dkm_MBn1D6LTXss83WY60VxVi8FeOKEjXX8EG76z6Ly3YmxBI8OArGFeerGAeERDXHwiF4N3qVgXmCAklrR4nFZ-0pkUxHHVynA5Yefyoyb-G8NH11RPtOaZB_BbddDrWORCPD8f4eSMIrBWMcXqx-bGuVqEUJwjahfmRazH6VElNcYT57pCJCuv2KY5HmhR4c7Mn4cDWa-3H9cvP8l5JxIA10Y0XhAlPvypqd1eKzkg8xR6Xd-YMysYd2y3bNtCrAUWIwlTWV00CqQ",
+    "by": "jjj p"
+   },
+   {
+    "name": "places/ChIJa3VYXq6jfDURyhGkuv7z9aw/photos/AVoNoXTTF1VasdT0c40r5r465DMHl67fzyyyTvWOTM4dekXVQQgOLkbbdvQx68bZP5tgiAHLagGq_7J9PwlKmTRZ_q5_QHjrh2_v2tVMcogbA7Z7kHrr9vYzz8RO2-bRv0ggXQq8QtXJYZPCEEP5TsdzOYoxDSWworIocJzYwCBV86Mqn6ZWlA1II0ngzRo4Jpk09KyAoIsea0fp1pL_Xwe7r8E9XZcGrELLqWpjq0YVDUM638AIuoq6wqjbMmw6iQzheW7TuBhpjBnVa2zA48q9WdhIFflmXG7aIJZKzsM7xQsDHr9H4leiJJqeBTYD-0Tc6qFn71_ImkJ-oJA99KmG_F8_PF68aDyepSypw8L3NjjXqcILLjcrWEzjkwIp1qj_VyIVlHY-uU1qSLd7-xg01-3-nlAQaXGnVO60irH_iKPGQtqdVd01SQjwcEd4T4Zv",
+    "by": "Matthew Lee"
+   },
+   {
+    "name": "places/ChIJa3VYXq6jfDURyhGkuv7z9aw/photos/AVoNoXQx5vNFGhImfi29oyo-FQgCOqeEgd_9fVG6KJKfuB4WHtSSDwc8IEkBHrF1MH6bUXkn409NgOIEDk6fpqQlepXZYbTWFT3f7l65teFqoa1pzhBM7mqWEaffaB5lL_nxcCRnhU5c_GV5QQzQ01mB7D9GkUNe6_AmPpvYriDxuan9UXcNnB2CVODRIeAilwEIleAyAdWLsMw8dzJFtGPR3oEK21QRTAyn7GEY8EJa7QluC1_vFUtQCRlSs304FIKVp1BJfeDZOPFPsbDZpiPPPXvXhRE7YfTcGTRxHvpj2qekh6RBdRIZAVYuq-Yc5ZE7oU_lut-zl4wINN4y7snxE2SRMvKKdE4FKKYUsK8Vzth7hdKTpsP4JG43RHxMUTo7bFBPDNdsWrH3Hale8HN9l2oqPZOk4s1OgcM8d358iiH7lpA6UrqxpGUQbl-YQi2E",
+    "by": "jjj p"
+   },
+   {
+    "name": "places/ChIJa3VYXq6jfDURyhGkuv7z9aw/photos/AVoNoXQT8AJJLd5MjVT62ZXy16TXGpzDptsExA5S2pJrBI_6r1pRQFQqcywXOFc8aRcPNuDnFeyMdz9VFdeKyLAdXbmaorBEjqL-yLS3iPzRAPTZUhlR5NoSoKqNW3eFguZ6YPRRHMzJ1YLvezEjw_48qqYYV0-SAVrQ9RT3Q3Id4YEFoIopQcJZdVFybq6uUqr_DPfkepztMhnVUDzwXAsd2QP733OW471u-gAI81IkAdDBx2uNGwRuiWcLVqabBrNUcQ8olw8lDhnHjL4PJv_jhjQ7TV2wCd9gPYF5FsBwCiuc98rHZpXKq8zAS1Aq1fLmFCCF6HsQhhZG6_1D-nzZyOe_ouG9e8uvq_riT0mNr2V-QzzA5k-XD0jlHS47G9MLVDxyrsJMavfeuxBujTpLQKWXsIUEp_YbcT_nBtmhM39xV8pJh67OlnkkuBRMKRkk",
+    "by": "Kaelin B"
+   }
+  ],
+  "gmaps": "https://maps.google.com/?cid=12463135819196273098&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYASAA",
+  "gpl": [
+   "g남영동양문6187_0",
+   "g남영동양문6187_1",
+   "g남영동양문6187_2"
+  ],
+  "gby": [
+   "Marvin lee",
+   "남영동양문 본점 korean BBQ Beef",
+   "jjj p"
+  ],
+  "gplAt": "2026-09-08",
+  "needsLoc": true,
+  "noAutoLink": true,
+  "vSrc": "리뷰 요약",
+  "removedWhy": "대전 안에 같은 이름이 없음 (서울만) — 폐업 추정"
+ },
+ {
+  "n": "케이찹사라다",
+  "cat": "카페/디저트",
+  "cats": [
+   "디저트",
+   "카페",
+   "신상"
+  ],
+  "area": "대흥동",
+  "gu": "중구",
+  "hours": "매일 9:00-23:00",
+  "phone": "010-8801-5513",
+  "budget": 1,
+  "sit": [
+   "데이트"
+  ],
+  "fac": {},
+  "cap": 4,
+  "ig": "DY_J6oaJAxg",
+  "link": null,
+  "mood": [],
+  "v": "카페형으로 낸 케이찹사라다 전문점 · 케이찹사라다 1500원 · 아메리카노 2800원",
+  "src": "reel",
+  "at": "2026-05-31",
+  "ph": "18119061277670121",
+  "likes": 386,
+  "igs": [
+   "DY_J6oaJAxg"
+  ],
+  "cover": "DY_J6oaJAxg",
+  "sig": "케이찹사라다",
+  "photoSrc": "대전공주",
+  "needsLoc": true,
+  "noAutoLink": true,
+  "removedWhy": "대전 안에 같은 이름이 없음 (대구·경산·세종만) — 폐업 추정"
+ },
+ {
+  "n": "귯걸귯보이",
+  "cat": "술집",
+  "cats": [
+   "술집"
+  ],
+  "area": "둔산동 1063",
+  "gu": "서구",
+  "hours": "월-목,일 17:00-05:00",
+  "sit": [
+   "가족",
+   "술자리"
+  ],
+  "fac": {
+   "group": true,
+   "kids": false,
+   "restroom": true
+  },
+  "cap": 8,
+  "ig": "DKjc_W9yoaB",
+  "link": null,
+  "v": "둔산동 90년대 레트로 감성 술집. 콘치즈전 · 돼지김치전골 · 미나리수육",
+  "src": "reel",
+  "phone": "050-71329-5905",
+  "ph": null,
+  "auto": true,
+  "likes": 87,
+  "mood": [
+   "예쁜"
+  ],
+  "igs": [
+   "DKjc_W9yoaB"
+  ],
+  "noDate": true,
+  "sig": "돼지김치전골",
+  "ghours": [
+   "월요일: 오후 5:00 ~ 오전 5:00",
+   "화요일: 오후 5:00 ~ 오전 5:00",
+   "수요일: 오후 5:00 ~ 오전 5:00",
+   "목요일: 오후 5:00 ~ 오전 5:00",
+   "금요일: 오후 5:00 ~ 오전 5:00",
+   "토요일: 오후 5:00 ~ 오전 5:00",
+   "일요일: 오후 5:00 ~ 오전 5:00"
+  ],
+  "gperiods": [
+   [
+    0,
+    1020,
+    1740
+   ],
+   [
+    1,
+    1020,
+    1740
+   ],
+   [
+    2,
+    1020,
+    1740
+   ],
+   [
+    3,
+    1020,
+    1740
+   ],
+   [
+    4,
+    1020,
+    1740
+   ],
+   [
+    5,
+    1020,
+    1740
+   ],
+   [
+    6,
+    1020,
+    1740
+   ]
+  ],
+  "grating": 4,
+  "gcount": 2,
+  "gphotos": [
+   {
+    "name": "places/ChIJrzN1awCffDURgKYlyMzlIOk/photos/AVoNoXRYpoCGMZ_gDhg1t4CQkH55UNWsRGqZpj9J2SvLV_wFJr-YUG6ksaTHJ9XJcl83aJft-jcJnxFkOvJJnonnrzDQyTdodC9s2s80lfP-qBiQDa9gRgNps_gr7oW_UB2qm-Q_UizNmQTqfVNRGv_1L00YzuO9DW8fOVPalQ_kdAOWaKb5XpncUpmoj8Tk3LJe2XJymkNtBSIRnYHCT74cLifV1z9hXMm5DaGUJkceHuYfRo1Zx2Ntwal9ZTZIYM4LTJSijGCpl8cXbV1fmG-nnGzQINfSQsIVfhydUQeImM8nPJZ2HqR2nbzutsplQfqYlxhfMgcaRq466_1lBeIeMmO6gsXpwI5Kc2iInsn2Ah95upQn-0jhp8dICW_iOHFihns7ZDIT7Ca_tq7fosehxRk0PNXq8URLFVBCREn59ek1oeQ",
+    "by": "이재호"
+   },
+   {
+    "name": "places/ChIJrzN1awCffDURgKYlyMzlIOk/photos/AVoNoXTHAVsEyyH-b1ceI3Z-I3HiCFSxZjnvGywtjISgPey-GkfuGk6O-RNDz-OUV70Ix-Z5AKUCeKB2dH4qaS7ILTN6m-LYyRoo64R3WYdrf69fV-Z4cE_c6PNbQoagL8rSar_MuV5_rD8JI5iAzUard2b4Hi8yNpwebyZtl0NuNhj7QmTN-IcwgVvf_hHGOjnLNER_r7SwlL81DM2zfhpfrC5opAr9mj44KNs90Lg50LiAG_5n5SL110bAj9ebRQeF--9vUbXXvoJqzdGg3HsWjAYu9unA0UY201vD-ikfKF4w3uf9-CAfKOpvwq8bWEqHDoF2t539CVbZTEh4cqd_2FMEwW_rhD3JSWYF-LQ_-FtRr2mrUPLuURhfk8d00e2pt6Dmsl8DlKasjuiIHo2ZoqMS2K4Bn4DJS2nd7Vkx1F4TPBvKZ6_rTmJnNNdU1Upe",
+    "by": "Allen Chung"
+   },
+   {
+    "name": "places/ChIJrzN1awCffDURgKYlyMzlIOk/photos/AVoNoXQhsn-05OPSbxUzd2Og7X9ik0Y2ILDaHTKaP2q-a_mzdU0hzQlOPJ_6ioyomyBoWxFMsYcJsd8AF02Dsf5e_JsoddhunBMYtrLFkpnnnLpaZu8X41UgdRIFg3m86mSzIOygVGK8WsLB6u4j65OZt4Ufeaajxm13HM259I8jfXJAgYbAW5lJKw3Vzo3OmbWql7vYIWZSrUkWMYO9-VTr6At-JHFSUXGRCGK6Le-HafDKtrrrPlRgz7WwUHRjraocimxtCU4WgZCJOKR1Ovhaw8lyNrTXgQTZNI7BLO8s0zotGKoYDaotqrumSufdMMOLdn3FiHoLx7tH4fvJhXUIl3en8wDWFsoQSZBpJL8bCzNM4OR9-G-4esBmhEdXhZCpuIVSQQOMw_OxC9BVrZ58F4iI-HM_ng79_rT2Jz19S6v3---nMbkA70fxjMfLvw",
+    "by": "Allen Chung"
+   },
+   {
+    "name": "places/ChIJrzN1awCffDURgKYlyMzlIOk/photos/AVoNoXT95oVM02IhxwCLro9qjbkqCrun2JVnKO-0DaW6WgXiSRPLHbdwfF8gw0G_ToaEkJhmdcHRvAVgSorJ296iyfpWqqVG_1mAsIVC__Z6xP2Zqpgn-d8ZSgZUSY6wfDhLQntaXo5IPewDQbpWLPde7TEbJLqt0Z7PDEe_hPLyGh2pKXzZbc3WWDvRque8BPzdI7KUQJRz_ejf2l0hKICtPP_Mu6Aygy2f_i48PF0SzB3ZQRxUK8nnDxRC0uJrqBjIz8UShEZB6QgslHg_wS0UxfCnfEz6fAkZJaS4kyrGe4G63fVkT7xigqlYP0HsmCfKCHkFnQgVXV1Sn6VAn4mrRScgQNuVdeVWP6hx69B4g8ys_-q9KQUNKU0cDq9qKklyJVgd84Q0vpOa5WolqgvzffKAb03xxS7KFOInkbGmlhPTsZ-LozkPybuFceoWMuIh",
+    "by": "Allen Chung"
+   },
+   {
+    "name": "places/ChIJrzN1awCffDURgKYlyMzlIOk/photos/AVoNoXTmink_fzmJNCge32VUQIaGa2ZRHiYkkcO-sI-IrIxTkWx0ibNltzeftVk-j2r6qxBqvTm2ba_eqZIkQUk4d_JwgPzHkCWAUZdMYq8opbkwzoR_3qTqOnz_Cpm5JSTfCnF9-Z2Hk8nH1Ycnz3I2_DPo9KizA78H3Sjs_zzwsb6-FPbdnHl62lSqDvdGZEjLuKaFitn0sOC_hRUKvgy_X_Y7N3EMSM3zEsnAHPPJv1sFZa8Axp1AYUN23UIuKw5P2bp5_C5hof80kLLoyfhx3G19nQgNyTN3mxqKf2mgBwCuGA93g3Zo904cPbrwYPxaOXwYXN9LUxtBQVHHZfetpEtrCpyaixFT9lgIimqcsd0Ocj6cEziUGGET2M3uX9hgOQEsmhqwEEjwvGctzBl78AOfAkxmVmdvFXgZ3LRxOLPaOawVR7w5q0z2Tcjdst1M",
+    "by": "뚱이"
+   },
+   {
+    "name": "places/ChIJrzN1awCffDURgKYlyMzlIOk/photos/AVoNoXTz7d8eg2bsswrbg17gkTT7NV9Tmq1mppB3GByqKx3NovcqO72ihxvtvuZzBzBK0dzoEd-qpHLkJhGhQmcq2p9Mu1mBnWwtoU64Mmz22C03wJctX3icmYNQCEcgVDLTTrj4sFo5cDkZwUu8jhsNzvreXH2hnGpvhRl18s6ysG1TqbFRTRyyBnZF-wwceZ-P_uPvDcfm5kldHIn3VZn7nj0gTNtNEtNBCrTOXzoksTO8XO5oYorEncv_UkO_sIsSQ0fqGZRCspolakw-0ldx7GjoCDUUn3o_ux2eboI2Ng1ImtsqJc5jQsWtoUyZlCwH4Xonk-cXg1h-pPrxgB5zPGa8xsahP11sYKxHdQufh_tRM4jwLkmQn9wDAyBEMgL_KbcyXf6GsZrIez_K-X5fk4I1Qqw32VFYOsKROs2U6G2rZjR5dlyItOgbk3j_jwAR",
+    "by": "Allen Chung"
+   }
+  ],
+  "gmaps": "https://maps.google.com/?cid=16798679277785949824&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYASAA",
+  "cover": "DKjc_W9yoaB",
+  "photoSrc": "대전공주",
+  "gpl": [
+   "g귯걸귯보이5449_0",
+   "g귯걸귯보이5449_1",
+   "g귯걸귯보이5449_2"
+  ],
+  "gby": [
+   "이재호",
+   "Allen Chung",
+   "Allen Chung"
+  ],
+  "gplAt": "2026-09-08",
+  "needsLoc": true,
+  "budget": 3,
+  "budgetAuto": true,
+  "noAutoLink": true,
+  "removedWhy": "대전 안에 같은 이름이 없음 (서울 구로점만 검색됨) — 폐업 추정"
+ },
+ {
+  "n": "을지면옥",
+  "cat": "냉면",
+  "cats": [
+   "한식"
+  ],
+  "area": "중리동",
+  "gu": "대덕구",
+  "hours": null,
+  "cap": 4,
+  "sit": [
+   "친구모임",
+   "가족",
+   "가성비"
+  ],
+  "fac": {
+   "parking": true,
+   "reserve": false,
+   "group": true,
+   "pet": false,
+   "delivery": false,
+   "restroom": true,
+   "kidsmenu": false
+  },
+  "v": "중리동 냉면집. 슴슴한 평양식 냉면",
+  "src": "local",
+  "phone": "02-2266-7052",
+  "ph": "pic을지면옥6420",
+  "photoSrc": "대전공주",
+  "cover": "pic을지면옥6420",
+  "jjin": true,
+  "ghours": [
+   "월요일: 오전 11:00 ~ 오후 2:30, 오후 5:00~8:30",
+   "화요일: 오전 11:00 ~ 오후 2:30, 오후 5:00~8:30",
+   "수요일: 오전 11:00 ~ 오후 2:30, 오후 5:00~8:30",
+   "목요일: 오전 11:00 ~ 오후 2:30, 오후 5:00~8:30",
+   "금요일: 오전 11:00 ~ 오후 2:30, 오후 5:00~8:30",
+   "토요일: 오전 11:00 ~ 오후 2:30, 오후 5:00~8:30",
+   "일요일: 휴무일"
+  ],
+  "gperiods": [
+   [
+    1,
+    660,
+    870
+   ],
+   [
+    1,
+    1020,
+    1230
+   ],
+   [
+    2,
+    660,
+    870
+   ],
+   [
+    2,
+    1020,
+    1230
+   ],
+   [
+    3,
+    660,
+    870
+   ],
+   [
+    3,
+    1020,
+    1230
+   ],
+   [
+    4,
+    660,
+    870
+   ],
+   [
+    4,
+    1020,
+    1230
+   ],
+   [
+    5,
+    660,
+    870
+   ],
+   [
+    5,
+    1020,
+    1230
+   ],
+   [
+    6,
+    660,
+    870
+   ],
+   [
+    6,
+    1020,
+    1230
+   ]
+  ],
+  "gpark": [
+   "paidParkingLot"
+  ],
+  "grating": 4.2,
+  "gcount": 233,
+  "gprice": "PRICE_LEVEL_MODERATE",
+  "gphotos": [
+   {
+    "name": "places/ChIJgamxSgCjfDURXl5INU25Y88/photos/AVoNoXRzXTk6E6OyO00Z_RDFqLfLGFL5I29jER-9cedZk3jtFMkgzxnuYlmD52UpcaRIx1AoYcdNV8114474_MGZAwJ7OF043T5mPz5f_9O2qHwDx0aBw8AEY6ibopLRc9lRiu-SNjZwSsxolJlU9HDlcld12zXNdgtl2iC9t6Wfu4Z83UDlWc58WEv0ZTPA5TworHmqAYwlz697NJML5YNKeDju-aylwuHU93H6OUSJ0qTBhdB7ghyjn-ykYWrEOr39qi9nv7uej1nnjkuhRCFmQetoVsDBvWwZqHINMKWqozfYDZlzX-pYVYWo8jBoLx5TDOajDy4laHgaJiSU_4TNtyM43fJAj_s8VgZYOSefOB7c_TgR8fmmGxmKmY9ABva-sHEzCoo87M2LvdUnMh5NCu7rdd-2RsNNiKtG26BjmfbI8cRvsTkj5IxXbrlcEnya",
+    "by": "Park Ji Wan"
+   },
+   {
+    "name": "places/ChIJgamxSgCjfDURXl5INU25Y88/photos/AVoNoXTyTpAm1l5nwPGT-e41CGRRVO5tatQ_Q2cRbJNg-qMe82YF0Qrp8MJu8bCL0C9Uxf6EZcnplnC6lKix277r-TKD2ReSitsbYdMeJBEI9rnVtZJkhWKCXRwM2iLlfbxHrvsgsCqYDCLJvTqqFVKvqD8mmDMRGxK0XyoJrlZR4V6kEo4xwPw2r7ICWPKVT0jP09kbLGz4xdmZxoy36lUS2WQoct2hoxRhbC4Ush2eGeG5Qi92i_bTXay1DImbPo82eTHTiuulM62swNB5U0B4tb2EUal_e4BoelJKMlz4XpwyNq_jxFrYbdZFmzNFUD3pvT1UNYE6QwWA9pUY5MkrXanU8dNCB69AZn1pfyLB9CBDeUM7LfB16LsBtxkzPKFtBSBfcq7oWGsiU-qDAycghGBJAcfWNDuh8JkXqHI6E8E",
+    "by": "변재문"
+   },
+   {
+    "name": "places/ChIJgamxSgCjfDURXl5INU25Y88/photos/AVoNoXSWiCOs9aId2lOcdLocFujVmHoLtTYbpR9qxWnSY-js_GfwtiRw3YekjMogqYFdFPci7Hm6F4Q6W89ym36tRDzosV198HG-tbxftJXgOxU30oQFwFQN9FeBJDwgJAYkukM6FVWMbcAfaXv1VAsgOr83NzFzq7JngdC6g9xetYntyERmGn46mFkQcAdsQ4BR4d6-EtZshBF345WMeRuPPBnthm-mnnq978VfOiO7kCDgHMby2Q_n8IkL_fz1kjfBi2Ht6oUXCshqYIk3IgOrrdnSxhTC2y_vjlSqdBM7F2cFbvUcfQrBdwG_9YBPHum0DjV2UVYBHTiuJdTmLxOIXMhUMxDxT2bJ4oj41ppU6928xf9gbUyN845M55UHpuX6NBbR4PqG3adbqs7ubCv09xxyn9pel8T3j_7AuLH6PvmwV50JyJ_89tsgsdyJ_AcX",
+    "by": "CWT"
+   },
+   {
+    "name": "places/ChIJgamxSgCjfDURXl5INU25Y88/photos/AVoNoXQCr11qQnA5g6s0-n6e2AXx9_3MGa_JuFzlra-dj7hwCBO3lZlwrJHLw2q2QNEUWYE_E6L9U05L2KacwlUZNFP73NHhrQHTw6b5LiAK9e4mP-DYzx2Bz_-GTQGH6_AVUkhtOQvHemfEb1BvuYPqX77PpcfjKV_EBfEsKz-mBg_tRyEM7d0ET6uS1LsgPJhZIc_1vj-ObKBem9occu7LWQCuw3PXGeLum4gnqwflAzfP6ngCmxHgz9Q758EEXhcA60jWC_KZuXwpMv3nfAp_nBLaE9f_IDdkuabowywwgIZjFLjBF9bmLgCDL1LGvhbMbudxIAPB-bRC3zrwYydxGLLoryY6IxWoSKcFImO2nguPaTJilPNxQe4mDrwXULdrKsM36nYJRy9mURZEbg_rvP0XEB5tUmg7RUc1uji4XG_9iby2Adb3yukHomefapU6",
+    "by": "이상욱"
+   },
+   {
+    "name": "places/ChIJgamxSgCjfDURXl5INU25Y88/photos/AVoNoXS42eRZwdmyOpfrEO_VFvT8e8cYiWAKmBJchjUwWON3ccGU4UUuKu8V4zsqdLBSWvoC-DtgXJSjFXU7xSetlMzrYmPezqOEQJ6mhjmsnHlFjVnSxgcWpMvHZw3AuNhSVA4fOw3ueH1pFnwSOskJjGRCs1MoID5KQXMCQbH_vwK1DS6avygu9y6bQmgAJqbSQvjeo7_myvU2ZXSOPrfr2V0o1Wta757SQ36mToxi9_ln4b-rJJX9QDY-Z6W_bfTF18CS4q-6SyeZCxmA7CenIbIAdNl7qbeUknItY8W0BoH4e0kEEpvrzQcC2ASmlkSsxFN84NciSUdxbVDn9eYo7khuoMzhYfc6w6i3tGrqnlXd3k-wM28T9_pN1pbau4HRbA06dlW30iDuwtyqQohfwLeIn8qy1b8j9T37KLZnC7mG47jvM_kD9ApltzqUcphH",
+    "by": "Philosophizing"
+   },
+   {
+    "name": "places/ChIJgamxSgCjfDURXl5INU25Y88/photos/AVoNoXSplssZZmIZFiV1Y-V4ZT8nRM9YXn20F8qNnObYDsOz6vtMN7EV0rZc0VNTnvKiNAPgjtwB-j_GMe8cg_EJM6O62JwedIl5iOyFf476jXVNEB512UrLV2OA6vYN2KnH9UXdYYInbhBmBNllI5Li7jBcO1HUTGxdw_axJtOEjJikfrTC0rLAdBvbCwiv1ePblE3A2PMDawb6mvPEnRmFDN_5EeFeGWeWLczFMTbFbEUDWCQwh76mnbCdTlHwexxjhqcbxi5goA2gFOEDjUJtszbTSxlxVLfhUSGvBDElAHYWVBnvuQd4ZCNy0QliSt5hOLgFNcH180QDU94ixZAFkC725A-zsI3InXU6U1nQpeQh8bEIE4aE-jnMzdEReb82s0TP8DQmgcZEeJ3BnOSzHavXzAac4450JAm6bn1d4vi6pitCfP4YxWr_cW0lQj3l",
+    "by": "DooYoung Choi"
+   }
+  ],
+  "gmaps": "https://maps.google.com/?cid=14943991729802993246&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYASAA",
+  "gpl": [
+   "g을지면옥26_0",
+   "g을지면옥26_1",
+   "g을지면옥26_2"
+  ],
+  "gby": [
+   "Park Ji Wan",
+   "변재문",
+   "CWT"
+  ],
+  "gplAt": "2026-09-08",
+  "needsLoc": true,
+  "budget": 1,
+  "budgetAuto": true,
+  "noAutoLink": true,
+  "sitAuto": true,
+  "removedWhy": "대전 중리동에 같은 이름이 없음 — 상호가 다르거나 폐업 추정"
  }
 ]
