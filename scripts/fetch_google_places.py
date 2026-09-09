@@ -59,7 +59,8 @@ for p in P:
     po=d.get('parkingOptions')
     if po is not None:
         p.setdefault('fac',{})
-        has=any(po.get(k) for k in ['freeParkingLot','paidParkingLot','freeStreetParking','paidStreetParking','valetParking','freeGarageParking','paidGarageParking'])
+        # '주차 가능'은 가게가 대는 곳만 인정한다. 길가 주차·근처 유료주차장은 주차 지원이 아니다.
+        has=any(po.get(k) for k in ['freeParkingLot','freeGarageParking','valetParking'])
         if p['fac'].get('parking') is None and not p.get('facLock'): p['fac']['parking']=bool(has)   # 소연님이 직접 확인한 곳은 그대로 둔다
         p['gpark']=[k for k in po if po[k]]
     if d.get('rating'): p['grating']=d['rating']; p['gcount']=d.get('userRatingCount',0)
