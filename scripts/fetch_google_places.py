@@ -60,7 +60,7 @@ for p in P:
     if po is not None:
         p.setdefault('fac',{})
         has=any(po.get(k) for k in ['freeParkingLot','paidParkingLot','freeStreetParking','paidStreetParking','valetParking','freeGarageParking','paidGarageParking'])
-        if p['fac'].get('parking') is None: p['fac']['parking']=bool(has)
+        if p['fac'].get('parking') is None and not p.get('facLock'): p['fac']['parking']=bool(has)   # 소연님이 직접 확인한 곳은 그대로 둔다
         p['gpark']=[k for k in po if po[k]]
     if d.get('rating'): p['grating']=d['rating']; p['gcount']=d.get('userRatingCount',0)
     # 편의 정보: 예약·단체·애견·아이·테라스·포장 (구글이 아는 곳만, 이미 손으로 적은 값은 유지)
