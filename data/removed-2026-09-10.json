@@ -752,5 +752,150 @@
   "budget": 3,
   "budgetAuto": true,
   "removedWhy": "소연님 판단으로 제외"
+ },
+ {
+  "n": "정동",
+  "cat": "일식/고기/술집/한식",
+  "cats": [
+   "일식"
+  ],
+  "area": "둔산동",
+  "gu": "서구",
+  "hours": "매일 11:00-20:30",
+  "phone": "010-5405-7644",
+  "budget": 2,
+  "sit": [
+   "술자리",
+   "혼밥",
+   "회식"
+  ],
+  "fac": {
+   "group": true,
+   "pet": false,
+   "kids": true,
+   "restroom": true
+  },
+  "cap": 12,
+  "ig": "DbPQs_9JGou",
+  "link": null,
+  "mood": [],
+  "v": "바삭한 돈카츠와 냉우동. 둔산동 깔끔한 일식 · 숯불 규카츠 19,500원 · 통모짜카츠산도 9,500원 · 소바냉면 11,000원",
+  "src": "reel",
+  "at": "2026-07-26",
+  "ph": "pic정동7578",
+  "likes": 267,
+  "lat": 36.3532919711485,
+  "lng": 127.388737638584,
+  "kcat": "음식점 > 일식 > 돈까스,우동",
+  "kid": "1814039554",
+  "kurl": "http://place.map.kakao.com/1814039554",
+  "igs": [
+   "DbPQs_9JGou"
+  ],
+  "photoSrc": "대전공주",
+  "cover": "DbPQs_9JGou",
+  "tip": "15:00-16:30 브레이크타임",
+  "gid": "ChIJh70fFgBJZTUR31QMOkMAGhE",
+  "gname": "정동 대전둔산점",
+  "ghours": [
+   "월요일: 오전 11:00 ~ 오후 3:00, 오후 4:30~8:30",
+   "화요일: 오전 11:00 ~ 오후 3:00, 오후 4:30~8:30",
+   "수요일: 오전 11:00 ~ 오후 3:00, 오후 4:30~8:30",
+   "목요일: 오전 11:00 ~ 오후 3:00, 오후 4:30~8:30",
+   "금요일: 오전 11:00 ~ 오후 3:00, 오후 4:30~8:30",
+   "토요일: 오전 11:00 ~ 오후 3:00, 오후 4:30~8:30",
+   "일요일: 오전 11:00 ~ 오후 3:00, 오후 4:30~8:30"
+  ],
+  "gperiods": [
+   [
+    0,
+    660,
+    900
+   ],
+   [
+    0,
+    990,
+    1230
+   ],
+   [
+    1,
+    660,
+    900
+   ],
+   [
+    1,
+    990,
+    1230
+   ],
+   [
+    2,
+    660,
+    900
+   ],
+   [
+    2,
+    990,
+    1230
+   ],
+   [
+    3,
+    660,
+    900
+   ],
+   [
+    3,
+    990,
+    1230
+   ],
+   [
+    4,
+    660,
+    900
+   ],
+   [
+    4,
+    990,
+    1230
+   ],
+   [
+    5,
+    660,
+    900
+   ],
+   [
+    5,
+    990,
+    1230
+   ],
+   [
+    6,
+    660,
+    900
+   ],
+   [
+    6,
+    990,
+    1230
+   ]
+  ],
+  "grating": 3.7,
+  "gcount": 7,
+  "gphotos": [
+   {
+    "name": "places/ChIJh70fFgBJZTUR31QMOkMAGhE/photos/AVoNoXQVU7H2BY-zKzWN6wRHC_KFT-q3DahbmGi8azK9qKjmCgFfYATvi1ccwPdoCfkTho8pxvrDX-TVQ84cY4yIejs2H82_vCP9ReH6sxeZSAqrTqGBingSxpKa0cJUbwvzm4vovJM4UQxTkAx-wOONMoiBdheCqaCEbtt0DdV0w--8FDqYqKClbWuC9Cz_-BiRLZnQwN2ObDNLGsmTTp2HF8jTKC9paVqeRO3Cvof3BaI6gYd-k2JO6_cadQ_kB2p5YHjFWc8O6Q-SSHZgxYMlSov4NPYpVQUy8r3x5pSoEW44jpb7kBMKBZ51ERDnGVEMiti9dyjQstZVjdwUeb757ULKdN9V0f3oHLqGlXPkxHSIWH3xDYXyfPt_q56aGJTyJB7Fz2Y97bfRKsGEr6wQzq20Hn-23CXSeIVZO0JSEhsJNEwFiWA10-U1BhTQLm9M",
+    "by": "sh c"
+   }
+  ],
+  "gmaps": "https://maps.google.com/?cid=1232297736775947487&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYASAA",
+  "gAt": "2026-09-03",
+  "gpl": [
+   "g정동5269_0"
+  ],
+  "gby": [
+   "sh c"
+  ],
+  "gplAt": "2026-09-08",
+  "vSrc": "리뷰 요약",
+  "removedWhy": "소연님 판단으로 제외"
  }
 ]
