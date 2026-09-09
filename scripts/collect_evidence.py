@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """설명을 새로 쓸 매장의 '근거'를 모은다 (구글 요약·리뷰·업종·메뉴가격·릴스 캡션).
-   결과는 data/evidence.json — 이걸 보고 사람이 읽기 좋은 한 줄 설명을 쓴다.
+   결과는 data/evidence2.json — 이걸 보고 사람이 읽기 좋은 한 줄 설명을 쓴다.
    python3 scripts/collect_evidence.py"""
 import json, re, subprocess, concurrent.futures as cf
 
@@ -16,7 +16,18 @@ def weak(p):
     if len(v) < 12: return '너무짧음'
     if re.fullmatch(r'[가-힣A-Za-z /,·]+', v) and len(v) < 20: return '밋밋함'
     return None
-need = [p for p in P if weak(p)]
+def why1(p):
+    v = str(p.get('v') or '')
+    for seg in re.split(r'\s*·\s*', v):
+        seg = seg.strip()
+        if not seg: continue
+        if re.search(r'\d[\d,]*\s*원', seg):
+            head = re.sub(r'[^.]*\d[\d,]*\s*원.*$', '', seg).strip(' .,')
+            if len(head) >= 6: return head
+            continue
+        return seg
+    return ''
+need = [p for p in P if weak(p) or len(why1(p)) < 6]
 R = json.load(open('data/reels_parsed.json', encoding='utf-8'))
 def nm(s): return re.sub(r'\s', '', s or '')
 caps = {nm(r.get('shop')): r for r in R if r.get('shop')}
@@ -51,5 +62,5 @@ for p, d in zip(need, ds):
         'caption': (c.get('caption') or '')[:600],
         'reviews': [r[:260].replace('\n', ' ') for r in revs[:5]],
     })
-json.dump(out, open('data/evidence.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
-print(f'근거 모음 저장: data/evidence.json ({len(out)}곳, 리뷰 있는 곳 {sum(1 for x in out if x["reviews"])}곳)')
+json.dump(out, open('data/evidence2.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+print(f'근거 모음 저장: data/evidence2.json ({len(out)}곳, 리뷰 있는 곳 {sum(1 for x in out if x["reviews"])}곳)')
