@@ -1,0 +1,168 @@
+[
+ {
+  "n": "마초스테이크",
+  "cat": "양식/한식",
+  "cats": [
+   "양식"
+  ],
+  "area": "둔산동",
+  "gu": "서구",
+  "hours": "매일 11:30-21:00",
+  "phone": "0507-1449-8961",
+  "sit": [
+   "기념일"
+  ],
+  "fac": {
+   "group": true,
+   "restroom": true
+  },
+  "cap": 4,
+  "ig": "DTB8E5VEl0H",
+  "link": null,
+  "mood": [],
+  "v": "5파운드 대용량으로 유명한 둔산동 스테이크집",
+  "src": "reel",
+  "at": "2026-01-03",
+  "ph": "18138564652489063",
+  "likes": 153,
+  "lat": 36.35009135864483,
+  "lng": 127.3768093909975,
+  "kcat": "음식점 > 양식 > 스테이크,립",
+  "kid": "1749580627",
+  "kurl": "http://place.map.kakao.com/1749580627",
+  "igs": [
+   "DTB8E5VEl0H"
+  ],
+  "cover": "DTB8E5VEl0H",
+  "tip": "14:45-16:00 브레이크타임",
+  "gid": "ChIJk7dpdgBLZTURhhYfqDzI4qA",
+  "gname": "마초스테이크 대전 둔산점",
+  "ghours": [
+   "월요일: 오전 11:00 ~ 오후 3:00, 오후 4:00~9:00",
+   "화요일: 오전 11:00 ~ 오후 3:00, 오후 4:00~9:00",
+   "수요일: 오전 11:00 ~ 오후 3:00, 오후 4:00~9:00",
+   "목요일: 오전 11:00 ~ 오후 3:00, 오후 4:00~8:30",
+   "금요일: 오전 11:00 ~ 오후 3:00, 오후 4:00~9:00",
+   "토요일: 오전 11:00 ~ 오후 3:00, 오후 4:00~9:00",
+   "일요일: 오전 11:00 ~ 오후 3:00, 오후 4:00~9:00"
+  ],
+  "gperiods": [
+   [
+    0,
+    660,
+    900
+   ],
+   [
+    0,
+    960,
+    1260
+   ],
+   [
+    1,
+    660,
+    900
+   ],
+   [
+    1,
+    960,
+    1260
+   ],
+   [
+    2,
+    660,
+    900
+   ],
+   [
+    2,
+    960,
+    1260
+   ],
+   [
+    3,
+    660,
+    900
+   ],
+   [
+    3,
+    960,
+    1260
+   ],
+   [
+    4,
+    660,
+    900
+   ],
+   [
+    4,
+    960,
+    1230
+   ],
+   [
+    5,
+    660,
+    900
+   ],
+   [
+    5,
+    960,
+    1260
+   ],
+   [
+    6,
+    660,
+    900
+   ],
+   [
+    6,
+    960,
+    1260
+   ]
+  ],
+  "grating": 5,
+  "gcount": 1004,
+  "gprice": "PRICE_LEVEL_MODERATE",
+  "gphotos": [
+   {
+    "name": "places/ChIJk7dpdgBLZTURhhYfqDzI4qA/photos/AVoNoXTwfXW8XhN3C1yUC-RQNrNcRXjnJgu8Hdqrb6Eoh7elN72mOkhHVH3M5wCGwJQ7LUiHcSGinj7d8eU_A_v2zfEBKbp_9cH7U2Q4olpiKE2jbYKSqbGeSH87jLuO7c1ttyuXgQWrNiT8ov_EWwkfbD4gEk2ZZD8Q6iCIq9bSciMoEcUM-HvK19IqdvL1wDJCgx5aG8Qx3XObM0kGLlgAsamavmEuRNS-qykPJMN3DLN00nol8aurEgqYO6UKvbyQDC45HxH1QxrS5YubwSEIm3M7J_nbwjsN6BIasIjwJg36dW33ap69EuCsNK3txzEOckvHx9KAJGdvj9DPZE4BKaYG73-GOA1IJdubuENfOMPruCokVTq-AMcDqXvfEyxYcJ57-Er1Mzb6EJc-yyWWPSYYs6jwWOKIPzryP1GWmeLcm_EiI-XJlT0HBxnjgZv0",
+    "by": "임소미."
+   },
+   {
+    "name": "places/ChIJk7dpdgBLZTURhhYfqDzI4qA/photos/AVoNoXSEB5DwqZBiRvzlkuE4BKEC4PHT8_NFC8dI7h8CMFIf-O_aRUiqf8r40n4zw-cdZH8buGxnxsVr_CSlNJD1dmhHbrh44XOEgYOhjsghjT7dONgM34NJ289wPMW3VPGaHaXYw0YBswlT_xLxCbPTP29DmvvVck11x2KNKXHmShJYbZMHtIwJ5euJ6RiTAzj70o_ujDoD3ED9Q-b2OXjPpqJPyyJH8mmO8T7uLYaJtXxT0zRSwEabBJEsax6mVXYNGbiYYohp8M-3mmNjCYRt730ZCF5yN27jsLxWrv2jsNW0X5kJR8fQ1lCjyLFQ34sXOQQMruZmWtvT7jH_w_SNYQzr3hkrOsCDxyWyyiJqnDMb6o5Ie7DA-OhDQTFcQlIYoxD0_BjDgcD8jMPmwTsvi2qrtOVi1sQACXWt3W_HsTSkdRVHOwpZYHeKB5NiZPNX",
+    "by": "hj bling_bling"
+   },
+   {
+    "name": "places/ChIJk7dpdgBLZTURhhYfqDzI4qA/photos/AVoNoXQVzL4m3lt1Dfe9-iN9WilJKPt-ijz0mnkSwruoARjTxwd2BblzhjE8eiCwMAmoENgSzTosXXrczYUhu2o_XdGqAf_Z7DMeWvw9XzvG7g6r5_BN1ol02_gAvTYAPxzd52-xDTv5sPsnMK1gQ8saVvx-3zuy0Br17rh--CdliNTWcJ1NgEQm2E1urrYHOy-rRF_ax2Cf3sNuYewWIOuGVilPLN2DRxgi1Mvdaol4UBnNl1mHN3W_Q1EVVNkvT-U3Cqf1L_gChVHXJDiD7-Cik2FPLzrGODSIdtBFGYHHyuSwf46CM1HBAwzSTD1Yd_P_AzjHYsHpIBMUuwNbcgZ8IofJeswVji6pdUAsYKiupA8kDAiGliUhNyu8n4OF5Td5lCZ8cZO1uOyh01xK2Geqnnxe1x0t4hOEm1mkCORkHQiqujRj-uTwj5NePZi8TAs7",
+    "by": "유진주"
+   },
+   {
+    "name": "places/ChIJk7dpdgBLZTURhhYfqDzI4qA/photos/AVoNoXQKeulcdJzQDbWX_VDlSZVKcmYUPRNww513b4s530j9pVm-T6ejE9FTx5eRftqjNMpF2tLZrRx4Xg-lEcrniVWYC1X6Xhm40wssSk1WYQlNk-XHndv7ykM8ljtVfgEPBXb2p_MLKoTwpPi47HVji5U3r_IM-HG4Kz1hybtfxVSJJhso0aNbLxSV3a54bt4QfTzvFzZg41R0nD727ui2NN3MY4i5gjLtlLvS6h7uAwRX3WWvxzm2aYg1HrKbXbbLNOa2TEKgNy5WKYu74yP2dEr6241KXuB7OYBvM22i8Zip4hYG5xmIPl2KpatuZWWPWuA5Vay-03YeRVZJn_g7bIf50QNSOvMAJzULA-c50fj46ytOyAOMeIOkCyh-Nn-hoVxpysAXmSD-oTsk9MKW81CstYa9AvYtkHjDnyH9y3o8bqdXVgH-VJm2Atvm-KAM",
+    "by": "김민정"
+   },
+   {
+    "name": "places/ChIJk7dpdgBLZTURhhYfqDzI4qA/photos/AVoNoXTl6hCuadkqwSNM3WjnJ89Pm9tC04l2IcuPCWx7_usnEH2LSH8lpJDt8P1idwe0SIlfDVDy7A33m3JKcRj-4ADr9GoShUbxX21JTLsLk8pXBiuma8cf2uxiwp9_7x-MLF-Nh3AZDSlqsxnITvBgCGxgYUMB_XDiKhCpgWWrhhOYxSueXBpkULHDlVrl6cvhZlj_gLMifvFcO8u9tDKEkDpn95yqi9eg3ZmMCVMU6aoCzdI9lWVw_rmG4NGfww9iHj5Es1235a-07iSx1_CtsgGUbrhKhWv7G8Jbo7V6vv4JE4IKoVzpkAysPsapS362pygjvLjPsqom6hBmiAske5uM_Me6oljbZ06PX_P9xbLZEQgY3suWhbTacVXzxwkIA9ktpm9wIGP5f_BDQ3G5v8QNzxBF7n85TaIvqkhI39GTapiQna1_Ow0K05HIhg",
+    "by": "희야윤"
+   },
+   {
+    "name": "places/ChIJk7dpdgBLZTURhhYfqDzI4qA/photos/AVoNoXQnLp_g4jNTbMCHqubcYa_p6zmjeOhbv19E0cnzPsXq6WmWVPTXRd6TC2aMM86m9qsJGq3djlVr-bqceUOhvnzrTqggQot53aEZLw8ij1Yklnw-cZHJmlnLRfIVDYD-BmpLYfVFQ8-qDgfEbd3p8Dho3dRRA_8-Z073BBLkErcgOTW0S-bOgob7mQFOZsj4VUuQbOCoRLSNZ0t6PzMa87_Z7V_tvHFyas_RcAPrkN9CKhCYCE1bGYdsUXvFtbZO6MwcIph5QdBHny1uVwtioOB7LulqPus6ofR5X7zqC7seB2Y2VthQFyQFF25ss_eedH6EbCRP3Y5Dy8npkT6_I08lafHLnZCd4ebBeG_KzgpCZiEarp4GO9pwELd7FqMJpp_bgoB2rNnzSBPoZWg8pdk2LR3FuBs04zppwxhNE-x47kRSHlDku8Xr1BVyb5o2",
+    "by": "이정훈"
+   }
+  ],
+  "gmaps": "https://maps.google.com/?cid=11593048553649280646&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYASAA",
+  "gAt": "2026-09-03",
+  "photoSrc": "대전공주",
+  "gpl": [
+   "g마초스테이크2710_0",
+   "g마초스테이크2710_1",
+   "g마초스테이크2710_2"
+  ],
+  "gby": [
+   "임소미.",
+   "hj bling_bling",
+   "유진주"
+  ],
+  "gplAt": "2026-09-08",
+  "budget": 4,
+  "budgetAuto": true,
+  "removedWhy": "별점 5.0에 리뷰 1,000개 — 신뢰하기 어려워 소연님 판단으로 제외"
+ }
+]
