@@ -1,8 +1,8 @@
 name: 릴스 동기화
 
+# DISABLED 2026-09-10: 인스타가 로그인 없는 조회를 막아 자동 동기화가 실패한다.
+# 소연님 크롬으로 읽어오는 방식으로 대체 (docs/릴스-업데이트-크롬으로.md)
 on:
-  schedule:
-    - cron: '0 21 * * *'   # 매일 06:00 KST
   workflow_dispatch:        # 수동 실행 버튼
 
 permissions:
