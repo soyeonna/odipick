@@ -5,7 +5,7 @@
 - 사진 data URI 를 img/ 파일로 분리해 페이지를 가볍게 만든다
 실행: python3 scripts/build_dist.py  → dist/ 갱신 후 넷리파이에 드래그
 """
-import io, json, re, os, base64, shutil, sys
+import io, json, re, os, base64, shutil, sys, subprocess
 
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
@@ -72,3 +72,10 @@ if os.path.exists("data/public-places.json"):
 size=os.path.getsize("dist/index.html")
 imgs=sum(os.path.getsize(f"dist/img/{f}") for f in os.listdir("dist/img"))
 print(f"dist/index.html {size//1024}KB · 이미지 {len(paths)}장 {imgs//1024//1024}MB (필요할 때만 받음)")
+
+
+# 배포 전 자동 점검 (문제가 있으면 화면에 알려준다)
+try:
+    subprocess.run([sys.executable,"scripts/predeploy_check.py"])
+except Exception:
+    pass

@@ -35,6 +35,12 @@ for i,p in enumerate(todo,1):
         if doc: break
         time.sleep(0.12)
     if not doc: continue
+    la,lo=float(doc["y"]),float(doc["x"])
+    box=(35.80,37.05,126.20,128.20) if p.get("gu")=="대전근교" else (36.15,36.55,127.20,127.60)
+    if not (box[0]<=la<=box[1] and box[2]<=lo<=box[3]): continue          # 대전(근교) 밖이면 연결하지 않는다
+    FOOD={"한식","중식","일식","분식","양식","고기","술집","카페","디저트"}
+    if FOOD & set(p.get("cats") or []) and not re.match(r"음식점|카페", doc.get("category_name") or ""):
+        continue                                                          # 음식점인데 학원·부동산 같은 데면 연결하지 않는다
     p["kid"]=doc["id"]; p["kurl"]=doc.get("place_url")
     if not p.get("lat") and doc.get("y"): p["lat"]=float(doc["y"]); p["lng"]=float(doc["x"])
     if not p.get("kcat"): p["kcat"]=doc.get("category_name")
