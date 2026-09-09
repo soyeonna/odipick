@@ -30,7 +30,7 @@ for p in P:
     if not p.get('hours') and not p.get('ghours'): add('영업시간 없음', p['n'])
     if not (any(T.get(p.get(k)) for k in ('cover','cv','ig','ph')) or (p.get('gpl') and T.get(p['gpl'][0]))): add('사진 없음', p['n'])
     if not p.get('budget') and (FOOD & set(p.get('cats') or [])): add('가격대 없음', p['n'])
-for key, label in (('n', '이름'), ('kid', '카카오번호'), ('ig', '릴스번호')):
+for key, label in (('n', '이름'), ('kid', '카카오번호'), ('ig', '릴스번호'), ('gid', '구글장소')):
     c = collections.Counter(nn(p.get(key)) for p in P if p.get(key))
     for k, v in c.items():
         if v > 1: add(f'{label} 중복', k)
@@ -39,7 +39,7 @@ for pat, label in [(r'class="shback"', '팝업 뒤로 버튼'), (r'\.mapover\{[^
                    (r'function hashFor', '새로고침 화면 유지'), (r'function spread', '추천 다양성')]:
     if not re.search(pat, h): add('화면 기능 빠짐', label)
 
-HARD = {'릴스 문구 남음', '대전에서 먼 좌표', '대전여행인데 대전 밖', '엉뚱한 업종 연결', '이름 중복', '카카오번호 중복', '릴스번호 중복', '화면 기능 빠짐', '공주픽인데 릴스 근거 없음'}
+HARD = {'릴스 문구 남음', '대전에서 먼 좌표', '대전여행인데 대전 밖', '엉뚱한 업종 연결', '이름 중복', '카카오번호 중복', '릴스번호 중복', '구글장소 중복', '화면 기능 빠짐', '공주픽인데 릴스 근거 없음'}
 fail = False
 print(f'점검 대상 {len(P)}곳')
 for k, v in bad.items():
