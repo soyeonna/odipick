@@ -1052,7 +1052,7 @@ function pct(p){ var h=0;
   if(p.sit&&p.sit.length)h++; if(p.budget!=null)h++; if(p.cap!=null)h++;
   if(p.fac&&Object.keys(p.fac).length)h++; if(p.gu)h++; if(p.hours)h++;
   return Math.round(h/6*100); }
-function nActive(){ var n=0; KEYS.forEach(function(k){ n+=A[k].length; }); return n+(NEAR?1:0)+(DONGQ?1:0)+(VISIT!=null?1:0)+(MEAL?1:0)+(PTF?1:0)+(DRINKQ?1:0)+(MOODQ?1:0)+(typeof NEEDLE!=='undefined'&&NEEDLE.length?1:0); }
+function nActive(){ var n=0; KEYS.forEach(function(k){ n+=A[k].length; }); return n+(NEAR?1:0)+(DONGQ?1:0)+(VISIT!=null?1:0)+(MEAL?1:0)+(PTF?1:0)+(DRINKQ?1:0)+(typeof NEEDLE!=='undefined'&&NEEDLE.length?1:0); }
 
 /* 추천 점수 — 기존 로직 그대로 */
 function score(p){
@@ -1078,7 +1078,7 @@ function score(p){
     var km=kmTo(p);
     cond(km===null?null:(km<=1.2?1:(km<=2.5?null:0)), NEAR.label+' 근처');
   }
-  if(MOODANY) cond((p.mood||[]).some(function(x){ return /예쁜|조용한|고급스러운|테라스|이국적/.test(x); })?1:null,'분위기 좋은');
+  if(MOODANY) cond((p.mood||[]).some(function(x){ return /예쁜|조용한|고급스러운|테라스|이국적|뷰맛집|깔끔한|넓은|레트로/.test(x); })?1:null,'분위기 좋은');
   A.avoid.forEach(function(v){ cond((p.cats||[]).indexOf(v)>-1||(p.sit||[]).indexOf(v)>-1?0:1,null); });
   if(DONGQ){
     var inDong=String(p.area||'').indexOf(DONGQ)===0;
@@ -1087,10 +1087,6 @@ function score(p){
   if(DRINKQ){                       // 그 술을 판다고 확인된 곳을 먼저
     var kws=(p.kw||[]).join(' ')+' '+(p.v||'');
     cond(kws.indexOf(DRINKQ)>-1?1:null, DRINKQ);
-  }
-  if(MOODQ){                        // '분위기 좋은' 은 예쁜·조용한·고급·뷰 중 하나만 있어도 인정
-    var md=p.mood||[];
-    cond(MOODQ.some(function(x){ return md.indexOf(x)>-1; })?1:0, '분위기 좋은');
   }
   if(NEEDLE.length){
     var nm=String(p.n).replace(/\s/g,'');
@@ -1180,7 +1176,7 @@ function toggle(k,v){
     if(k==='sit' && SIT_X[v]) A.sit=A.sit.filter(function(s){ return SIT_X[v].indexOf(s)<0; }); }
   syncAll(); render(); if(document.getElementById('sc-home').classList.contains('on')) homeList();
 }
-function clearAll(){ KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; DRINKQ=null; MOODQ=null; lastQuery=''; ['q','q2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; }); VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; lastQuery='';
+function clearAll(){ KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; DRINKQ=null; MOODANY=false; lastQuery=''; ['q','q2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; }); VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; lastQuery='';
   ['q','q2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; }); PTF=null; syncAll(); render(); }
 function syncAll(){
   buildQuick(); if(typeof buildPtabs==='function') buildPtabs(); if(typeof buildMcats==='function') buildMcats();   // 종류 탭 눌림 표시 갱신
@@ -1201,7 +1197,6 @@ function drawCond(){
   });
   el.innerHTML='';
   [[DRINKQ, DRINKQ, function(){ DRINKQ=null; }],
-   [MOODQ, '분위기 좋은', function(){ MOODQ=null; }],
    [NEEDLE.length, NEEDLE.join('·'), function(){ NEEDLE=[]; }],
    [PTF, '맛집', function(){ PTF=null; }],
    [MEAL, {lunch:'점심',dinner:'저녁',breakfast:'아침',late:'야식'}[MEAL], function(){ MEAL=null; }],
@@ -1240,7 +1235,7 @@ function drawCond(){
 
 /* ── 자연어 → 조건. AI 호출 없이 규칙으로 푼다 ── */
 var NEEDLE=[], DONGQ=null;      // 자유 낱말 · 동 단위 검색
-var DRINKQ=null, MOODQ=null;    // 어떤 술인지 · '분위기 좋은' 같은 뭉뚱그린 말
+var DRINKQ=null;                // 검색어에 나온 술 종류
 var QWORDS=0;                   // 검색어 낱말 수 (상호명 우선 판단용)
 var VISIT=null, PARTY=null, BUDMAX=null;   // 방문시각(분) · 인원 · 1인 예산(원)
 var PTF=null;   // 장소 유형 필터 — '맛집' 칩은 밥집 전체
@@ -1250,7 +1245,7 @@ var RELAX={dist:false, unkFac:false, unkHours:false, unkBud:false};
 function parse(t){
   KEYS.forEach(function(k){ A[k]=[]; });
   NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null;
-  DRINKQ=null; MOODQ=null; MOODANY=false;
+  DRINKQ=null; MOODANY=false;
   QWORDS=String(t||'').trim().split(/\s+/).filter(Boolean).length;
   RELAX={dist:false, unkFac:false, unkHours:false, unkBud:false};
   Object.keys(LANDMARKS).forEach(function(k){
@@ -1261,7 +1256,6 @@ function parse(t){
   // 식사 시간대: 점심이면 밥집·그 시간 영업이 상식
   var _dr=t.match(/생맥주|생맥|하이볼|산토리|소주|맥주|사케|와인|막걸리|위스키|칵테일|전통주|수제맥주/);
   if(_dr) DRINKQ={'생맥':'생맥주','산토리':'산토리'}[_dr[0]]||_dr[0];
-  if(/분위기\s*좋|분위기\s*있|무드\s*좋|감성\s*있/.test(t)) MOODQ=['예쁜','조용한','고급스러운','뷰맛집','테라스'];
   if(/점심|런치/.test(t)) MEAL='lunch';
   else if(/아침|조식|모닝/.test(t)) MEAL='breakfast';
   else if(/야식/.test(t)) MEAL='late';
@@ -1300,6 +1294,9 @@ function parse(t){
   t.split(/[\s,]+/).forEach(function(w){
     w=w.replace(/(에서|근처|맛집|추천|주변|으로|먹고싶|먹을만한|가고싶)/g,'').trim();
     if(w.length<2 || /동$|구$|^\d|시$|분$|명$|원$|만원|이하|이상|필수|오늘|내일|저녁|점심|아침/.test(w)) return;
+    // 이미 조건으로 알아들은 말은 낱말 검색에서 뺀다 ('분위기 좋은' 이 '분위기' 글자 찾기로 좁혀지던 문제)
+    if(MOODANY && /^(분위기|무드|느좋|좋은|좋은데|좋음)$/.test(w)) return;
+    if(DRINKQ && w.indexOf(DRINKQ)>-1) return;
     // 종류(cats) 규칙에 걸린 음식 이름(냉면 등)은 낱말 검색에도 살려둔다
     // 가게 이름과 맞는 낱말은 규칙보다 우선 (상호명 검색)
     var isName=P.some(function(p){ return p.src!=='public' && String(p.n).replace(/\s/g,'').indexOf(w)>-1; });   // 공공 아카이브 이름은 제외 (흔한 낱말이 상호명으로 오인되는 것 방지)
@@ -1497,6 +1494,14 @@ function results(){
   }
   var arr=pool.map(function(p){ var r=score(p); r.p=p; return r; });
   if(n && !mustActive() && NEEDLE.length===0) arr=arr.filter(function(r){ return r.hit>0; });
+  if(MOODANY){                              // '분위기 좋은' — 분위기 태그가 있는 곳만 (충분히 있을 때)
+    var mo=arr.filter(function(r){ return (r.p.mood||[]).some(function(x){ return /예쁜|조용한|고급스러운|테라스|이국적|뷰맛집|레트로/.test(x); }); });
+    if(mo.length>=8) arr=mo;
+  }
+  if(DRINKQ){                               // '하이볼' 처럼 술을 콕 집으면 그 술을 파는 곳만 (충분히 있을 때)
+    var dq=arr.filter(function(r){ return ((r.p.kw||[]).join(' ')+' '+(r.p.v||'')).indexOf(DRINKQ)>-1; });
+    if(dq.length>=6) arr=dq;
+  }
   if(A.sit.length && NEEDLE.length===0){   // 상황(데이트·혼밥 등)을 골랐으면 그 상황에 맞는 곳만 — 동네 검색과 섞여도 순대집이 데이트에 끼지 않게
     var sitOk=arr.filter(function(r){ return A.sit.some(function(s){ return (r.p.sit||[]).indexOf(s==='부모님'?'가족':s)>-1; }); });
     if(sitOk.length) arr=sitOk;
@@ -2158,7 +2163,7 @@ function buildMap(host, big){
     pth.addEventListener('click',function(){
       if(!big){                                  // 홈 지도: 그 구만 깨끗하게 본다 (남은 조건 때문에 0곳 뜨지 않게)
         var on=A.gu.indexOf(g)>-1;
-        KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; DRINKQ=null; MOODQ=null; lastQuery='';
+        KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; DRINKQ=null; MOODANY=false; lastQuery='';
         ['q','q2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
         if(!on) A.gu=[g];
         syncAll(); render(); syncMap(); homeList(); return;
@@ -2936,7 +2941,7 @@ function buildAiRows(el){
       if(r.fn){ r.fn(); return; }
       if(r.set.menu){ clearAll(); NEEDLE=r.set.menu.slice(); QWORDS=9; lastQuery=''; syncAll(); SHOW=12; show('result'); render(); return; }
       if(r.set.q){ runSearch(r.set.q); document.getElementById('q').value=''; return; }
-      KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; DRINKQ=null; MOODQ=null; lastQuery=''; ['q','q2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
+      KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; DRINKQ=null; MOODANY=false; lastQuery=''; ['q','q2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
       Object.keys(r.set).forEach(function(k){ A[k]=r.set[k].slice(); });
       syncAll(); SHOW=12; show('result'); render();
     });
@@ -2957,7 +2962,7 @@ function buildAiRows(el){
     var g=document.getElementById('goPicks');
     if(g) g.addEventListener('click',function(){
       closeSheet(function(){
-        KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; DRINKQ=null; MOODQ=null; lastQuery=''; ['q','q2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
+        KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; DRINKQ=null; MOODANY=false; lastQuery=''; ['q','q2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
         A.src=['reel']; syncAll(); SHOW=12; show('result'); render();
       });
     });
