@@ -952,5 +952,144 @@
   ],
   "vSrc": "리뷰 요약",
   "removedWhy": "소연님 판단으로 제외"
+ },
+ {
+  "n": "갑부본가",
+  "cat": "고기/술집/한식",
+  "cats": [
+   "고기"
+  ],
+  "area": "성남동 506-4",
+  "gu": "동구",
+  "hours": "월-일 11:00-21:30",
+  "budget": 1,
+  "sit": [
+   "데이트",
+   "술자리",
+   "회식"
+  ],
+  "fac": {
+   "reserve": true,
+   "group": true,
+   "pet": false,
+   "kids": true,
+   "takeout": true,
+   "delivery": true,
+   "restroom": true
+  },
+  "cap": 12,
+  "ig": "DLHcIXXyLO_",
+  "link": null,
+  "v": "고기 질 좋은 성남동 고깃집. 김치전골도 함께 · 성남동 옛날불고기 한상 13,000원. 코다리찜 · 게장 추가 3,000원",
+  "src": "reel",
+  "phone": "0507-1346-1800",
+  "ph": null,
+  "auto": true,
+  "likes": 126,
+  "lat": 36.34568334804483,
+  "lng": 127.43053931390129,
+  "kcat": "음식점 > 한식 > 육류,고기",
+  "mood": [],
+  "kid": "1248290386",
+  "kurl": "http://place.map.kakao.com/1248290386",
+  "igs": [
+   "DLHcIXXyLO_"
+  ],
+  "combo": "고기 아껴뒀다가 불고기랑 같이 먹는걸 추천",
+  "sig": "옛날불고기 점심특선",
+  "gid": "ChIJQZy_Ui5JZTURduB2XCX5V4g",
+  "gname": "갑부본가 성남점",
+  "ghours": [
+   "월요일: 오전 11:00 ~ 오후 10:00",
+   "화요일: 오전 11:00 ~ 오후 10:00",
+   "수요일: 오전 11:00 ~ 오후 10:00",
+   "목요일: 오전 11:00 ~ 오후 10:00",
+   "금요일: 오전 11:00 ~ 오후 10:00",
+   "토요일: 오전 11:00 ~ 오후 10:00",
+   "일요일: 오전 11:00 ~ 오후 10:00"
+  ],
+  "gperiods": [
+   [
+    0,
+    660,
+    1320
+   ],
+   [
+    1,
+    660,
+    1320
+   ],
+   [
+    2,
+    660,
+    1320
+   ],
+   [
+    3,
+    660,
+    1320
+   ],
+   [
+    4,
+    660,
+    1320
+   ],
+   [
+    5,
+    660,
+    1320
+   ],
+   [
+    6,
+    660,
+    1320
+   ]
+  ],
+  "grating": 4.5,
+  "gcount": 17,
+  "gprice": "PRICE_LEVEL_MODERATE",
+  "gphotos": [
+   {
+    "name": "places/ChIJQZy_Ui5JZTURduB2XCX5V4g/photos/AVoNoXTqfXzPurZBR8WPGZHqQpLKywu7dBuPY4QuZJpFFSALxHfNVNhih93pWAsrgklwhNSAd7iCqKYwglSNjN7SPAWZpG7HvZfYbdr9_mpoZaCOyOpfUv_6L9187fJF__9iMn6tJ_VzkRPhc64IHykkUQ0EJt8Zh_bN0tflGda4v2FUwuvhXiFbJi-eorYt0Ht4WuQf22XQl3v96JLvDgTjslYSMlsbp4vul4mrTHQ-n44l2BdyjHfWQD4GaJb3IM2kGP0wcVYjEpYEyqb8TkMu53RVVPyyiXYgw1HWF4IWYNIz4X1lp1wkh05kNTe0bpNJKraqUKeSEVRVHhTwBLNX6kFJDWrH4h5nH_fsD42WXmaTfICDkks90jJGRX5-EKeIhCHy_wbR4Gtp1ePrHyd63USPAWamxXgnCTwASA5AfpB2bPg",
+    "by": "이순철"
+   },
+   {
+    "name": "places/ChIJQZy_Ui5JZTURduB2XCX5V4g/photos/AVoNoXTPz7nvs_OYZUDozHjSoo_ZysqQo-pIKj9S_Z4_zDAqQ6x5Q2BQ8VouHXBmsWljclSv5QcXH5imyjtDEGlse_0tkHtn_hLIoKXTUZXk3QqohpgOD7Pdm0U2LhNkUHNNcZ1MmS-wTiUIfXu1hWHlNu3m7h7Hc3CeVXfTKKAjYwBmZWoe27V1N8r6313NQToQpBkp4v_bTrOchav619kRrHqp1cWKb8PMTusMa2dPsrlQ9wVvGnonbWU3u6tAR_1ytR8EpRosoS0KI2-WTZ121TOMznWaZ2v4edextIIOx_a13FOxrhsXfkDq9FUpz4R6PBDwLzdbLk81jpZob_rsXOCyHskCEm4OQ5fg-HTmJSblh6fr0vjC0s-CpBmjAyJrYa_o_HM_QvEam_FpFSuajwULYwRlU6W5MBXfhEPlh-O70g",
+    "by": "에헷"
+   },
+   {
+    "name": "places/ChIJQZy_Ui5JZTURduB2XCX5V4g/photos/AVoNoXQxLsY6UlqyfYnB1FqiQwV3NnGBOPckXTDXEg-rkBY5nJ9Irxq8KbXGXtuiQfJH47q3amJl4vGOSyEBEoqiT78ZQ--8P21HN7es1ZQYG4ilQlZWS1Ww_7E48BsJtFJT_EYwqLrMsG12w78IDDycQT-V6548Zd_2a4eQ8iDtjdmPhDgv-ep3SnkqSLeVDU4XeI2i0U3Ci6tn3YIDfXW2WpuCmQ_CIRVjqVaVJQJgcu5sAIOROUSEvsOVW31hfrKnKFDjOwxAqFOeLC2uiCU0ww6iD3IJwooPLzeQtQPmqLldn9o-NY6R_JhMu-gzVtINsrTuSHXnPS84rSXKj7ibDyyi-cPwkFOZ33gzsX1Y2CytE92zcfbPITS-nBxBovrAWbfFY3bQrp8jfBJxbRoPOQx05aEvxMZVpdseQFprioCY3s4",
+    "by": "김대영"
+   },
+   {
+    "name": "places/ChIJQZy_Ui5JZTURduB2XCX5V4g/photos/AVoNoXQtNuFOf0JlAT4HRAZBrO5IXO3E84sS_L50Kwr-OjICGQMfamjmY8sZ5bXDMD0_QgUwfKPJF8SV8nIsZPq_yN7QcowdiN-x13bsRBF93ka--LmP8jCmFoFrm_ja0Tae1aZdgOSL4HWe75R_eH1rsEfLUtCIOMty7nyWT0phgQ4SbVAVhnXVyKi0yJEtYASN3kU1PiVdCfSVH1cge6CHIPbzoCPt8fMD-W-P7H2ScxOGpqHSffgvQjlUMEl3CF-0Bf6Y9cr8S_DHwsFn4oHaTeqReFLfuteKqS7A3dP5j-reBTTnayPr3DxenHXEMG2ssRVCXRsAAjzP3vY8NEI0RtuZ_h343tYoA9UuKS0qdnb75AGuLeLAkWFI8783I7XcufwnTUS7pKyqK4zs3I1g2KdPbQ4eILyHiea1wUhUIV6NJega",
+    "by": "맛집여행이정표"
+   },
+   {
+    "name": "places/ChIJQZy_Ui5JZTURduB2XCX5V4g/photos/AVoNoXSBVJv3EMFB3sueXyzPQm-wK855MOXitfrFaXgXO9LZa1fw8d346vGdW8rHIdD5xD9CThwjaV_17evg1X7s_Hm-ljgJAgWt1rfYVoaIR2wLC9v4xpztG3TCGx86AQzYPttQYJsluxAIgRXNb6wi_NMJCPUWvJkN8oFax5t-acoVI7cA0dAjKcjmtUchfvVaGbvyTDf-SsOL11w3exPEdB-l5bOLdAQ9RPH1EbWfphW1mj9E0-GEYTT3HjqKxAbXvIgD8lCU87k1f6KgG_wcZ71X7Kx1DSfBfQlCrGyRcASTPaUhkGYuo8Ym73eBQonWMv1VZXaQ_B3ty0sJSlT3TXZTP96P2DgtQUKllCk8c0y3t23syxpb-YgabOtaOOvcEeBMv-LnlVAMgsRtPVYt3VE2JjFKGJcCDJYmU4mgizuNdyvg",
+    "by": "김대영"
+   },
+   {
+    "name": "places/ChIJQZy_Ui5JZTURduB2XCX5V4g/photos/AVoNoXSo_L47_7R6WBwJMmTpOTMs3zmFJNnq3YGS1seh-pk80Yez1C7TTuw4m-So0_CH1YSO-4ar7VNBJZlZyjqX5NobJjcEWMLbw0suo7f95ctuemsorTxReqvAZLWJ29CkPjfs7gQ10BDE6LHdWtUcGjIDfFYx_fYkCOCZhykJdaLZKREbOO3ULyolqUp_dHn5iX-P9_OzjwzDql35FY_FGLaAUgJDtR80ec1mm8ZEZAW0eqVWkDba5tt9qn7-bt1Is9F3GVxq_tWTMl1wrdNn_ekFWU0ruwmqWBFnOjruQ-uHU2lXsDE0Hvcv7a80CSZCAFjflsLAL8Vc5Kw-RDv4FC8b7r42FIpf-RT6iLwJdD05iei9RXn6MJE4cG1DlK2pck8UOnTTtKGAh3z5DB9L7KVYfthDmUlGvdmTttNsnZGEbUZD7VO8iR9c0DMnTid5",
+    "by": "SB LEE"
+   }
+  ],
+  "gmaps": "https://maps.google.com/?cid=9824595050992427126&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYASAA",
+  "gAt": "2026-09-03",
+  "cover": "DLHcIXXyLO_",
+  "photoSrc": "대전공주",
+  "gpl": [
+   "g갑부본가4984_0",
+   "g갑부본가4984_1",
+   "g갑부본가4984_2"
+  ],
+  "gby": [
+   "이순철",
+   "에헷",
+   "김대영"
+  ],
+  "gplAt": "2026-09-08",
+  "vSrc": "리뷰 요약",
+  "removedWhy": "소연님 판단으로 제외"
  }
 ]
