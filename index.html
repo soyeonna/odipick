@@ -237,22 +237,6 @@ section.blk{margin-top:26px}
   place-items:center; color:var(--ink3); flex-shrink:0}
 .sv.on{color:var(--brand); border-color:var(--brand); background:var(--brand-w)}
 
-function openAiSheet(){
-  openSheet('<h2 class="dtitle" style="font-size:20px;margin:4px 0 6px">상황 추천</h2>'+
-    '<p class="srcline" style="margin:0 0 12px">상황을 문장 그대로 적으면 조건을 알아듣고 골라드려요.<br>'+
-    '예) 둔산동에서 부모님 모시고 갈 조용한 한식집 · 주차되는 룸 있는 고깃집 8명</p>'+
-    '<div class="sbar" style="margin:0">'+
-      '<input id="qai" type="text" autocomplete="off" enterkeyhint="search" '+
-        'style="font-size:17px" aria-label="상황을 입력하세요" placeholder="오늘 어떤 자리인가요?">'+
-      '<button class="sgo" id="goai" aria-label="추천받기">'+ic(I.arrow,18)+'</button>'+
-    '</div>');
-  var inp=document.getElementById('qai');
-  function go(){ var v=inp.value.trim(); if(!v) return;
-    closeSheet(function(){ document.getElementById('q').value=v; runSearch(v); }); }
-  document.getElementById('goai').addEventListener('click',go);
-  inp.addEventListener('keydown',function(e){ if(e.key==='Enter') go(); });
-  setTimeout(function(){ inp.focus(); },150);
-}
 /* ── 바텀시트 ── */
 .scrim{position:fixed; inset:0; background:rgba(15,17,20,.45); opacity:0; pointer-events:none;
   transition:opacity .26s; z-index:60}
@@ -412,9 +396,9 @@ function openAiSheet(){
   border-top:1px solid var(--line); padding-bottom:env(safe-area-inset-bottom);
   transition:transform .22s}
 .nav.hide{transform:translateY(110%)}
-.navin{max-width:640px; margin:0 auto; height:var(--nav); display:grid; grid-template-columns:repeat(5,1fr)}
+.navin{max-width:640px; margin:0 auto; height:var(--nav); display:grid; grid-template-columns:repeat(6,1fr)}
 .nb{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
-  font-size:10.5px; color:var(--ink3); font-weight:600}
+  font-size:10px; color:var(--ink3); font-weight:600}
 .nb svg{width:21px; height:21px}
 .nb.on{color:var(--brand)}
 .nb.mid .bub{width:42px; height:42px; border-radius:14px; background:var(--brand); color:var(--on-brand);
@@ -504,6 +488,15 @@ body.lock{position:fixed;left:0;right:0;width:100%;overflow:hidden}
   width:52px;height:52px;border-radius:50%;background:var(--card);display:grid;place-items:center;
   box-shadow:0 2px 8px rgba(0,0,0,.2);font-size:22px}
 .wresult{margin-top:14px;text-align:center;min-height:120px;padding-bottom:8px}
+.wcard{background:var(--sub);border-radius:16px;padding:14px 14px 16px;margin-top:2px}
+.wph{width:100%;max-width:230px;aspect-ratio:4/3;object-fit:cover;border-radius:12px;margin-bottom:10px}
+.wcrown{width:24px;height:24px;vertical-align:-5px;margin-right:4px}
+.whub img{width:40px;height:40px;object-fit:contain}
+.wsub{font-size:13px;color:var(--ink2);margin-top:4px}
+.wrow{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:8px;flex-wrap:wrap}
+.wdesc{font-size:14px;color:var(--ink);line-height:1.5;margin:10px 4px 0;word-break:keep-all}
+.wsig{font-size:13px;color:var(--ink2);margin:6px 4px 0}
+.wagain{font-size:12.5px;color:var(--ink3);margin:12px 0 0}
 .wresult .wn{font-size:21px;font-weight:900;letter-spacing:-.3px}
 .wresult .wm{font-size:13.5px;color:var(--ink2);margin-top:3px;line-height:1.45;padding:0 8px;
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
@@ -672,6 +665,7 @@ body.lock{position:fixed;left:0;right:0;width:100%;overflow:hidden}
   <button class="nb on" data-sc="home"><span class="ic"></span><span class="t">홈</span></button>
   <button class="nb" data-sc="result"><span class="ic"></span><span class="t">목록</span></button>
   <button class="nb mid" data-sc="ai"><span class="bub"></span><span class="t">상황 추천</span></button>
+  <button class="nb" data-sc="wheel"><span class="ic"></span><span class="t">랜덤</span></button>
   <button class="nb" data-sc="map"><span class="ic"></span><span class="t">지도</span></button>
   <button class="nb" data-sc="saved"><span class="ic"></span><span class="t">저장</span></button>
 </div></nav>
@@ -784,6 +778,7 @@ var I={
  arrow:'<path d="M5 12h13"/><path d="M12.5 5.5L19 12l-6.5 6.5"/>',
  home:'<path d="M3 10.5L12 3.5l9 7"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-6h5v6"/>',
  list:'<path d="M8 6h13M8 12h13M8 18h13"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/>',
+ dice:'<rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="15.5" cy="8.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="8.5" cy="15.5" r="1.2" fill="currentColor" stroke="none"/>',
  spark:'<path d="M12 3l2 5.4 5.4 2-5.4 2-2 5.4-2-5.4-5.4-2 5.4-2z"/>',
  map:'<path d="M9 4L3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5z"/><path d="M9 4v13M15 6.5v13"/>',
  bmark:'<path d="M6.5 3.5h11v17l-5.5-4-5.5 4z"/>',
@@ -850,7 +845,7 @@ document.getElementById('topSave').innerHTML=ic(I.bmark,20);
 document.getElementById('topMy').innerHTML=ic(I.user,20);
 document.getElementById('locBtn').innerHTML=ic(I.loc,20);
 document.getElementById('listBtn').innerHTML=ic(I.list,20);
-var NAVI=[I.home,I.list,I.spark,I.map,I.bmark];
+var NAVI=[I.home,I.list,I.spark,I.dice,I.map,I.bmark];
 document.querySelectorAll('.nb').forEach(function(b,i){
   var t=b.querySelector('.bub')||b.querySelector('.ic');
   if(t) t.innerHTML=ic(NAVI[i], i===2?21:21);
@@ -1392,6 +1387,9 @@ function mustCheck(p){
   }
   if(A.open.length){ var on=openNow(p); if(on===false) return '지금 영업 안 함'; if(on===null && !RELAX.unkHours) return '영업시간 미확인'; }   // '영업 중'은 확인된 곳만
   if(A.fac.length){
+    // 룸·단체석은 밥집·카페·술집에만 있는 개념이다 (사진관 촬영실·세신 개인실이 섞이지 않게)
+    var _t=ptypeOf(p), _eat=(_t==='rest'||_t==='cafe'||_t==='bar');
+    if(!_eat && (A.fac.indexOf('룸')>-1 || A.fac.indexOf('단체석')>-1)) return '룸·단체석은 밥집만';
     for(var i=0;i<A.fac.length;i++){
       var v=(p.fac||{})[FAC[A.fac[i]]];
       if(v===false) return A.fac[i]+' 안 됨';
@@ -1730,6 +1728,7 @@ document.querySelectorAll('.nb').forEach(function(b){
   b.addEventListener('click',function(){
     var t=b.dataset.sc;
     if(t==='ai'){ openAiSheet(); return; }
+    if(t==='wheel'){ openWheel('all'); return; }
     show(t);
   });
 });
@@ -1750,7 +1749,10 @@ function openAiSheet(){
       '<input id="qai" type="text" autocomplete="off" enterkeyhint="search" '+
         'style="font-size:17px" aria-label="상황을 입력하세요" placeholder="오늘 어떤 자리인가요?">'+
       '<button class="sgo" id="goai" aria-label="추천받기">'+ic(I.arrow,18)+'</button>'+
-    '</div>');
+    '</div>'+
+    '<button type="button" class="btn o" id="toWheel" style="width:100%;margin-top:12px">🎯 못 고르겠어요 · 랜덤으로 뽑아줘</button>');
+  var tw=document.getElementById('toWheel');
+  if(tw) tw.addEventListener('click',function(){ closeSheet(function(){ openWheel('all'); }); });
   var inp=document.getElementById('qai');
   function go(){ var v=inp.value.trim(); if(!v) return;
     closeSheet(function(){ document.getElementById('q').value=v; runSearch(v); }); }
@@ -2644,14 +2646,11 @@ function wheelGu(){
   return Object.keys(c).filter(function(g){ return c[g]>=8; }).sort(function(a,b){ return c[b]-c[a]; });
 }
 function wheelPoolBy(mode, val){
-  var base=P.filter(function(p){ return !p.closed && p.src!=='public' && openNow(p)!==false; });
+  // '전부'는 정말 전부. 문 닫은 곳도 결과 카드에 '영업 종료'로 표시되니 굳이 빼지 않는다.
+  var base=P.filter(function(p){ return !p.closed && p.src!=='public'; });
   if(mode==='cat' && val) base=base.filter(function(p){ return (p.cats||[]).indexOf(val)>-1; });
   if(mode==='gu'  && val) base=base.filter(function(p){ return p.gu===val; });
-  if(mode==='now'){
-    var r=results().map(function(x){ return x.p; });
-    var open=r.filter(function(p){ return openNow(p)!==false; });
-    base=(open.length>=4?open:r);
-  }
+  if(mode==='open') base=base.filter(function(p){ return openNow(p)===true; });
   return base;
 }
 var WHEEL_EMOJI=['🍜','🍖','🍰','🍺','🍚','🍕','☕','🍣'];
@@ -2659,7 +2658,7 @@ function openWheel(mode, val){
   WHEEL_MODE = mode || 'all'; WHEEL_PICK = val || null;
   var pool=wheelPoolBy(WHEEL_MODE, WHEEL_PICK);
   var gus=wheelGu();
-  var tabs=[['all','전부'],['now','지금 조건']].concat(WHEEL_CATS.map(function(c){ return ['cat:'+c, c]; }))
+  var tabs=[['all','전부'],['open','지금 영업 중']].concat(WHEEL_CATS.map(function(c){ return ['cat:'+c, c]; }))
             .concat(gus.map(function(g){ return ['gu:'+g, g]; }));
   var cur=(WHEEL_MODE==='cat'||WHEEL_MODE==='gu') ? WHEEL_MODE+':'+WHEEL_PICK : WHEEL_MODE;
   var bar=tabs.map(function(t){
@@ -2677,7 +2676,7 @@ function openWheel(mode, val){
     for(var k=0;k<n;k++) labs+='<span class="lab" style="transform:rotate('+(k*deg+deg/2)+'deg)"><b>'+WHEEL_EMOJI[k%WHEEL_EMOJI.length]+'</b></span>';
     body='<div class="wheelwrap"><span class="wneedle"></span>'+
       '<div class="wheel" id="wheelEl" style="background:conic-gradient('+stops.join(',')+')">'+labs+'</div>'+
-      '<span class="whub">👑</span></div>'+
+      '<span class="whub"><img src="'+PIN_IMG+'" alt="대전공주"></span></div>'+
       '<div class="wresult" id="wres"><p class="wm"><b style="color:var(--brand-d)">'+pool.length+'곳</b> 중에서 한 곳을 뽑아드려요</p></div>';
   }
   openSheet(
@@ -2712,13 +2711,23 @@ function openWheel(mode, val){
     function finish(){
       if(done) return; done=true;
       if(timer) clearTimeout(timer);
-      res.innerHTML='<div class="wn">'+(p.src==='reel'?'👑 ':'')+E(p.n)+'</div>'+
-        '<div class="wm">'+E([p.cat,p.area].filter(Boolean).join(' · '))+'<br>'+E(why1(p)||'')+'</div>';
+      var ph=photoOf(p) || (p.gpl&&p.gpl.length?thumbOf(p.gpl[0]):null);
+      var bud=budText(p);
+      res.innerHTML=
+        '<div class="wcard">'+
+          (ph?'<img class="wph" src="'+ph+'" alt="'+E(p.n)+' 사진" loading="lazy" onerror="this.remove()">':'')+
+          '<div class="wn">'+(p.src==='reel'?'<img class="wcrown" src="'+PIN_IMG+'" alt="공주픽">':'')+E(p.n)+'</div>'+
+          '<div class="wsub">'+E([p.cat, (p.gu?p.gu+' ':'')+(p.area||'')].filter(Boolean).join(' · '))+'</div>'+
+          '<div class="wrow">'+statusOf2(p)+(bud?'<span class="bud">1인 '+bud+'</span>':'')+'</div>'+
+          (why1(p)?'<p class="wdesc">'+E(why1(p))+'</p>':'')+
+          (p.sig?'<p class="wsig">🍽 '+E(p.sig)+'</p>':'')+
+        '</div>'+
+        '<p class="wagain">아쉬우면 한 번 더?</p>';
       btn.disabled=false; btn.textContent='이 가게 보기';
       btn.onclick=function(){ closeSheet(function(){ openDetail(p); }); };
       var again=document.createElement('button');
-      again.type='button'; again.className='btn o'; again.style.cssText='width:100%;margin-top:8px';
-      again.textContent='다시 돌리기';
+      again.type='button'; again.className='btn o'; again.style.cssText='width:100%;margin-top:6px';
+      again.textContent='🎯 한 번 더 돌리기';
       again.addEventListener('click',function(){ again.remove(); btn.textContent='돌리기'; btn.onclick=spin; spin(); });
       res.appendChild(again);
       spinning=false;
