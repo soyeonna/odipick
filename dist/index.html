@@ -2306,7 +2306,7 @@ function loadKakao(){
   });
   return kakaoReady;
 }
-var MAP_FRESH=true, MAP_LAST_THEME=null;
+var MAP_FRESH=true, MAP_LAST_THEME=null, kcluster=null;
 var kmap=null, kmarkers=[];
 function drawKakao(kk){
   var c=document.getElementById('mapCanvas');
@@ -2320,6 +2320,7 @@ function drawKakao(kk){
   var img=new kk.maps.MarkerImage(PIN_IMG, new kk.maps.Size(26,28),
     {offset:new kk.maps.Point(13,28)});
   kmarkers.forEach(function(m){ m.setMap(null); }); kmarkers=[];
+  if(kcluster){ try{ kcluster.clear(); kcluster.setMap(null); }catch(e){} kcluster=null; }
   // 현재 필터·검색 결과를 그대로 지도에 (공주픽만이 아니라 전부)
   var arr=results().map(function(r){ return r.p; })
     .filter(function(x){ return x.lat; });
@@ -2340,6 +2341,7 @@ function drawKakao(kk){
     MTHEME_RANK={}; arr.forEach(function(p,i){ MTHEME_RANK[p.n]=i+1; });
     // 순위 배지로 찍는다
     kmarkers.forEach(function(m){ m.setMap(null); }); kmarkers=[];
+  if(kcluster){ try{ kcluster.clear(); kcluster.setMap(null); }catch(e){} kcluster=null; }
     arr.forEach(function(x,i){
       var el=document.createElement('button');
       el.type='button';
@@ -2378,7 +2380,7 @@ function drawKakao(kk){
     kmarkers.push(mk); return mk;
   });
   if(kk.maps.MarkerClusterer){
-    new kk.maps.MarkerClusterer({map:kmap, markers:mks, averageCenter:true, minLevel:6,
+    kcluster=new kk.maps.MarkerClusterer({map:kmap, markers:mks, averageCenter:true, minLevel:6,
       styles:[{width:'42px',height:'42px',background:'#FF3F7F',borderRadius:'21px',
         color:'#fff',textAlign:'center',lineHeight:'42px',fontWeight:'800',
         border:'3px solid #fff',boxShadow:'0 3px 10px rgba(216,27,96,.4)'}]});
@@ -2392,7 +2394,7 @@ function rankStrip(arr, sel){
   var host=document.querySelector('.mapscreen'); if(!host || !arr || !arr.length) return;
   var box=document.createElement('div'); box.id='rankStrip'; box.className='rstrip';
   box.innerHTML=arr.map(function(p,i){
-    var im=photoOf(p) || (p.gpl&&p.gpl.length?thumbOf(p.gpl[0]):null);
+    var im=(p.gpl&&p.gpl.length?thumbOf(p.gpl[0]):null) || photoOf(p) || (p.cover?thumbOf(p.cover):null);
     return '<button type="button" class="rcard'+(i===sel?' on':'')+'" data-i="'+i+'">'+
       '<span class="rno'+(i<3?' top':'')+'">'+(i+1)+'</span>'+
       (im?'<img src="'+im+'" alt="" loading="lazy">':'<span class="rno-img"></span>')+
