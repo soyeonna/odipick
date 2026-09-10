@@ -1776,7 +1776,7 @@ function show(name, fromPop){
 document.querySelectorAll('.nb').forEach(function(b){
   b.addEventListener('click',function(){
     var t=b.dataset.sc;
-    if(t==='ai'){ openAiSheet(); return; }
+    if(t==='ai'){ openWheel('all'); return; }
     show(t);
   });
 });
@@ -2807,11 +2807,24 @@ function openWheel(mode, val){
   }
   openSheet(
     '<button type="button" class="shback" data-close="1" aria-label="뒤로">←</button>'+
+    '<div class="sbar" style="margin:0 0 14px">'+
+      '<input id="qai" type="text" autocomplete="off" enterkeyhint="search" style="font-size:16px" '+
+        'aria-label="상황을 입력하세요" placeholder="상황을 적으면 골라드려요 (예: 부모님과 조용한 한식집)">'+
+      '<button class="sgo" id="goai" aria-label="추천받기">'+ic(I.arrow,18)+'</button>'+
+    '</div>'+
     '<h2 class="dtitle" style="font-size:20px;margin:4px 0 2px">🎯 랜덤 식당 뽑기, 일단 돌려!</h2>'+
     '<p class="srcline" style="margin:0 0 8px">뭐 먹어야 될지 모르겠으면 랜덤 뽑기</p>'+
     '<div class="fbar wbar" style="margin:0 0 10px">'+bar+'</div>'+ body,
     pool.length ? '<button class="btn p" id="spinBtn" style="width:100%">돌리기</button>' : ''
   );
+  (function(){
+    var inp=document.getElementById('qai'), go=document.getElementById('goai');
+    if(!inp||!go) return;
+    function run(){ var v=inp.value.trim(); if(!v) return;
+      closeSheet(function(){ var q=document.getElementById('q'); if(q) q.value=v; runSearch(v); }); }
+    go.addEventListener('click',run);
+    inp.addEventListener('keydown',function(e){ if(e.key==='Enter') run(); });
+  })();
   document.querySelectorAll('.wtab').forEach(function(b){
     b.addEventListener('click',function(){
       var w=b.dataset.w;
