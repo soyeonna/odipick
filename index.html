@@ -528,6 +528,8 @@ body.lock{position:fixed;left:0;right:0;width:100%;overflow:hidden}
 .wpromo b{font-size:14.5px;font-weight:800;color:var(--ink)}
 .wpromo i{font-style:normal;font-size:12.5px;color:var(--ink2)}
 .wpromo .go{margin-left:auto;color:var(--brand)}
+.plogo{width:1em;height:1em;vertical-align:-.15em;object-fit:contain;margin-right:2px}
+.pick .plogo{width:14px;height:14px;vertical-align:-3px}
 </style>
 
 <script id="fb" type="application/json">
@@ -600,7 +602,7 @@ body.lock{position:fixed;left:0;right:0;width:100%;overflow:hidden}
 
 
 
-  <footer>👑 공주픽 — 대전공주가 직접 다녀온 곳<br>
+  <footer><img class="plogo" src="" id="ftlogo" alt="">공주픽 — 대전공주가 직접 다녀온 곳<br>
   영업시간과 가격은 변경될 수 있으니 방문 전에 한 번 더 확인해주세요.
   <span class="fine">영업시간 · 가격 · 주차 · 룸 등 매장 정보는 수집 시점 기준이며 실제와 다를 수 있습니다.
   방문 전 매장에 직접 확인해 주세요.</span></footer>
@@ -732,6 +734,9 @@ var RULES=[[/10\s*명|열\s*명|단체|대\s*인원/,'cap','10명+'],[/[5-9]\s*�
  [/파스타|피자|스테이크|양식|이탈리|브런치|타코|버거|리조또/,'cats','양식'],
  [/술집|이자카야|와인|칵테일|위스키|포차|호프|막걸리|바\b|술\s*(마시|마실|한잔|먹)|한잔\s*할/,'cats','술집'],
  [/노포|오래된|옛날|원조|전통|골목/,'cats','노포'],
+ [/대형\s*카페|넓은\s*카페|큰\s*카페/,'mood','넓은'],
+ [/소개팅|첫\s*만남/,'sit','데이트'],
+ [/브런치/,'cats','카페'],
  [/조용|한적|차분/,'mood','조용한'],[/예쁜|감성|인테리어|무드/,'mood','예쁜'],
  [/소주|맥주|생맥|하이볼|산토리|사케|위스키|막걸리|전통주|칵테일|와인|한\s*잔/,'sit','술자리'],
  [/고급|근사|분위기\s*있/,'mood','고급스러운'],[/테라스|루프탑|야외/,'mood','테라스'],
@@ -746,7 +751,8 @@ var RULES=[[/10\s*명|열\s*명|단체|대\s*인원/,'cap','10명+'],[/[5-9]\s*�
  [/서구|둔산|괴정|도마|탄방|월평/,'gu','서구'],[/유성|봉명|용산|궁동|노은|반석/,'gu','유성구'],
  [/중구|선화|은행동|대흥|오류/,'gu','중구'],[/동구|자양|가양|판암|용전/,'gu','동구'],
  [/대덕|송촌|법동|신탄진/,'gu','대덕구'],[/근교|세종|보령|공주시|계룡/,'gu','대전근교'],
- [/비싼|고급|오마카세/,'budget','10만+'],
+ [/비싼|고급스러운\s*곳/,'budget','5만원 이상'],
+ [/오마카세/,'cats','일식'],
  [/비\s*오는|장마|우천/,'weather','비'],[/더운|더위|무더/,'weather','더위'],[/쌀쌀|추운|추위/,'weather','추위']];
 (function(){
 'use strict';
@@ -1488,7 +1494,24 @@ var SYN={
  '만두':['만두','교자','딤섬','손만두'],
  '우동':['우동','소바','일식','텐동'],
  '햄버거':['버거','수제버거','패티'],
- '샐러드':['샐러드','포케','브런치']
+ '샐러드':['샐러드','포케','브런치'],
+ '위스키':['위스키','바','하이볼','싱글몰트'],
+ '와인':['와인','와인바','내추럴','비스트로'],
+ '맥주':['맥주','생맥','호프','펍','수제맥주','맥주집'],
+ '생맥주':['생맥','맥주','호프','펍'],
+ '소주':['소주','술집','포차','이자카야','한잔'],
+ '빵집':['베이커리','제과','빵','케이크','도넛','크루아상'],
+ '베이커리':['빵','제과','케이크','빵집','도넛','크루아상'],
+ '대형카페':['대형','넓은','층','루프탑','베이커리카페'],
+ '양식':['파스타','스테이크','피자','이탈리안','비스트로','다이닝','뇨끼','리조또'],
+ '소개팅':['예쁜','조용한','고급스러운','다이닝','데이트'],
+ '오마카세':['오마카세','스시','코스','다이닝'],
+ '이자카야':['이자카야','일본식주점','사케','야키토리','일식'],
+ '포차':['포차','포장마차','술집','안주'],
+ '뷔페':['뷔페','무한리필','샐러드바'],
+ '분식':['분식','떡볶','김밥','튀김','순대'],
+ '해장':['해장','국밥','콩나물','뼈해장','북어'],
+ '브런치':['브런치','샌드위치','에그','팬케이크','카페']
 };
 function needleAlts(w){
   var out=[w];
@@ -1500,7 +1523,16 @@ function results(){
   var n=nActive();
   var pool=P.filter(function(p){ return p.src!=='public'; });   // 공공 아카이브는 기본 제외 (찐맛집만)
   // 상호명을 그대로 친 경우('계룡산장')는 지역 낱말('계룡')에 걸려도 그 가게를 먼저 보여준다
-  var nameHits = NEEDLE.length ? pool.filter(function(p){ var nm=String(p.n).replace(/\s/g,''); return NEEDLE.some(function(w){ return w.length>=3 && nm.indexOf(w)>-1; }); }) : [];
+  // 상호명 바로가기 — '삼겹살'처럼 흔한 음식 이름에는 쓰지 않는다 (가게 이름에 든 3곳만 나오던 문제)
+  var nameHits = NEEDLE.length ? pool.filter(function(p){
+    var nm=String(p.n).replace(/\s/g,'');
+    return NEEDLE.some(function(w){
+      if(w.length<3) return false;
+      if(SYN[w] || needleAlts(w).length>1) return false;      // 음식 이름은 제외
+      if(RULES.some(function(r){ return r[0].test(w); })) return false;  // 종류·상황 규칙에 걸린 말도 제외
+      return nm.indexOf(w)>-1;
+    });
+  }) : [];
   if(nameHits.length && nameHits.length<=5 && QWORDS<=2){ var arr0=nameHits.map(function(p){ var r=score(p); r.p=p; r.sc+=500; return r; }); arr0.sort(function(a,b){ return b.sc-a.sc; }); return arr0; }
   if(mustActive()) pool=pool.filter(function(p){ return !mustCheck(p); });
   if(NEEDLE.length){
@@ -1606,7 +1638,7 @@ function toggleSave(p){
 /* 카드 배지 — 최대 2개 (오디픽 PICK > 최근 확인 > 광고) */
 function badges(p){
   var out=[];
-  if(p.src==='reel') out.push('<span class="pick">👑 PICK</span>');
+  if(p.src==='reel') out.push('<span class="pick"><img class="plogo" src="'+PRINCESS_IMG+'" alt="">PICK</span>');
   if(p.checkedAt) out.push('<span class="pick pick2">최근 확인</span>');
   if(p.ad) out.push('<span class="pick pick3">광고</span>');
   return out.slice(0,2).join('');
@@ -2012,7 +2044,7 @@ function similarBlock(p){
         'style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;'+
         'border:1px solid var(--line);border-radius:10px;background:var(--card);text-align:left">'+
         '<span style="min-width:0"><b style="font-size:14px">'+x.n+'</b>'+
-        (x.src==='reel'?' <span class="pick" style="font-size:10px">👑</span>':'')+
+        (x.src==='reel'?' <span class="pick" style="font-size:10px"><img class="plogo" src="'+PRINCESS_IMG+'" alt="공주픽"></span>':'')+
         '<br><span style="font-size:12px;color:var(--ink2)">'+[x.cat,x.area].filter(Boolean).join(' · ').slice(0,30)+'</span></span>'+
         '<span style="color:var(--ink3)">'+ic(I.arrow,14)+'</span></button>';
     }).join('')+'</div></div>';
@@ -2055,7 +2087,7 @@ function openDetail(p){
   openSheet(
     hero+
     '<h2 class="dtitle">'+p.n+'</h2>'+
-    '<div class="crow1" style="margin-top:6px">'+(p.src==='reel'?'<span class="pick">👑 공주픽</span>':'')+
+    '<div class="crow1" style="margin-top:6px">'+(p.src==='reel'?'<span class="pick"><img class="plogo" src="'+PRINCESS_IMG+'" alt="">공주픽</span>':'')+
       (p.travel?'<span class="pick" style="background:var(--ok-w);color:var(--ok)">🧳 대전여행</span>':'')+statusOf(p)+'</div>'+
     '<div class="dmeta">'+[p.cat,p.area].filter(Boolean).join(' · ')+'</div>'+
     (mood?'<div class="hits" style="margin-top:8px">'+mood+'</div>':'')+
@@ -2064,15 +2096,6 @@ function openDetail(p){
       ((p.gpl&&p.gpl.length)?p.gpl:p.gphotos.slice(0,3)).map(function(x){ var u=(typeof x==='string')?thumbOf(x):gphotoUrl(x.name,480); return u?'<img src="'+u+'" alt="'+E(p.n)+' 사진" loading="lazy" style="height:160px;border-radius:12px;flex:none;object-fit:cover" onerror="this.remove()">':''; }).join('')+
       '</div><p class="srcline">사진: Google 방문자 · '+E((p.gby&&p.gby.length?p.gby:p.gphotos.slice(0,3).map(function(x){ return x.by; })).filter(Boolean).join(', '))+'</p></div>':'')+
     (p.lat&&p.lng?'<div class="dsec" id="rvSec"><h3>가게 앞 로드뷰</h3><div id="rvBox" style="position:relative;height:220px;border-radius:12px;overflow:hidden;background:var(--sub)"></div><p class="srcline">카카오 로드뷰 · 촬영 시점과 지금 모습이 다를 수 있어요</p></div>':'')+
-    (function(){ var parts=String(p.v||'').split(/\s*·\s*/).filter(Boolean);
-      var menu=parts.filter(function(s){ return /\d[\d,]*\s*원/.test(s); }), desc=parts.filter(function(s){ return !/\d[\d,]*\s*원/.test(s); });
-      return (desc.length?'<div class="dsec"><h3>이런 곳이에요</h3><div class="dbox">'+vLines(desc.join(' · '))+'</div></div>':'')+
-        (p.sig?'<div class="dsec"><h3>시그니처 메뉴</h3><div class="dbox">'+E(p.sig)+'</div></div>':'')+
-        (menu.length?'<div class="dsec"><h3>대표 메뉴</h3><div class="dbox">'+menu.map(E).join('<br>')+'</div></div>':'')+
-        (p.combo?'<div class="dsec"><h3>이렇게 드세요</h3><div class="dbox">'+E(p.combo)+'</div></div>':'')+
-        (p.tip?'<div class="dsec"><h3>꿀팁</h3><div class="dbox" style="background:var(--ok-w)">'+E(p.tip)+'</div></div>':'')+
-        (p.branches&&p.branches.length?'<div class="dsec"><h3>다른 지점</h3><div class="dbox">'+p.branches.map(E).join('<br>')+'</div></div>':''); })()+
-    (cau?'<div class="dsec"><h3>방문 전 확인할 점</h3><div class="dbox" style="background:var(--warn-w);color:var(--warn)">'+cau+'</div></div>':'')+
     (p.src==='reel'&&(p.igs||[]).length?'<div class="dsec"><h3>대전공주 영상'+
       ((p.igs.length>1)?' <span style="color:var(--ink3);font-weight:500">'+p.igs.length+'개</span>':'')+'</h3>'+
       p.igs.map(function(code,vi){
@@ -2083,6 +2106,15 @@ function openDetail(p){
           '<span>대전공주가 직접 다녀왔어요</span></span>'+
           '<span class="vplay">'+ic(I.play,13)+'</span></a>';
       }).join('')+'</div>':'')+
+    (function(){ var parts=String(p.v||'').split(/\s*·\s*/).filter(Boolean);
+      var menu=parts.filter(function(s){ return /\d[\d,]*\s*원/.test(s); }), desc=parts.filter(function(s){ return !/\d[\d,]*\s*원/.test(s); });
+      return (desc.length?'<div class="dsec"><h3>이런 곳이에요</h3><div class="dbox">'+vLines(desc.join(' · '))+'</div></div>':'')+
+        (p.sig?'<div class="dsec"><h3>시그니처 메뉴</h3><div class="dbox">'+E(p.sig)+'</div></div>':'')+
+        (menu.length?'<div class="dsec"><h3>대표 메뉴</h3><div class="dbox">'+menu.map(E).join('<br>')+'</div></div>':'')+
+        (p.combo?'<div class="dsec"><h3>이렇게 드세요</h3><div class="dbox">'+E(p.combo)+'</div></div>':'')+
+        (p.tip?'<div class="dsec"><h3>꿀팁</h3><div class="dbox" style="background:var(--ok-w)">'+E(p.tip)+'</div></div>':'')+
+        (p.branches&&p.branches.length?'<div class="dsec"><h3>다른 지점</h3><div class="dbox">'+p.branches.map(E).join('<br>')+'</div></div>':''); })()+
+    (cau?'<div class="dsec"><h3>방문 전 확인할 점</h3><div class="dbox" style="background:var(--warn-w);color:var(--warn)">'+cau+'</div></div>':'')+
     '<div class="dsec"><h3>매장 정보</h3><dl class="dl">'+
       rows.map(function(r){ return '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>'; }).join('')+'</dl></div>'+
     (p.src==='public'?
@@ -2469,7 +2501,10 @@ function drawBigMap(){
   });
   var n=results().length;
   var redo=document.getElementById('redoBtn');
-  redo.hidden=false; redo.innerHTML=ic(I.search,14)+'이 지역에서 '+n+'곳 보기';
+  var _on=[]; if(A.src.indexOf('reel')>-1) _on.push('공주픽'); if(A.open.length) _on.push('영업 중');
+  var _all=P.filter(function(x){ return !x.closed && x.src!=='public' && x.lat; }).length;
+  redo.hidden=false;
+  redo.innerHTML=ic(I.search,14)+(_on.length ? (_on.join('·')+' '+n+'곳 · 전체 '+_all) : ('이 지역에서 '+n+'곳 보기'));
 }
 document.getElementById('redoBtn').addEventListener('click',function(){ show('result'); });
 document.getElementById('locBtn').addEventListener('click',function(){
@@ -2479,9 +2514,9 @@ document.getElementById('locBtn').addEventListener('click',function(){
       '<h3>위치 권한이 꺼져 있어요</h3><p>설정에서 위치 접근을 허용하면 가까운 곳부터 보여드릴 수 있어요. 지금은 지역을 눌러 골라주세요.</p></div>'); });
 });
 var mf=document.getElementById('mapFilt');
-[{t:'👑 공주픽',k:'src',v:'reel'},{t:'영업 중',k:'open',v:'1'}].forEach(function(x){
+[{t:'공주픽',k:'src',v:'reel',logo:1},{t:'영업 중',k:'open',v:'1'}].forEach(function(x){
   var b=document.createElement('button'); b.className='srt'; b.type='button';
-  b.textContent=x.t; b.dataset.k=x.k; b.dataset.val=x.v; b.val=x.v; b.setAttribute('aria-pressed','false');
+  b.innerHTML=(x.logo?'<img class="plogo" src="'+PRINCESS_IMG+'" alt="">':'')+x.t; b.dataset.k=x.k; b.dataset.val=x.v; b.val=x.v; b.setAttribute('aria-pressed','false');
   b.addEventListener('click',function(){
     toggle(x.k,x.v);
     b.setAttribute('aria-pressed', String((A[x.k]||[]).indexOf(x.v)>-1));
@@ -2783,7 +2818,7 @@ function openTrips(idx){
         return '<button type="button" class="tleg" data-n="'+E(p.n)+'" style="display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:var(--sub);border:0;border-radius:12px;padding:8px 10px;margin-top:6px">'+
           '<span style="width:44px;font-size:12px;font-weight:700;color:var(--brand);flex:none">'+s[0]+'</span>'+
           (im?'<img src="'+im+'" alt="" style="width:40px;height:52px;object-fit:cover;border-radius:8px;flex:none">':'<span style="width:40px;height:52px;border-radius:8px;background:var(--line);flex:none"></span>')+
-          '<span style="flex:1;min-width:0"><b>'+E(p.n)+'</b> '+(p.src==='reel'?'<span style="font-size:11px">👑</span>':'')+'<br><span style="font-size:12px;color:var(--ink2)">'+E(s[2])+'</span></span></button>';
+          '<span style="flex:1;min-width:0"><b>'+E(p.n)+'</b> '+(p.src==='reel'?'<img class="plogo" src="'+PRINCESS_IMG+'" alt="공주픽">':'')+'<br><span style="font-size:12px;color:var(--ink2)">'+E(s[2])+'</span></span></button>';
       }).join('')+'</div>';
     }).join('');
   openSheet(html);
@@ -2947,7 +2982,7 @@ function openCourses(dong, anchor){
           return (i?'<div style="color:var(--ink3);font-size:12px;padding:2px 0 2px 22px">↓ 도보 '+walkMin(c.legs[i-1].p,p)+'분</div>':'')+
             '<button type="button" class="cleg" data-n="'+E(p.n)+'" style="display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:var(--sub);border:0;border-radius:12px;padding:8px 10px">'+
             (im?'<img src="'+im+'" alt="" style="width:44px;height:58px;object-fit:cover;border-radius:8px;flex:none">':'<span style="width:44px;height:58px;border-radius:8px;background:var(--line);flex:none"></span>')+
-            '<span style="flex:1;min-width:0"><span style="font-size:12px;color:var(--brand);font-weight:700">'+l.role+'</span> '+(p.src==='reel'?'<span style="font-size:11px">👑</span>':'')+
+            '<span style="flex:1;min-width:0"><span style="font-size:12px;color:var(--brand);font-weight:700">'+l.role+'</span> '+(p.src==='reel'?'<img class="plogo" src="'+PRINCESS_IMG+'" alt="공주픽">':'')+
             '<br><b>'+E(p.n)+'</b><br><span style="font-size:12px;color:var(--ink2)">'+E(why1(p)||p.cat||'')+'</span></span></button>';
         }).join('')+'</div>';
     }).join('') : '<div class="dbox">'+(anchor?E(anchor.n)+' 근처(도보 15분 안)에':'이 동네에')+' 함께 묶을 가게가 아직 적어요.<br>'+
@@ -2985,7 +3020,7 @@ function buildAiRows(el){
   b.addEventListener('click',function(){
     openSheet('<h2 class="dtitle" style="font-size:20px;margin:6px 0 12px">대전공주</h2>'+
       '<div style="display:flex;flex-direction:column;gap:8px">'+
-      '<button class="btn p" id="goPicks" style="width:100%">👑 공주픽 전체 보기</button>'+
+      '<button class="btn p" id="goPicks" style="width:100%"><img class="plogo" src="'+PRINCESS_IMG+'" alt="">공주픽 전체 보기</button>'+
       '<a class="btn s" style="width:100%" href="'+IG+'" target="_blank" rel="noopener">인스타그램 채널 가기</a>'+
       '</div>');
     var g=document.getElementById('goPicks');
@@ -3044,7 +3079,7 @@ function drawTheme(){
       var b=document.createElement('button'); b.className='tli'; b.type='button';
       b.innerHTML='<span class="tn">'+(i+1)+'</span>'+
         '<span><span class="ti1">'+x.n+'</span><br><span class="ti2">'+[x.gu,x.area].filter(Boolean).join(' · ')+'</span></span>'+
-        (x.src==='reel'?'<span class="pick pk2">👑</span>':'');
+        (x.src==='reel'?'<span class="pick pk2"><img class="plogo" src="'+PRINCESS_IMG+'" alt="공주픽"></span>':'');
       b.addEventListener('click',function(){ openDetail(x); });
       box.appendChild(b);
     });
@@ -3144,6 +3179,7 @@ addEventListener('popstate', function(ev){
   show((ev.state && ev.state.sc) || 'home', true);
 });
 
+(function(){ var f=document.getElementById('ftlogo'); if(f) f.src=PRINCESS_IMG; })();
 buildSorts(); syncAll(); render();
 var _render0=render; render=function(){ _render0(); syncHash(); };
 /* 새로고침해도 보던 화면으로 (주소 뒤 # 부분을 읽는다) */
@@ -3163,7 +3199,7 @@ var _render0=render; render=function(){ _render0(); syncHash(); };
   }catch(e){}
 })();
 /* 자동 검증에서 쓰는 훅 */
-try{ window.__odi={parse:parse, results:results, score:score, A:A}; }catch(e){}
+try{ window.__odi={parse:parse, results:results, score:score, A:A, needleAlts:needleAlts, needleHay:needleHay, NEEDLE:function(){return NEEDLE;}}; }catch(e){}
 })();
 
 </script>
