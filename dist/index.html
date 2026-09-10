@@ -423,9 +423,9 @@ section.blk{margin-top:26px}
   border-top:1px solid var(--line); padding-bottom:env(safe-area-inset-bottom);
   transition:transform .22s}
 .nav.hide{transform:translateY(110%)}
-.navin{max-width:640px; margin:0 auto; height:var(--nav); display:grid; grid-template-columns:repeat(6,1fr)}
+.navin{max-width:640px; margin:0 auto; height:var(--nav); display:grid; grid-template-columns:repeat(5,1fr)}
 .nb{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
-  font-size:10px; color:var(--ink3); font-weight:600}
+  font-size:10.5px; color:var(--ink3); font-weight:600}
 .nb svg{width:21px; height:21px}
 .nb.on{color:var(--brand)}
 .nb.mid .bub{width:42px; height:42px; border-radius:14px; background:var(--brand); color:var(--on-brand);
@@ -759,7 +759,7 @@ var RULES=[[/10\s*명|열\s*명|단체|대\s*인원/,'cap','10명+'],[/[5-9]\s*�
  [/술집|이자카야|와인|칵테일|위스키|포차|호프|막걸리|바\b|술\s*(마시|마실|한잔|먹)|한잔\s*할/,'cats','술집'],
  [/노포|오래된|옛날|원조|전통|골목/,'cats','노포'],
  [/조용|한적|차분/,'mood','조용한'],[/예쁜|감성|인테리어|무드/,'mood','예쁜'],
- [/소주|맥주|생맥|하이볼|산토리|사케|위스키|막걸리|전통주|한\s*잔/,'sit','술자리'],
+ [/소주|맥주|생맥|하이볼|산토리|사케|위스키|막걸리|전통주|칵테일|와인|한\s*잔/,'sit','술자리'],
  [/고급|근사|분위기\s*있/,'mood','고급스러운'],[/테라스|루프탑|야외/,'mood','테라스'],
  [/지금\s*영업|열려|영업\s*중|오픈했/,'open','1'],
  [/대전공주|공주\s*픽|진짜\s*맛집|광고\s*말고|영상에\s*나온/,'src','reel'],
@@ -1052,7 +1052,7 @@ function pct(p){ var h=0;
   if(p.sit&&p.sit.length)h++; if(p.budget!=null)h++; if(p.cap!=null)h++;
   if(p.fac&&Object.keys(p.fac).length)h++; if(p.gu)h++; if(p.hours)h++;
   return Math.round(h/6*100); }
-function nActive(){ var n=0; KEYS.forEach(function(k){ n+=A[k].length; }); return n+(NEAR?1:0)+(DONGQ?1:0)+(VISIT!=null?1:0)+(MEAL?1:0)+(PTF?1:0)+(typeof NEEDLE!=='undefined'&&NEEDLE.length?1:0); }
+function nActive(){ var n=0; KEYS.forEach(function(k){ n+=A[k].length; }); return n+(NEAR?1:0)+(DONGQ?1:0)+(VISIT!=null?1:0)+(MEAL?1:0)+(PTF?1:0)+(DRINKQ?1:0)+(MOODQ?1:0)+(typeof NEEDLE!=='undefined'&&NEEDLE.length?1:0); }
 
 /* 추천 점수 — 기존 로직 그대로 */
 function score(p){
@@ -1083,6 +1083,14 @@ function score(p){
   if(DONGQ){
     var inDong=String(p.area||'').indexOf(DONGQ)===0;
     cond(inDong?1:null, DONGQ);
+  }
+  if(DRINKQ){                       // 그 술을 판다고 확인된 곳을 먼저
+    var kws=(p.kw||[]).join(' ')+' '+(p.v||'');
+    cond(kws.indexOf(DRINKQ)>-1?1:null, DRINKQ);
+  }
+  if(MOODQ){                        // '분위기 좋은' 은 예쁜·조용한·고급·뷰 중 하나만 있어도 인정
+    var md=p.mood||[];
+    cond(MOODQ.some(function(x){ return md.indexOf(x)>-1; })?1:0, '분위기 좋은');
   }
   if(NEEDLE.length){
     var nm=String(p.n).replace(/\s/g,'');
@@ -1172,7 +1180,7 @@ function toggle(k,v){
     if(k==='sit' && SIT_X[v]) A.sit=A.sit.filter(function(s){ return SIT_X[v].indexOf(s)<0; }); }
   syncAll(); render(); if(document.getElementById('sc-home').classList.contains('on')) homeList();
 }
-function clearAll(){ KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; lastQuery=''; ['q','q2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; }); VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; lastQuery='';
+function clearAll(){ KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; DRINKQ=null; MOODQ=null; lastQuery=''; ['q','q2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; }); VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; lastQuery='';
   ['q','q2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; }); PTF=null; syncAll(); render(); }
 function syncAll(){
   buildQuick(); if(typeof buildPtabs==='function') buildPtabs(); if(typeof buildMcats==='function') buildMcats();   // 종류 탭 눌림 표시 갱신
@@ -1192,7 +1200,9 @@ function drawCond(){
     A[k].forEach(function(v){ items.push([k,v,LABEL[k]||(k==='avoid'?v+' 제외':v)]); });
   });
   el.innerHTML='';
-  [[NEEDLE.length, NEEDLE.join('·'), function(){ NEEDLE=[]; }],
+  [[DRINKQ, DRINKQ, function(){ DRINKQ=null; }],
+   [MOODQ, '분위기 좋은', function(){ MOODQ=null; }],
+   [NEEDLE.length, NEEDLE.join('·'), function(){ NEEDLE=[]; }],
    [PTF, '맛집', function(){ PTF=null; }],
    [MEAL, {lunch:'점심',dinner:'저녁',breakfast:'아침',late:'야식'}[MEAL], function(){ MEAL=null; }],
    [DONGQ, DONGQ, function(){ DONGQ=null; }],
@@ -1230,6 +1240,7 @@ function drawCond(){
 
 /* ── 자연어 → 조건. AI 호출 없이 규칙으로 푼다 ── */
 var NEEDLE=[], DONGQ=null;      // 자유 낱말 · 동 단위 검색
+var DRINKQ=null, MOODQ=null;    // 어떤 술인지 · '분위기 좋은' 같은 뭉뚱그린 말
 var QWORDS=0;                   // 검색어 낱말 수 (상호명 우선 판단용)
 var VISIT=null, PARTY=null, BUDMAX=null;   // 방문시각(분) · 인원 · 1인 예산(원)
 var PTF=null;   // 장소 유형 필터 — '맛집' 칩은 밥집 전체
@@ -1238,7 +1249,8 @@ var MEAL=null;   // lunch/dinner/breakfast/late — '점심'처럼 시각 없이
 var RELAX={dist:false, unkFac:false, unkHours:false, unkBud:false};
 function parse(t){
   KEYS.forEach(function(k){ A[k]=[]; });
-  NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; MOODANY=false;
+  NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null;
+  DRINKQ=null; MOODQ=null; MOODANY=false;
   QWORDS=String(t||'').trim().split(/\s+/).filter(Boolean).length;
   RELAX={dist:false, unkFac:false, unkHours:false, unkBud:false};
   Object.keys(LANDMARKS).forEach(function(k){
@@ -1247,6 +1259,9 @@ function parse(t){
   var dm=t.match(/([가-힣]{1,6}동)(?=\s|$|에|의|으로|쪽)/);
   if(dm) DONGQ=dm[1];
   // 식사 시간대: 점심이면 밥집·그 시간 영업이 상식
+  var _dr=t.match(/생맥주|생맥|하이볼|산토리|소주|맥주|사케|와인|막걸리|위스키|칵테일|전통주|수제맥주/);
+  if(_dr) DRINKQ={'생맥':'생맥주','산토리':'산토리'}[_dr[0]]||_dr[0];
+  if(/분위기\s*좋|분위기\s*있|무드\s*좋|감성\s*있/.test(t)) MOODQ=['예쁜','조용한','고급스러운','뷰맛집','테라스'];
   if(/점심|런치/.test(t)) MEAL='lunch';
   else if(/아침|조식|모닝/.test(t)) MEAL='breakfast';
   else if(/야식/.test(t)) MEAL='late';
@@ -2143,7 +2158,7 @@ function buildMap(host, big){
     pth.addEventListener('click',function(){
       if(!big){                                  // 홈 지도: 그 구만 깨끗하게 본다 (남은 조건 때문에 0곳 뜨지 않게)
         var on=A.gu.indexOf(g)>-1;
-        KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; lastQuery='';
+        KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; DRINKQ=null; MOODQ=null; lastQuery='';
         ['q','q2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
         if(!on) A.gu=[g];
         syncAll(); render(); syncMap(); homeList(); return;
@@ -2921,7 +2936,7 @@ function buildAiRows(el){
       if(r.fn){ r.fn(); return; }
       if(r.set.menu){ clearAll(); NEEDLE=r.set.menu.slice(); QWORDS=9; lastQuery=''; syncAll(); SHOW=12; show('result'); render(); return; }
       if(r.set.q){ runSearch(r.set.q); document.getElementById('q').value=''; return; }
-      KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; lastQuery=''; ['q','q2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
+      KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; DRINKQ=null; MOODQ=null; lastQuery=''; ['q','q2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
       Object.keys(r.set).forEach(function(k){ A[k]=r.set[k].slice(); });
       syncAll(); SHOW=12; show('result'); render();
     });
@@ -2942,7 +2957,7 @@ function buildAiRows(el){
     var g=document.getElementById('goPicks');
     if(g) g.addEventListener('click',function(){
       closeSheet(function(){
-        KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; lastQuery=''; ['q','q2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
+        KEYS.forEach(function(k){ A[k]=[]; }); NEAR=null; NEEDLE=[]; DONGQ=null; VISIT=null; PARTY=null; BUDMAX=null; MEAL=null; PTF=null; DRINKQ=null; MOODQ=null; lastQuery=''; ['q','q2'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
         A.src=['reel']; syncAll(); SHOW=12; show('result'); render();
       });
     });
