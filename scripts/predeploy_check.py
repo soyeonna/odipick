@@ -21,6 +21,16 @@ def _in_reels(name):
     k = re.sub(r'\s', '', name or '')
     return bool(k) and any(k in s or s in k for s in _REELS)
 
+# 설명 문구가 '-한다' 반말로 끝나면 잡는다 (사이트 말투는 '-요' 로 통일)
+BANMAL_END = re.compile(r'(다|음|함|됨|임|짐)$')
+BANMAL_OK = re.compile(r'(요|죠)$')
+def _banmal(text):
+    for seg in re.split(r'\s+·\s+', str(text or '')):
+        seg = seg.strip()
+        if not seg or re.search(r'\d[\d,]*\s*원', seg) or BANMAL_OK.search(seg): continue
+        if BANMAL_END.search(seg): return seg[:30]
+    return None
+
 HOOK = re.compile(r'[‼❗️🔥💖🤍]|!!|!$|공유|저장하기|태그|팔로우|이벤트|미쳤|실화|주목|등장|떴|찾음|최초|레전드|역대급|난리|대란|무조건|찐맛집')
 bad = collections.OrderedDict()
 def add(k, v): bad.setdefault(k, []).append(v)
@@ -33,6 +43,9 @@ for p in P:
     if p.get('src') == 'reel' and not (p.get('ig') or p.get('igs') or p.get('ph') or _in_reels(p['n'])):
         add('공주픽인데 릴스 근거 없음', p['n'])
     if FOOD & set(p.get('cats') or []) and p.get('kcat') and BAD.match(p['kcat']): add('엉뚱한 업종 연결', p['n'])
+    for _k in ('v', 'combo', 'sig'):
+        _b = _banmal(p.get(_k))
+        if _b: add('반말 문구', p['n'] + f'({_k}) {_b}')
     for _k in ('v', 'sig', 'tip', 'combo'):
         if isinstance(p.get(_k), str) and HOOK.search(p[_k]): add('릴스 문구 남음', p['n'] + f'({_k})')
     if not (p.get('v') or '').strip(): add('설명 없음', p['n'])

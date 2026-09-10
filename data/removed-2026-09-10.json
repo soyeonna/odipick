@@ -897,5 +897,60 @@
   "gplAt": "2026-09-08",
   "vSrc": "리뷰 요약",
   "removedWhy": "소연님 판단으로 제외"
+ },
+ {
+  "n": "메리골드",
+  "cat": "양식/술집",
+  "cats": [
+   "카페"
+  ],
+  "area": "유천동",
+  "gu": "중구",
+  "hours": "매일 10:00-24:00",
+  "phone": "0507-1493-1303",
+  "budget": 2,
+  "sit": [
+   "데이트",
+   "술자리"
+  ],
+  "fac": {
+   "room": true,
+   "group": true,
+   "kids": true,
+   "takeout": true,
+   "restroom": true
+  },
+  "cap": 12,
+  "ig": "DR_2TYnEneL",
+  "link": null,
+  "mood": [
+   "테라스"
+  ],
+  "v": "유천동 브런치·와인바. 에그인헬과 피자 · 에그인헬 24,900원 · 콥샐러드 24,900원 · 루꼴라피자  22,900원",
+  "src": "reel",
+  "at": "2025-12-08",
+  "ph": "17932830486129196",
+  "likes": 161,
+  "lat": 36.3201302949211,
+  "lng": 127.397558567724,
+  "kcat": "음식점 > 카페 > 커피전문점",
+  "kid": "481221721",
+  "kurl": "http://place.map.kakao.com/481221721",
+  "igs": [
+   "DR_2TYnEneL"
+  ],
+  "cover": "DR_2TYnEneL",
+  "gid": "ChIJf2g1NgBPZTURfHKNec6HNvo",
+  "gname": "메리골드",
+  "grating": 2.3,
+  "gcount": 3,
+  "gmaps": "https://maps.google.com/?cid=18029747479096685180&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYASAA",
+  "gAt": "2026-09-03",
+  "photoSrc": "대전공주",
+  "kw": [
+   "와인"
+  ],
+  "vSrc": "리뷰 요약",
+  "removedWhy": "소연님 판단으로 제외"
  }
 ]
