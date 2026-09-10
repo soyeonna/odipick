@@ -2837,7 +2837,8 @@ function openWheel(mode, val){
     function finish(){
       if(done) return; done=true;
       if(timer) clearTimeout(timer);
-      var ph=photoOf(p) || (p.gpl&&p.gpl.length?thumbOf(p.gpl[0]):null);
+      // 릴스 커버(글자 박힌 표지)보다 실제 가게·음식 사진을 먼저 쓴다
+      var ph=(p.gpl&&p.gpl.length?thumbOf(p.gpl[0]):null) || photoOf(p);
       var bud=budText(p);
       res.innerHTML=
         '<div class="wcard">'+
