@@ -1091,5 +1091,30 @@
   "gplAt": "2026-09-08",
   "vSrc": "리뷰 요약",
   "removedWhy": "소연님 판단으로 제외"
+ },
+ {
+  "n": "빵시투어",
+  "cat": "여행상품",
+  "cats": [
+   "체험"
+  ],
+  "area": "대전",
+  "gu": null,
+  "hours": null,
+  "budget": null,
+  "cap": 4,
+  "sit": [
+   "데이트",
+   "가족"
+  ],
+  "fac": {},
+  "v": "성심당부터 동네 빵집까지 도는 대전 빵 투어 코스",
+  "src": "local",
+  "ph": "pic빵시투어1077",
+  "photoSrc": "대전공주",
+  "cover": "pic빵시투어1077",
+  "suspect": true,
+  "sitAuto": true,
+  "removedWhy": "소연님 판단으로 제외"
  }
 ]
