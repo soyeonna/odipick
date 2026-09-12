@@ -9,7 +9,7 @@ import json, re, sys
 
 DAY = '월화수목금토일'          # gperiods 의 0 은 일요일
 ORDER = [1, 2, 3, 4, 5, 6, 0]   # 월~일 순서
-KEEP = re.compile(r'((?:[0-9]+[·,\s]*)*[0-9]+번째[^·]*휴무|연중무휴|라스트오더[^·]*|예약[^·]*|브레이크[^·]*)')
+KEEP = re.compile(r'(?<![:\d])((?:[0-9]+[·,]\s*)*[0-9]+번째[^·]*휴무|연중무휴|라스트오더[^·]*|예약[^·]*|브레이크[^·]*)')
 
 def hm(mn):
     mn %= 1440
@@ -69,7 +69,12 @@ for p in P:
     keep2 = ' · ' not in new          # 구글이 브레이크타임을 안 준 경우만 손으로 적은 값을 남긴다
     tail = [t.strip(' ·') for t in KEEP.findall(old)
             if t.strip(' ·') and ('브레이크' not in t or keep2)]
-    if tail: new += ' · ' + ' · '.join(dict.fromkeys(tail))
+    if tail:
+        new += ' · ' + ' · '.join(dict.fromkeys(tail))
+        # 'N번째 일요일 휴무' 가 있으면 뭉뚱그린 '일 휴무' 는 겹치므로 뺀다
+        d2 = re.search(r'([월화수목금토일])요일 휴무', new)
+        if d2:
+            new = re.sub(r'(?<= )' + d2.group(1) + r' 휴무 · ', '', new)
     if new != old:
         changed.append((p['n'], old, new))
         p['hours'] = new
