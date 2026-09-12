@@ -1611,7 +1611,8 @@ function results(){
     var dq=arr.filter(function(r){ return ((r.p.kw||[]).join(' ')+' '+(r.p.v||'')).indexOf(DRINKQ)>-1; });
     if(dq.length>=6) arr=dq;
   }
-  if(A.sit.length && NEEDLE.length===0){   // 상황(데이트·혼밥 등)을 골랐으면 그 상황에 맞는 곳만 — 동네 검색과 섞여도 순대집이 데이트에 끼지 않게
+  if(A.sit.length){   // 상황(데이트·혼밥 등)이 잡혔으면 그 상황에 맞는 곳만.
+                      // 낱말 검색이 함께 있어도 적용한다 — '소개팅하기 좋은 술집'에 노포가 끼던 문제
     var sitOk=arr.filter(function(r){ return A.sit.some(function(s){ return (r.p.sit||[]).indexOf(s==='부모님'?'가족':s)>-1; }); });
     if(sitOk.length) arr=sitOk;
   }
