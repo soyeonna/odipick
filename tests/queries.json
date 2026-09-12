@@ -1,0 +1,174 @@
+{
+  "_설명": "검색문을 제대로 알아듣는지 확인하는 정답지. scripts/test_parser.mjs 로 돌린다.",
+  "_보는법": "expect 는 '이렇게 나와야 한다', notExpect 는 '이건 나오면 안 된다'.",
+  "cases": [
+    {
+      "id": "기획서-1",
+      "q": "둔산동에서 소개팅인데 너무 시끄럽지 않고 주차 가능한 곳, 둘이 총 8만원 이하",
+      "expect": {
+        "location.neighborhood": "둔산동",
+        "partySize": 2,
+        "occasions": ["소개팅"],
+        "budget.type": "total",
+        "budget.max": 80000,
+        "budget.perPerson": 40000,
+        "mustHave": ["주차"],
+        "preferences": ["조용함", "대화하기 좋음"]
+      },
+      "notExpect": {
+        "occasions": ["데이트"],
+        "rawKeywords": ["너무", "가능한", "시끄럽지", "않고"]
+      }
+    },
+    {
+      "id": "기획서-2",
+      "q": "봉명동에서 8명 회식, 룸 있고 주차되는 고깃집, 1인 5만원 이하",
+      "expect": {
+        "location.neighborhood": "봉명동",
+        "partySize": 8,
+        "occasions": ["회식"],
+        "cuisines": ["고기"],
+        "budget.type": "per_person",
+        "budget.max": 50000,
+        "mustHave": ["주차", "룸"]
+      },
+      "notExpect": { "budget.type": "total" }
+    },
+    {
+      "id": "기획서-3",
+      "q": "유성에서 부모님 모시고 갈 조용한 한식집, 4명 총 12만원, 오늘 저녁 7시",
+      "expect": {
+        "location.district": "유성구",
+        "occasions": ["부모님"],
+        "partySize": 4,
+        "cuisines": ["한식"],
+        "budget.type": "total",
+        "budget.max": 120000,
+        "budget.perPerson": 30000,
+        "visitDateTime.minutes": 1140,
+        "preferences": ["조용함"]
+      },
+      "notExpect": { "occasions": ["데이트"], "openNow": true }
+    },
+    {
+      "id": "기획서-4",
+      "q": "술집 말고 은행동에서 친구들이랑 조용히 저녁 먹을 곳",
+      "expect": {
+        "location.neighborhood": "은행동",
+        "occasions": ["친구"],
+        "exclude": ["bar"],
+        "preferences": ["조용함"]
+      },
+      "notExpect": { "placeTypes": ["bar"] }
+    },
+    {
+      "id": "기획서-5",
+      "q": "대전역 근처 혼밥, 1만원 이하, 지금 영업",
+      "expect": {
+        "location.landmark": "대전역",
+        "occasions": ["혼밥"],
+        "partySize": 1,
+        "budget.max": 10000,
+        "openNow": true
+      },
+      "notExpect": { "visitDateTime": "있음" }
+    },
+    {
+      "id": "기획서-6",
+      "q": "애견동반 가능한 대형 카페, 주차",
+      "expect": {
+        "placeTypes": ["cafe"],
+        "mustHave": ["애견동반", "주차"],
+        "preferences": ["넓음"]
+      },
+      "notExpect": { "cuisines": ["한식"] }
+    },
+
+    {
+      "id": "줄임말-1",
+      "q": "둔산 소개팅 조용하고 주차",
+      "expect": { "occasions": ["소개팅"], "mustHave": ["주차"], "preferences": ["조용함"] },
+      "notExpect": { "occasions": ["데이트"] }
+    },
+    {
+      "id": "반말-1",
+      "q": "봉명동 10명 회식 룸필수",
+      "expect": { "location.neighborhood": "봉명동", "partySize": 10, "occasions": ["회식"], "mustHave": ["룸"] }
+    },
+    {
+      "id": "부정-1",
+      "q": "술집말고 늦게까지 밥먹을곳",
+      "expect": { "exclude": ["bar"] },
+      "notExpect": { "placeTypes": ["bar"] }
+    },
+    {
+      "id": "부정-2",
+      "q": "웨이팅 긴데 말고 둔산동 밥집",
+      "expect": { "location.neighborhood": "둔산동", "preferences": ["웨이팅 없음"] }
+    },
+    {
+      "id": "총예산-1",
+      "q": "엄마아빠랑 갈 한정식 4명 10만원대",
+      "expect": { "occasions": ["부모님"], "partySize": 4, "cuisines": ["한식"] },
+      "notExpect": { "occasions": ["데이트"] }
+    },
+    {
+      "id": "랜드마크-1",
+      "q": "차없어 대전역 근처로",
+      "expect": { "location.landmark": "대전역" }
+    },
+    {
+      "id": "날씨-1",
+      "q": "비오는날 실내데이트",
+      "expect": { "occasions": ["데이트"], "preferences": ["실내"] },
+      "notExpect": { "occasions": ["소개팅"] }
+    },
+    {
+      "id": "접대-1",
+      "q": "거래처 모시고 갈 조용한 식당",
+      "expect": { "occasions": ["접대"], "preferences": ["조용함"] }
+    },
+    {
+      "id": "혼자-1",
+      "q": "혼자 노트북 하기 좋은 카페",
+      "expect": { "placeTypes": ["cafe"], "partySize": 1 }
+    },
+    {
+      "id": "애견-1",
+      "q": "애견동반에 주차되는 넓은 카페",
+      "expect": { "placeTypes": ["cafe"], "mustHave": ["애견동반", "주차"], "preferences": ["넓음"] }
+    },
+    {
+      "id": "단체-1",
+      "q": "8명이 한 테이블에 앉을 수 있는 곳",
+      "expect": { "partySize": 8, "mustHave": ["단체석"] }
+    },
+    {
+      "id": "시각-1",
+      "q": "오늘 밤 10시에 도착해도 식사 가능한 곳",
+      "expect": { "visitDateTime.minutes": 1320 },
+      "notExpect": { "openNow": true }
+    },
+    {
+      "id": "모호-1",
+      "q": "오늘 뭐 먹지?",
+      "expect": { "needsClarification": true }
+    },
+    {
+      "id": "2차-1",
+      "q": "2차인데 배부르니까 안주 가벼운 곳",
+      "expect": { "occasions": ["2차"] }
+    },
+    {
+      "id": "생일-1",
+      "q": "여자친구 생일인데 너무 부담스럽진 않은 곳",
+      "expect": { "occasions": ["데이트", "생일"] },
+      "notExpect": { "rawKeywords": ["너무"] }
+    },
+    {
+      "id": "혼술-1",
+      "q": "유성구 혼술하기 좋은 데",
+      "expect": { "location.district": "유성구", "occasions": ["혼술"], "partySize": 1 }
+    }
+  ]
+}
