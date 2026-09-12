@@ -3,13 +3,13 @@
    docs/전체점검표.md 로 저장. 번호만 말씀해주시면 고칠 수 있게 하는 것이 목적.
    python3 scripts/make_sheet.py
 """
-import json, re, collections
+import json, os, re, collections
 
 h = open('index.html', encoding='utf-8').read()
 P = json.loads(re.search(r'<script id="places" type="application/json">(.*?)</script>', h, re.S).group(1))
 A = [p for p in P if not p.get('closed')]
 
-GU = ['중구', '서구', '유성구', '동구', '대덕구']
+GU = ['중구', '서구', '유성구', '동구', '대덕구', '대전근교']
 BUD = {1: '1만원 이하', 2: '1–2만원', 3: '2–3만원', 4: '3–5만원', 5: '5만원 이상'}   # 화면 표기와 같게
 
 # 한줄평이 알맹이 없는 복붙인지
@@ -29,7 +29,7 @@ def budget_txt(p):
     if not needs_budget(p): return '가격 안 씀'
     if not b: return '❓없음'
     t = BUD[b]
-    return t + '(추정)' if p.get('budgetAuto') else t
+    return t
 
 def flags(p):
     f = []
@@ -47,21 +47,27 @@ def flags(p):
     if p.get('grating') and p['grating'] < 3.9 and (p.get('gcount') or 0) > 100: f.append('평점낮음')
     return f
 
-rows, i = [], 0
+# 번호는 한번 정하면 바꾸지 않는다. 소연님이 번호로 말씀하시므로 지워져도 번호는 비워둔다.
+NUMF = 'docs/점검표-번호.json'
+NUM = json.load(open(NUMF, encoding='utf-8')) if os.path.exists(NUMF) else {}
+nxt = max(NUM.values()) + 1 if NUM else 1
+rows = []
 for gu in GU:
     g = [p for p in A if p.get('gu') == gu]
     g.sort(key=lambda p: ((p.get('area') or '').split()[0], p['n']))
     rows.append((gu, []))
     for p in g:
-        i += 1
-        rows[-1][1].append((i, p, flags(p)))
+        if p['n'] not in NUM:
+            NUM[p['n']] = nxt; nxt += 1
+        rows[-1][1].append((NUM[p['n']], p, flags(p)))
+json.dump(NUM, open(NUMF, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
 out = ['# 오디픽 전체 점검표', '',
        f'매장 **{len(A)}곳** 전부입니다. 구 → 동네 순으로 묶었어요.',
        '',
        '**읽는 법**', '',
        '`번호. 가게이름 | 동네 | 가격대 | 종류 | 한줄평` 순서입니다.',
-       '`👑` 는 대전공주 릴스에 나온 곳, `(추정)` 은 구글이 매긴 값을 그대로 쓴 가격입니다.',
+       '`👑` 는 대전공주 릴스에 나온 곳입니다.',
        '뒤에 `⚠` 로 표시한 것은 제가 보기에 손볼 데가 있는 곳이에요.', '',
        '**알려주실 때** — 번호만 적어주세요.', '',
        '```', '17 빼기', '42 가격 3만원대', '88 종류 술집아니라 한식', '103 한줄평 이상함', '```', '',
