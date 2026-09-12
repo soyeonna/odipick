@@ -2961,6 +2961,7 @@ function wheelGu(){
   P.forEach(function(p){ if(!p.closed && p.src!=='public' && p.gu) c[p.gu]=(c[p.gu]||0)+1; });
   return Object.keys(c).filter(function(g){ return c[g]>=8; }).sort(function(a,b){ return c[b]-c[a]; });
 }
+var WHEEL_FELLBACK=false;   /* 문 연 곳이 적어 전체에서 뽑았는지 */
 function wheelPoolBy(mode, val){
   // 식당 뽑기이므로 밥집·카페·술집만 (공원·미술관·숙소·쇼핑은 빼고)
   var base=P.filter(function(p){
@@ -2972,10 +2973,14 @@ function wheelPoolBy(mode, val){
   if(mode==='gu' && val) base=base.filter(function(p){ return p.gu===val; });
   if(mode==='open') base=base.filter(function(p){ return openNow(p)===true; });
   // 맛집·카페·술집은 지금 문 연 곳만 돌린다 — 뽑았는데 닫혀 있으면 소용없다
+  WHEEL_FELLBACK=false;
   if(mode==='eat' || mode==='cafe' || mode==='bar'){
     var want = mode==='eat' ? 'rest' : mode;
     base=base.filter(function(p){ return ptypeOf(p)===want && openNow(p)===true; });
-    if(base.length<8) base=wheelPoolBy('all').filter(function(p){ return ptypeOf(p)===want; });  // 다 닫힌 시간대면 전체에서
+    if(base.length<8){                                  // 새벽처럼 다 닫힌 시간대
+      base=wheelPoolBy('all').filter(function(p){ return ptypeOf(p)===want; });
+      WHEEL_FELLBACK=true;                              // 이때는 '지금 영업 중'이라고 쓰면 거짓말이 된다
+    }
   }
   return base;
 }
@@ -3010,7 +3015,7 @@ function openWheel(mode, val){
   var cur=(WHEEL_MODE==='cat') ? 'cat:'+WHEEL_PICK
           : (WHEEL_MODE==='gu' && WHEEL_PICK) ? 'gu:'+WHEEL_PICK
           : (WHEEL_MODE==='gu') ? 'gu' : WHEEL_MODE;
-  var OPENONLY = (WHEEL_MODE==='eat'||WHEEL_MODE==='cafe'||WHEEL_MODE==='bar');
+  var OPENONLY = (WHEEL_MODE==='eat'||WHEEL_MODE==='cafe'||WHEEL_MODE==='bar') && !WHEEL_FELLBACK;
   var bar=tabs.map(function(t){
     return '<button type="button" class="fbtn wtab" data-w="'+t[0]+'" aria-pressed="'+(t[0]===cur)+'">'+E(t[1])+'</button>';
   }).join('');
@@ -3035,7 +3040,7 @@ function openWheel(mode, val){
     body='<div class="wheelwrap"><span class="wneedle"></span>'+
       '<div class="wheel" id="wheelEl" style="background:conic-gradient('+stops.join(',')+')">'+labs+'</div>'+
       '<span class="whub"><img src="'+PRINCESS_IMG+'" alt="대전공주"></span></div>'+
-      '<div class="wresult" id="wres"><p class="wm"><b style="color:var(--brand-d)">'+pool.length+'곳</b>'+(OPENONLY?' (지금 영업 중)':'')+' 중에서 한 곳을 뽑아드려요</p></div>';
+      '<div class="wresult" id="wres"><p class="wm"><b style="color:var(--brand-d)">'+pool.length+'곳</b>'+(OPENONLY?' (지금 영업 중)':(WHEEL_FELLBACK?' <span style="color:var(--ink3)">(지금 문 연 곳이 적어 전체에서 뽑아요)</span>':''))+' 중에서 한 곳을 뽑아드려요</p></div>';
   }
   openSheet(
     '<button type="button" class="shback" data-close="1" aria-label="뒤로">←</button>'+
