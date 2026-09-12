@@ -2102,11 +2102,13 @@ function openDetail(p){
       var g=p.gpark||[], mine=g.map(function(k){ return lot[k]; }).filter(Boolean), other=g.map(function(k){ return near[k]; }).filter(Boolean);
       if(f.parking===true) return '가능'+(mine.length?' · '+mine.join('·'):'');
       if(f.parking===false) return '가게 주차 없음'+(other.length?' · '+other.join('·'):' · 근처 공영주차장 이용');
-      return '미확인 · 전화로 확인';
+      if(mine.length) return mine.join('·')+' <span style="color:var(--ink3);font-size:12px">Google</span>';
+      if(other.length) return other.join('·')+' <span style="color:var(--ink3);font-size:12px">Google</span>';
+      return null;                                 /* 아는 게 없으면 줄을 아예 안 보여준다 */
     })()],
     ['근처 공영주차장',(function(){ var k=parkingOf(p); return k? E(k.n)+' · 도보 '+k.min+'분 · '+E(k.fee||'')+(k.cnt?' · '+E(k.cnt)+'면':'')+'<div class="srcline">공공데이터(2024) · 요금·운영시간은 바뀔 수 있어요</div>' : null; })()],
-    ['예약',f.reserve===true?'가능':(f.reserve===false?'안 받음':'미확인')],
-    ['단체석',f.group===true?'있음 · 단체 OK':(f.group===false?'없음 · 소규모':'미확인')],['룸',f.room===true?'있음':(f.room===false?'없음':'미확인')],
+    ['예약',f.reserve===true?'가능':(f.reserve===false?'안 받음':null)],
+    ['단체석',f.group===true?'있음 · 단체 OK':(f.group===false?'없음 · 소규모':null)],['룸',f.room===true?'있음':(f.room===false?'없음':null)],
     ['가까운 역',(function(){ var s=stationOf(p); return s? s.n+' 도보 '+s.min+'분' : null; })()],
     ['반려동물',f.pet===true?'동반 가능':(f.pet===false?'동반 불가':null)],
     ['포장',f.takeout===true?'가능':(f.takeout===false?'안 됨':null)],['배달',f.delivery===true?'가능':null],
@@ -2163,7 +2165,7 @@ function openDetail(p){
     similarBlock(p)+
     '<p class="srcline">정보 출처 · '+srcLabel(p)+(p.checkedAt?' · 마지막 확인 '+p.checkedAt:'')+
       '<br>영업시간과 가격은 변경될 수 있으니 방문 전에 한 번 더 확인해주세요.</p>',
-    '<a class="btn s" href="'+(p.kurl||('https://map.kakao.com/?q='+encodeURIComponent((p.area||'')+' '+p.n)))+'" target="_blank" rel="noopener">지도 보기</a>'+
+    '<a class="btn s" href="'+String(p.kurl||('https://map.kakao.com/?q='+encodeURIComponent((p.area||'')+' '+p.n))).replace(/^http:\/\//,'https://')+'" target="_blank" rel="noopener">지도 보기</a>'+
     (p.phone?'<a class="btn s" href="tel:'+String(p.phone).replace(/-/g,'')+'">전화</a>':'')+
     '<button class="btn p" id="svBtn">'+(isSaved(p)?'저장됨':'저장하기')+'</button>'
   );
