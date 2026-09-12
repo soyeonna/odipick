@@ -60,6 +60,22 @@ for k,v in T.items():
     paths[k]=f"img/{k}.jpg"
 inner=inner[:m.start()]+m.group(1)+json.dumps(paths)+m.group(3)+inner[m.end():]
 
+
+# 화면에서 안 쓰는 무거운 항목은 배포본에서 뺀다 (원본에는 남겨 둔다 — 갱신 스크립트가 쓴다)
+# gphotos 만 976KB. 사진은 이미 img/ 로 받아뒀으므로 화면에는 필요 없다.
+SLIM = ("ghours", "gmaps", "gphotos")
+mp = re.search(r'(<script id="places" type="application/json">)(.*?)(</script>)', inner, re.S)
+if mp:
+    _pl = json.loads(mp.group(2))
+    for _p in _pl:
+        if _p.get("gpl"):                      # 받아둔 사진이 있으면 구글 사진 목록은 통째로 뺀다
+            _p.pop("gphotos", None)
+        elif _p.get("gphotos"):                # 아직 못 받은 곳은 첫 장만 남긴다
+            _p["gphotos"] = _p["gphotos"][:1]
+        for _k in ("ghours", "gmaps"):
+            _p.pop(_k, None)
+    inner = inner[:mp.start(2)] + json.dumps(_pl, ensure_ascii=False) + inner[mp.end(2):]
+
 io.open("dist/index.html","w",encoding="utf-8").write(HEAD+inner+"\n</body>\n</html>\n")
 shutil.copy("pin_clean.png","dist/favicon.png")
 os.makedirs("dist/data",exist_ok=True)
