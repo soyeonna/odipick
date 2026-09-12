@@ -529,6 +529,9 @@ body.lock{position:fixed;left:0;right:0;width:100%;overflow:hidden}
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 @media (prefers-reduced-motion:reduce){ .wheel{transition-duration:.6s} }
 .wbar{display:flex;gap:6px;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;padding-bottom:2px}
+.wgu{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0 0 12px}
+.wgu .fbtn{width:100%;justify-content:center}
+
 .wbar::-webkit-scrollbar{display:none}
 .wbar>*{flex-shrink:0}
 .wtab{min-height:34px;padding:6px 11px;font-size:13px}
@@ -2959,7 +2962,6 @@ function openWheel(mode, val){
   var gus=wheelGu();
   // 자주 누르는 것만 남긴다 — 탭이 많으면 옆으로 넘겨야 해서 불편하다
   var tabs=[['all','전부'],['eat','맛집'],['cafe','카페'],['bar','술집'],['gu','지역']];
-  if(WHEEL_MODE==='gu') tabs=tabs.concat(gus.map(function(g){ return ['gu:'+g, g]; }));
   var cur=(WHEEL_MODE==='cat') ? 'cat:'+WHEEL_PICK
           : (WHEEL_MODE==='gu' && WHEEL_PICK) ? 'gu:'+WHEEL_PICK
           : (WHEEL_MODE==='gu') ? 'gu' : WHEEL_MODE;
@@ -2967,6 +2969,11 @@ function openWheel(mode, val){
   var bar=tabs.map(function(t){
     return '<button type="button" class="fbtn wtab" data-w="'+t[0]+'" aria-pressed="'+(t[0]===cur)+'">'+E(t[1])+'</button>';
   }).join('');
+  // '지역'을 누르면 구 목록을 옆이 아니라 아래에 펼친다 (옆으로 밀면 안 보인다)
+  var gubox = WHEEL_MODE!=='gu' ? '' :
+    '<div class="wgu">'+gus.map(function(g){
+      return '<button type="button" class="fbtn wtab" data-w="gu:'+g+'" aria-pressed="'+(WHEEL_PICK===g)+'">'+E(g)+'</button>';
+    }).join('')+'</div>';
   // 칸마다 후보를 하나씩 미리 정해둔다. 그래야 멈춘 칸의 그림과 뽑힌 가게가 맞는다.
   function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
   var picks=shuffle(pool).slice(0,8);
@@ -2989,7 +2996,7 @@ function openWheel(mode, val){
     '<button type="button" class="shback" data-close="1" aria-label="뒤로">←</button>'+
     '<h2 class="dtitle" style="font-size:23px;margin:2px 0 2px;letter-spacing:-.5px">어디 갈지 못 정했으면<br>일단 돌려!</h2>'+
     '<p class="srcline" style="margin:2px 0 10px">뭐 먹어야 될지 모르겠으면 랜덤으로 뽑아드려요</p>'+
-    '<div class="fbar wbar" style="margin:0 0 10px">'+bar+'</div>'+ body,
+    '<div class="fbar wbar" style="margin:0 0 8px">'+bar+'</div>'+ gubox + body,
     pool.length ? '<button class="btn p" id="spinBtn" style="width:100%">돌리기</button>' : ''
   );
   (function(){
