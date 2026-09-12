@@ -38,6 +38,18 @@ FIXES = {
     '장태산자연휴양림': {'parking': True, 'tip': None},
     '한밭수목원':      {'parking': True},
     '대청호자연생태관': {'cat': '생태관'},                  # '박물관' 은 공공데이터 분류라 실제와 안 맞다
+
+    # 2026-09-13 2차
+    '로바타모에':      {'v': '전 좌석에 앉아 즐기는 둔산동 일본 감성 이자카야'},
+    '빨간포차':        {'dropReels': ['DL4WldsSfh4']},      # 이전 가게 릴스
+    '파스타바밍':      {'dropReels': ['DZuEt5iCfpc']},      # 릴스가 아니라 피드 캐러셀
+    '구구구':          {'parking': False},
+    '글리하우스':      {'pet': True, 'group': True,
+                       'v': '우베 디저트로 알려진 구암동 대형 베이커리 카페. 강아지 놀이터가 따로 있어요'},
+    '타향골 따귀탕':   {'parking': False, 'hours': '24시간',
+                       'v': '맑고 진한 뼈탕에 육사시미. 둔산동'},
+    '다이너':          {'pet': True, 'room': True,
+                       'v': '애견동반 되는 가성비 양식집. 강아지 쿠션·배변패드·물·수제간식까지 챙겨줘요'},
 }
 
 FACKEY = {'parking': 'parking', 'room': 'room', 'group': 'group', 'reserve': 'reserve'}
@@ -69,6 +81,15 @@ def main():
                         sit.append('혼밥'); changed.append('혼밥 가능')
                 elif k == 'cats':
                     p['cats'] = v; changed.append('종류=' + '·'.join(v))
+                elif k == 'dropReels':
+                    igs = [x for x in (p.get('igs') or []) if x not in v]
+                    if igs != (p.get('igs') or []):
+                        p['igs'] = igs
+                        if p.get('ig') in v: p['ig'] = igs[0] if igs else None
+                        changed.append('릴스 %d개 뺌' % len(v))
+                elif k == 'pet':
+                    fac = p.setdefault('fac', {})
+                    if fac.get('pet') != v: fac['pet'] = v; changed.append('애견동반=%s' % ('있음' if v else '없음'))
                 elif k == 'tip' and v is None:
                     if p.get('tip'):
                         changed.append('꿀팁 지움("%s")' % str(p['tip'])[:20]); p.pop('tip', None)
