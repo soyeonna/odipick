@@ -2063,6 +2063,7 @@ function similarBlock(p){
   var mine=p.cats||[], dong=String(p.area||'').split(' ')[0];
   var sim=P.filter(function(x){
     if(x===p||x.closed) return false;
+    if(x.src==='public') return false;                       // 정보 없는 공공 아카이브는 '비슷한 곳'에 안 넣는다
     if(ptypeOf(x)!==ptypeOf(p)) return false;
     return mine.some(function(c){ return c!=='노포'&&c!=='신상'&&(x.cats||[]).indexOf(c)>-1; });
   }).map(function(x){
@@ -2087,6 +2088,19 @@ function similarBlock(p){
 }
 function openDetail(p){
   SHEET_HASH='#p='+encodeURIComponent(p.n);
+  /* 공공데이터 아카이브(인허가 명단)는 이름·동네·좌표뿐이라 상세화면을 열면 빈 칸만 보인다.
+     아예 막되, '그 가게는 아직 안 다녀왔다'는 것만 알려준다. */
+  if(p.src==='public'){
+    openSheet(
+      '<h2 class="dtitle">'+E(p.n)+'</h2>'+
+      '<div class="dmeta">'+[p.cat,p.area].filter(Boolean).join(' · ')+'</div>'+
+      '<div class="dsec"><div class="dbox">아직 대전공주가 안 다녀온 곳이에요.<br>'+
+        '<span style="color:var(--ink3);font-size:13px">영업시간·가격 같은 정보가 없어서 추천에는 넣지 않았어요. '+
+        '가게 위치만 확인하실 수 있어요.</span></div></div>',
+      '<a class="btn s" href="https://map.kakao.com/?q='+encodeURIComponent((p.area||'')+' '+p.n)+'" target="_blank" rel="noopener">지도에서 보기</a>'
+    );
+    return;
+  }
   var f=p.fac||{};
   var rows=[['카테고리',p.cat],['지역',p.area],
     ['영업시간', (p.gperiods&&p.gperiods.length) ? (function(){
