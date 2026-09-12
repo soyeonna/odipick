@@ -37,6 +37,7 @@ FIXES = {
     # 명소·공원 — 시설 주차장이 따로 있다 (가게 주차 개념이 아니다)
     '장태산자연휴양림': {'parking': True, 'tip': None},
     '한밭수목원':      {'parking': True},
+    '대청호자연생태관': {'cat': '생태관'},                  # '박물관' 은 공공데이터 분류라 실제와 안 맞다
 }
 
 FACKEY = {'parking': 'parking', 'room': 'room', 'group': 'group', 'reserve': 'reserve'}
