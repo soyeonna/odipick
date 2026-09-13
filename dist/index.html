@@ -2565,7 +2565,9 @@ function baseCount(k,o){
   }).length;
 }
 function optVisible(k,o){
-  if(k==='avoid'||k==='open') return true;
+  /* 예산·인원·지역은 눈금이 고정된 필터라 개수와 상관없이 늘 같은 자리에 둔다.
+     (안 그러면 '5만원 이상'이 사라졌다 나타났다 해서 헷갈린다) 0곳이면 비활성 + 0 으로 표시된다. */
+  if(k==='avoid'||k==='open'||k==='budget'||k==='cap'||k==='gu') return true;
   var n=baseCount(k,o);
   if(n===0) return false;
   if(n<5)  return !!INTENT[o];
