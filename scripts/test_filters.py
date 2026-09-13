@@ -49,6 +49,30 @@ s35 = [p for p in live if solo(p) and p.get('budget') == BUD['3–5만원']]
 cheap = [p for p in s35 if p.get('budget') == 1]
 check('혼밥+3–5만원에 1만원 이하가 안 섞인다', not cheap, '후보 %d곳' % len(s35))
 
+print('\n=== 혼밥 순위 ===')
+def base(p):
+    return (8 if p.get('src')=='reel' else 0) + \
+           (10 if (p.get('grating') or 0) >= 4.5 and (p.get('gcount') or 0) >= 100 else
+            6 if (p.get('grating') or 0) >= 4.2 and (p.get('gcount') or 0) >= 50 else 0) + \
+           (4 if len(p.get('v') or '') >= 14 else 0)
+def solo_bonus(p):
+    f = p.get('fac') or {}
+    b = 0
+    if p.get('soloPick'): b += 16
+    if p.get('soloVerified'): b += 8
+    elif solo(p): b += 5
+    if p.get('budget') is not None and p['budget'] <= 2: b += 4
+    if f.get('group') is True: b -= 5
+    if f.get('room') is True: b -= 3
+    return b
+sp = [p for p in live if solo(p)]
+top5 = [p['n'] for p in sorted(sp, key=lambda x: -(base(x) + solo_bonus(x)))[:5]]
+check('산카쿠가 혼밥 상위 5개 안에 있다', '산카쿠' in top5, ' · '.join(top5))
+check('더바사삭이 혼밥 상위 5개 안에 있다', '더바사삭' in top5)
+check('중리옥이 혼밥에서 빠졌다', all(not solo(p) for p in live if '중리옥' in p['n']))
+check('토미야가 혼밥·일식·점심이다', any(
+    solo(p) and '일식' in (p.get('cats') or []) and p.get('lunch') for p in live if '토미야' in p['n']))
+
 print('\n=== 주차 ===')
 park_ok = [p for p in live if (p.get('fac') or {}).get('parking') is True]
 check('주차 확인된 곳이 있다', len(park_ok) > 0, '%d곳' % len(park_ok))
