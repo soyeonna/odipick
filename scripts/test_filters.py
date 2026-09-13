@@ -85,7 +85,7 @@ check('경복궁이 만년동 식당이다', any(p.get('area') == '만년동' an
       ' / '.join('%s(%s,%s)' % (p['n'], p.get('area'), p.get('cat')) for p in gb) or '없음')
 check('카페 경복궁이 남아있지 않다', not any(p['n'].startswith('경복궁') and p.get('cat') == '카페' for p in P))
 
-dn = [p for p in live if p['n'] == '다이너']
+dn = [p for p in live if p['n'].startswith('다이너')]
 check('다이너 시그니처가 옥수수새우피자다', bool(dn) and dn[0].get('sig') == '옥수수새우피자')
 check('다이너 소개가 문장으로 끝난다', bool(dn) and not str(dn[0].get('v','')).rstrip().endswith(('에서','에','의','을','를','와','과')))
 
