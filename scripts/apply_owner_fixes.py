@@ -58,7 +58,7 @@ FACKEY = {'parking': 'parking', 'room': 'room', 'group': 'group', 'reserve': 're
 def main():
     path = os.path.join(ROOT, 'index.html')
     html = open(path, encoding='utf-8').read()
-    m = re.search(r'(<script id="places" type="application/json">)(\[.*?\])(</script>)', html, re.S)
+    m = re.search(r'(<script id="places" type="application/json">)\s*(\[.*?\])\s*(</script>)', html, re.S)
     P = json.loads(m.group(2))
 
     touched, notfound = [], []

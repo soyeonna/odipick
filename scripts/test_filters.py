@@ -7,7 +7,7 @@ import json, re, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 H = open(os.path.join(ROOT, 'index.html'), encoding='utf-8').read()
-P = json.loads(re.search(r'<script id="places" type="application/json">(\[.*?\])</script>', H, re.S).group(1))
+P = json.loads(re.search(r'<script id="places" type="application/json">\s*(\[.*?\])\s*</script>', H, re.S).group(1))
 BUD = json.loads(re.search(r'var BUD=(\{[^}]*\});', H, re.S).group(1).replace("'", '"'))
 
 live = [p for p in P if not p.get('closed') and p.get('src') != 'public' and not p.get('spot')]

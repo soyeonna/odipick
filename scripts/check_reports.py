@@ -55,7 +55,7 @@ def api(path, method='GET', body=None, extra_headers=None):
 
 def places():
     h = open(os.path.join(ROOT, 'index.html'), encoding='utf-8').read()
-    m = re.search(r'<script id="places" type="application/json">(\[.*?\])</script>', h, re.S)
+    m = re.search(r'<script id="places" type="application/json">\s*(\[.*?\])\s*</script>', h, re.S)
     return json.loads(m.group(1)) if m else []
 
 
