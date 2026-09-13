@@ -79,5 +79,43 @@ check('주차 확인된 곳이 있다', len(park_ok) > 0, '%d곳' % len(park_ok)
 check('주차 미확인이 주차 결과에 안 섞인다',
       all((p.get('fac') or {}).get('parking') is True for p in park_ok))
 
+print('\n=== 오늘 지적하신 것 ===')
+gb = [p for p in P if p['n'].startswith('경복궁')]
+check('경복궁이 만년동 식당이다', any(p.get('area') == '만년동' and p.get('cat') != '카페' for p in gb),
+      ' / '.join('%s(%s,%s)' % (p['n'], p.get('area'), p.get('cat')) for p in gb) or '없음')
+check('카페 경복궁이 남아있지 않다', not any(p['n'].startswith('경복궁') and p.get('cat') == '카페' for p in P))
+
+dn = [p for p in live if p['n'] == '다이너']
+check('다이너 시그니처가 옥수수새우피자다', bool(dn) and dn[0].get('sig') == '옥수수새우피자')
+check('다이너 소개가 문장으로 끝난다', bool(dn) and not str(dn[0].get('v','')).rstrip().endswith(('에서','에','의','을','를','와','과')))
+
+so = [p for p in live if '신성오리' in p['n']]
+check('신성오리주물럭이 1인 5천원이 아니다', bool(so) and so[0].get('budget') != 1,
+      '예산 단계 %s' % (so[0].get('budget') if so else '?'))
+if so:
+    pr = so[0].get('prices') or []
+    g = [x for x in pr if x.get('type') == 'groupMenu']
+    check('오리로스가 다인용으로 표시된다', bool(g) and g[0].get('p') == 38000 and g[0].get('minPeople') == 2)
+    check('사이드메뉴에 종류가 붙어있다', any(x.get('type') in ('side', 'addOn') for x in pr))
+
+rb = [p for p in live if '래인보우' in p['n']]
+check('래인보우가 5만원 이상이다', bool(rb) and rb[0].get('budget') == 5)
+
+print('\n=== 가격 이상 자동 검사 ===')
+odd = []
+for p in live:
+    pr = [x for x in (p.get('prices') or []) if x.get('p')]
+    if not pr:
+        continue
+    mains = [x['p'] for x in pr if x.get('type') in ('signature', 'main', 'set')]
+    grp = [x for x in pr if x.get('type') == 'groupMenu']
+    if p.get('budget') == 1 and (mains and min(mains) >= 30000):
+        odd.append('%s — 1인 1만원 이하인데 대표메뉴가 3만원 넘음' % p['n'])
+    if grp and p.get('budget') == 1:
+        odd.append('%s — 다인용 메뉴를 인원으로 안 나눈 듯' % p['n'])
+for o in odd[:8]:
+    print('  · ' + o)
+check('가격이 앞뒤가 안 맞는 곳이 없다', not odd, '%d곳' % len(odd))
+
 print('\n' + ('전부 통과했습니다.' if not fails else '%d건 실패: %s' % (len(fails), ', '.join(fails))))
 sys.exit(1 if fails else 0)
