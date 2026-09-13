@@ -1444,9 +1444,15 @@ function parse(t){
   // 규칙에 안 걸린 낱말은 가게 이름·문구에서 직접 찾는다 (예: 생새우회, 뭉티기)
   t.split(/[\s,]+/).forEach(function(w){
     w=w.replace(/(에서|근처|맛집|추천|주변|으로|먹고싶|먹을만한|가고싶)/g,'').trim();
+    w=w.replace(/(이랑|랑|하고|과|와|의)$/,'').trim();   // 조사 떼기 ('아이랑' → '아이')
     if(w.length<2 || /동$|구$|^\d|시$|분$|명$|원$|만원|이하|이상|필수|오늘|내일|저녁|점심|아침/.test(w)) return;
     // 뜻 없는 말은 낱말 검색에서 뺀다 ('마실'·'있는' 때문에 1곳으로 줄던 문제)
     if(/^(마실|마시|먹을|먹고|먹는|있는|있을|있고|없는|갈만한|가고|가는|하는|좋은|괜찮은|같이|함께|정도|여기|저기|어디|그냥|조금|많이|대신|아주|진짜|정말|바로|한번|우리|저희|사람|분들|자리|시간|기분)$/.test(w)) return;
+    /* '주차 되는 곳' 의 '되는', '모시고 갈' 의 '모시고' 처럼 뜻 없는 활용형도 뺀다.
+       칩에 '고깃집·되는' 같은 찌꺼기가 붙고 결과가 과하게 줄던 문제. */
+    if(/^(되는|되고|되나|된|안되|편한|편하고|편안한|가기|갈|갈까|가서|모시고|모실|데리고|데려가기|데려갈|만한|할|하기|보기|즐기기|즐길|쓸|찾는|찾기|앉아서|앉을|놀기|쉬기|필요한|좋아하는|많은|적은|넓은데|가능한)$/.test(w)) return;
+    /* 업종을 가리키는 일반명사는 이미 종류 조건으로 잡힌다. 낱말 검색까지 하면 상호명이 아닌데 결과가 확 줄어든다. */
+    if(/^(식당|밥집|맛집|가게|집|카페|커피숍|고깃집|고기집|술집|한식당|일식당|중식당|양식당|분식집|횟집|포차|빵집|베이커리|치킨집|레스토랑|주점|호프집|이자카야|한정식집)$/.test(w)) return;
     // 이미 조건으로 알아들은 말은 낱말 검색에서 뺀다 ('분위기 좋은' 이 '분위기' 글자 찾기로 좁혀지던 문제)
     if(MOODANY && /^(분위기|무드|느좋|좋은|좋은데|좋음)$/.test(w)) return;
     if(DRINKQ && w.indexOf(DRINKQ)>-1) return;
@@ -1569,11 +1575,16 @@ function buildQuick(){}
       '</div>');
     body.querySelectorAll('[data-sort]').forEach(function(b){
       b.addEventListener('click',function(){
+        var prev=SORT;
         SORT=b.dataset.sort;
         closeSheet(function(){ buildSorts(); render();
           if(SORT==='near' && !NEAR && !MYLOC) askMyLoc(function(ok){
             if(ok) render();
-            else openSheet('<div class="state"><span class="ico">'+ic(I.loc,24)+'</span><h3>위치를 알 수 없어요</h3><p>위치 접근을 허용하거나, 검색창에 "대전역 근처"처럼 기준 장소를 적어주시면 가까운 순으로 보여드려요.</p></div>');
+            else {
+              /* 위치를 못 얻으면 정렬은 실제로 안 바뀐다. 이름만 '가까운 순'으로 남으면 속으므로 되돌린다. */
+              SORT=(prev==='near'?'rec':prev); buildSorts(); render();
+              openSheet('<div class="state"><span class="ico">'+ic(I.loc,24)+'</span><h3>위치를 알 수 없어요</h3><p>위치 접근을 허용하거나, 검색창에 "대전역 근처"처럼 기준 장소를 적어주시면 가까운 순으로 보여드려요.<br>지금은 추천순으로 보여드릴게요.</p></div>');
+            }
           }); });
       });
     });
@@ -1895,7 +1906,14 @@ function statusOf2(p){
   if(o===true) return '<span class="stat open"><i></i>영업 중</span>';
   if(o===false){
     var m=String(p.hours||'').match(/(\d{1,2}):(\d{2})/);
-    return '<span class="stat shut"><i></i>영업 종료'+(m?' · 오늘 '+m[1]+':'+m[2]+' 오픈':'')+'</span>';
+    var when='';
+    if(m){
+      /* 밤에 보면 오픈 시각은 이미 지나 있다. 지난 시각이면 '내일'이라고 해야 맞다. */
+      var nw=new Date(), nowMin=nw.getHours()*60+nw.getMinutes();
+      var opMin=parseInt(m[1],10)*60+parseInt(m[2],10);
+      when=(opMin>nowMin?'오늘 ':'내일 ')+m[1]+':'+m[2]+' 오픈';
+    }
+    return '<span class="stat shut"><i></i>영업 종료'+(when?' · '+when:'')+'</span>';
   }
   return '';
 }
@@ -1933,6 +1951,14 @@ function payGuess(p){
   return { text:n+'명 약 '+(per*n).toLocaleString('ko-KR')+'원 · 1인 '+per.toLocaleString('ko-KR')+'원', basis:basis };
 }
 
+/* '명가통닭로'처럼 조사가 틀리지 않게 받침을 보고 '로/으로'를 고른다. */
+function josaRo(name){
+  var t=String(name||'').replace(/[^가-힣a-zA-Z0-9]+$/,'');
+  var c=t.charCodeAt(t.length-1);
+  if(!(c>=0xAC00&&c<=0xD7A3)) return '로';          // 한글이 아니면 '로'
+  var jong=(c-0xAC00)%28;
+  return (jong===0||jong===8)?'로':'으로';           // 받침 없음/ㄹ 받침이면 '로'
+}
 /* 설명을 자를 때 낱말·조사 중간에서 끊기지 않게 한다.
    '강아지 방석에서…' 처럼 뜻이 끊기던 문제. */
 function trimSentence(txt, max){
@@ -1963,7 +1989,10 @@ function cardEl(r,i){
     if(kmm!==null) meta+=' · '+NEAR.label+'에서 '+(kmm<1?Math.round(kmm*1000)+'m':kmm.toFixed(1)+'km'); }
   var bud=budText(p);
   var pay=payGuess(p);
-  if(pay) bud = pay.text + (pay.basis?' <span style="color:var(--ink3);font-size:11px">'+E(pay.basis)+' 기준</span>':'');
+  /* payGuess 문구는 '1인 약 …' / '10명 약 … · 1인 …' 처럼 이미 단위가 들어 있다.
+     앞에 '1인 '을 또 붙이면 '1인 1인 약 15,000원'이 되므로 구간 표기일 때만 붙인다. */
+  var budPre='1인 ';
+  if(pay){ bud = pay.text + (pay.basis?' <span style="color:var(--ink3);font-size:11px">'+E(pay.basis)+' 기준</span>':''); budPre=''; }
   var uniq=r.names.filter(function(x,i){ return x && r.names.indexOf(x)===i; });
   var hits=uniq.slice(0,3).map(function(x){ return '<span class="hit">'+x+'</span>'; }).join('');
   var fac=facLine(p).slice(0,3).map(function(x){ return '<span class="hit" style="background:var(--sub);color:var(--ink2)">'+x+'</span>'; }).join('');
@@ -1974,7 +2003,7 @@ function cardEl(r,i){
        '<span class="nm">'+p.n+'</span>'+
        badges(p)+'</div>'+
      '<div class="meta">'+meta+'</div>'+
-     '<div class="crow1">'+statusOf2(p)+(bud?'<span class="bud">1인 '+bud+'</span>':'')+'</div>'+
+     '<div class="crow1">'+statusOf2(p)+(bud?'<span class="bud">'+budPre+bud+'</span>':'')+'</div>'+
      (why1(p)?'<div class="why">'+why1(p)+'</div>':'')+
      (menu1(p)?'<div class="menu1">대표메뉴 '+menu1(p)+'</div>':'')+
      (fac?'<div class="hits">'+fac+'</div>':'')+
@@ -2050,9 +2079,10 @@ function render(){
     var num=arr.length.toLocaleString('ko-KR');
     /* 무엇 때문에 이 숫자가 됐는지 적어준다 */
     var lbl=[];
-    if(A.budget.length) lbl.push(A.budget.join('·')+'대에 맞는');
-    if(A.fac.indexOf('주차')>-1) lbl.push('주차가 확인된');
-    if(A.fac.indexOf('룸')>-1) lbl.push('룸이 확인된');
+    /* 조건을 풀어준 뒤에도 '확인된'이라고 하면 거짓말이 된다. 푼 상태를 그대로 적는다. */
+    if(A.budget.length) lbl.push(A.budget.join('·')+'대에 맞는'+(RELAX.unkBud?'(가격 미확인 포함)':''));
+    if(A.fac.indexOf('주차')>-1) lbl.push(RELAX.unkFac?'주차 미확인까지 포함한':'주차가 확인된');
+    if(A.fac.indexOf('룸')>-1) lbl.push(RELAX.unkFac?'룸 미확인까지 포함한':'룸이 확인된');
     if(A.sit.indexOf('혼밥')>-1) lbl.push('혼밥 근거가 확인된');
     if(A.gu.length) lbl.push(A.gu.join('·'));
     rc.innerHTML = nActive()
@@ -3061,8 +3091,13 @@ function drawMy(){
 }
 function drawMyInner(el){
   var nPick=P.filter(function(x){ return x.src==='reel'; }).length;
+  /* 공공데이터 아카이브(src:'public')까지 합치면 2만 곳이 된다.
+     직접 고른 곳과 아카이브를 같은 숫자로 묶지 않는다. */
+  var nPub=P.filter(function(x){ return x.src==='public'; }).length;
+  var nCur=P.length-nPub;
   el.innerHTML='<div class="dbox" style="margin-bottom:12px">'+
-    '<b>'+P.length+'곳</b> 등록 · 공주픽 <b>'+nPick+'곳</b> · 저장 <b>'+SAVED.length+'곳</b></div>'+
+    '골라 담은 곳 <b>'+nCur.toLocaleString('ko-KR')+'곳</b> · 공주픽 <b>'+nPick+'곳</b> · 저장 <b>'+SAVED.length+'곳</b>'+
+    (nPub?'<div style="color:var(--ink3);font-size:12px;margin-top:4px">검색할 때는 공공데이터 '+nPub.toLocaleString('ko-KR')+'곳도 함께 찾아봐요</div>':'')+'</div>'+
     '<div class="dsec"><h3>정보 신뢰도 표시</h3><dl class="dl">'+
     '<dt>대전공주 확인</dt><dd>영상에서 직접 방문한 곳</dd>'+
     '<dt>매장 확인</dt><dd>매장이 직접 알려준 정보</dd>'+
@@ -3557,7 +3592,7 @@ function openCourses(dong, anchor){
   var cs=coursesFor(dong, anchor);
   var chips=dongs.slice(0,14).map(function(d){ return '<button type="button" class="fbtn cdong" data-d="'+E(d)+'" aria-pressed="'+(d===dong)+'">'+E(d)+'</button>'; }).join('');
   var html='<button type="button" class="shback" id="cBack" aria-label="뒤로">←</button>'+
-    '<h2 class="dtitle" style="font-size:20px;margin:4px 0 6px">'+(anchor?E(anchor.n)+'로 코스 짜기':'동네별 공주 코스')+'</h2>'+
+    '<h2 class="dtitle" style="font-size:20px;margin:4px 0 6px">'+(anchor?E(anchor.n)+josaRo(anchor.n)+' 코스 짜기':'동네별 공주 코스')+'</h2>'+
     '<p class="srcline" style="margin:0 0 10px">카페 → 밥 → 한잔, 걸어서 다닐 수 있는 조합만 골랐어요. 대전공주가 다녀온 곳 우선.</p>'+
     (anchor?'':'<div class="fbar" style="margin:0 0 12px">'+chips+'</div>')+
     (cs.length? cs.map(function(c,k){
