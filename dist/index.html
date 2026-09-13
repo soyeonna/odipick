@@ -92,6 +92,7 @@ header.top.stuck{border-color:var(--line)}
 .ptabs::-webkit-scrollbar{display:none}
 .ptab{min-height:36px; padding:7px 13px; border-radius:20px; font-size:14px;
   font-weight:600; color:var(--ink2); background:var(--card); border:1px solid var(--line)}
+.mapcard-on #redoBtn,.mapcard-on .mapfab{opacity:0;pointer-events:none;transition:opacity .15s}
 .ptab[aria-pressed="true"]{background:var(--brand); color:#fff; border-color:var(--brand); font-weight:700}
 #mcats .fbtn[aria-pressed="true"]{background:var(--brand); color:#fff; border-color:var(--brand); font-weight:700}
 .ptab[aria-pressed="true"],#mcats .fbtn[aria-pressed="true"]{box-shadow:0 1px 4px rgba(0,0,0,.12)}
@@ -724,7 +725,7 @@ body.lock{position:fixed;left:0;right:0;width:100%;overflow:hidden}
 <nav class="nav" id="nav"><div class="navin">
   <button class="nb on" data-sc="home"><span class="ic"></span><span class="t">홈</span></button>
   <button class="nb" data-sc="result"><span class="ic"></span><span class="t">목록</span></button>
-  <button class="nb mid" data-sc="ai"><span class="bub"></span><span class="t">랜덤</span></button>
+  <button class="nb mid" data-sc="ai"><span class="bub"></span><span class="t">상황 추천</span></button>
   <button class="nb" data-sc="map"><span class="ic"></span><span class="t">지도</span></button>
   <button class="nb" data-sc="saved"><span class="ic"></span><span class="t">저장</span></button>
 </div></nav>
@@ -2799,14 +2800,31 @@ function drawKakao(kk){
   arr=arr.slice(0,300);
   var mks=arr.map(function(x){
     var mk=new kk.maps.Marker({position:new kk.maps.LatLng(x.lat,x.lng), image:img, title:x.n});
-    kk.maps.event.addListener(mk,'click',function(){ try{ if(kmap.getLevel()>4) kmap.setLevel(4,{anchor:mk.getPosition()}); kmap.panTo(mk.getPosition()); }catch(e){} mapCard(x); });   // 핀 하나 눌러도 그 자리로 확대
+    mk.__p=x;                                   /* 나중에 핀에서 가게를 찾으려고 붙여둔다 */
+    kk.maps.event.addListener(mk,'click',function(){ try{ if(kmap.getLevel()>4) kmap.setLevel(4,{anchor:mk.getPosition()}); kmap.panTo(mk.getPosition()); }catch(e){} mapCard(x); });
     kmarkers.push(mk); return mk;
   });
   if(kk.maps.MarkerClusterer){
     kcluster=new kk.maps.MarkerClusterer({map:kmap, markers:mks, averageCenter:true, minLevel:6,
+      disableClickZoom:true,                    /* 숫자를 계속 눌러 들어가지 않게 한다 */
       styles:[{width:'42px',height:'42px',background:'#FF3F7F',borderRadius:'21px',
         color:'#fff',textAlign:'center',lineHeight:'42px',fontWeight:'800',
         border:'3px solid #fff',boxShadow:'0 3px 10px rgba(216,27,96,.4)'}]});
+    /* 숫자를 한 번 누르면 그 안이 다 보이게 넓히고, 아래에 가게 목록을 깔아준다.
+       예전엔 9 → 6 → 3 → 2 처럼 계속 눌러 들어가야 했다. */
+    kk.maps.event.addListener(kcluster,'clusterclick',function(cluster){
+      var ms=cluster.getMarkers()||[];
+      var list=ms.map(function(m){ return m.__p; }).filter(Boolean);
+      if(!list.length) return;
+      try{
+        var lv=kmap.getLevel();
+        var bd=new kk.maps.LatLngBounds();
+        ms.forEach(function(m){ bd.extend(m.getPosition()); });
+        kmap.setBounds(bd);
+        if(kmap.getLevel()>=lv) kmap.setLevel(Math.max(1,lv-2),{anchor:cluster.getCenter()});  /* 겹쳐 있어 더 못 넓히면 그냥 당긴다 */
+      }catch(e){}
+      rankStrip(list, -1);                      /* 바로 고를 수 있게 아래에 카드로 */
+    });
   } else { mks.forEach(function(mk){ mk.setMap(kmap); }); }
 }
 /* 마커를 누르면 아래에서 올라오는 작은 카드 */
@@ -2842,7 +2860,9 @@ function mapCard(x){
   var old=document.getElementById('mapCard'); if(old) old.remove();
   var ph=photoOf(x);
   var d=document.createElement('button'); d.id='mapCard'; d.type='button';
-  d.style.cssText='position:absolute;left:12px;right:12px;bottom:14px;z-index:5;display:flex;'+
+  /* 하단 내비게이션과 목록 버튼 위로 올린다 (아이폰 홈바까지 감안) */
+  d.style.cssText='position:absolute;left:12px;right:12px;z-index:30;display:flex;'+
+    'bottom:calc(78px + env(safe-area-inset-bottom,0px));'+
     'align-items:center;gap:12px;background:var(--card);border:1.5px solid var(--brand);'+
     'border-radius:14px;padding:11px 13px;text-align:left;box-shadow:0 6px 24px rgba(0,0,0,.18)';
   d.innerHTML=(ph?'<img src="'+ph+'" style="width:48px;height:60px;border-radius:9px;object-fit:cover" alt="">':'')+
@@ -2854,6 +2874,12 @@ function mapCard(x){
     '<span style="font-size:12.5px;font-weight:800;color:var(--brand)">상세 보기</span>';
   d.addEventListener('click',function(){ openDetail(x); });
   document.querySelector('.mapscreen').appendChild(d);
+  document.body.classList.add('mapcard-on');        /* 카드 위를 덮는 버튼 숨김 */
+}
+/* 지도 빈 곳을 누르면 카드를 닫는다 */
+function closeMapCard(){
+  var o=document.getElementById('mapCard'); if(o) o.remove();
+  document.body.classList.remove('mapcard-on');
 }
 function drawBigMap(){
   loadKakao().then(function(kk){
@@ -2865,13 +2891,50 @@ function drawBigMap(){
   });
   var n=results().length;
   var redo=document.getElementById('redoBtn');
-  var _on=[]; if(A.src.indexOf('reel')>-1) _on.push('공주픽'); if(A.open.length) _on.push('영업 중');
-  var _all=P.filter(function(x){ return !x.closed && x.src!=='public' && x.lat; }).length;
+  /* 이 버튼은 '다시 검색'이 아니라 '목록으로 돌아가기'다. 그렇게 읽히게 적는다.
+     지도에 들어오자마자 뭘 또 눌러야 하는 것처럼 보이던 문제. */
   redo.hidden=false;
-  var _gu = A.gu.length ? A.gu.join('·')+' ' : '';
-  redo.innerHTML=ic(I.search,14)+(_on.length ? (_gu+_on.join('·')+' '+n+'곳 · 전체 '+_all) : (_gu ? (_gu+n+'곳 보기') : ('이 지역에서 '+n+'곳 보기')));
+  redo.innerHTML=ic(I.list,14)+'목록으로 '+n+'곳 보기';
+  mapCondBar(n);
+}
+/* ── 지도 위에 지금 조건을 한 줄로 보여준다 (목록에서 고른 그대로) ── */
+function mapCondBar(n){
+  var host=document.querySelector('.mapscreen'); if(!host) return;
+  var old=document.getElementById('mapCond'); if(old) old.remove();
+  var parts=[];
+  var pf=PTABS.filter(function(x){ return x.v===PTF; })[0];
+  if(A.travel.length) parts.push('대전여행');
+  else if(pf && pf.v) parts.push(pf.t);
+  A.cats.forEach(function(c){ if(MCATS.indexOf(c)>-1) parts.push(c); });
+  if(DONGQ) parts.push(DONGQ);
+  A.gu.forEach(function(g){ parts.push(g); });
+  A.sit.forEach(function(x){ parts.push(x); });
+  A.budget.forEach(function(x){ parts.push(x); });
+  A.fac.forEach(function(x){ parts.push(x); });
+  if(MTHEME) parts=[MTHEME.t];
+  var bar=document.createElement('div'); bar.id='mapCond';
+  bar.style.cssText='position:absolute;left:10px;right:10px;top:10px;z-index:20;display:flex;'+
+    'align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);'+
+    'border-radius:12px;padding:8px 10px;box-shadow:0 3px 12px rgba(0,0,0,.12)';
+  bar.innerHTML='<span style="flex:1;min-width:0;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+
+      (parts.length? parts.map(E).join(' · ')+' · ' : '')+'<b style="color:var(--brand)">'+n+'곳</b></span>'+
+      '<button type="button" id="mapFilt" style="flex:none;font-size:12.5px;font-weight:700;color:var(--brand);'+
+      'background:var(--sub);border:0;border-radius:8px;padding:6px 10px;min-height:34px">필터</button>';
+  host.appendChild(bar);
+  var fb=document.getElementById('mapFilt');
+  if(fb) fb.addEventListener('click',function(){ show('result'); setTimeout(function(){
+    var t=document.getElementById('fbar'); if(t) t.scrollIntoView({behavior:'smooth',block:'center'});
+  },80); });
 }
 document.getElementById('redoBtn').addEventListener('click',function(){ show('result'); });
+/* 지도 빈 곳을 누르면 아래 카드를 닫는다 */
+(function(){
+  var mc=document.getElementById('mapCanvas');
+  if(mc) mc.addEventListener('click',function(e){
+    if(e.target.closest('#mapCard')||e.target.closest('#mapCond')||e.target.closest('#rankStrip')) return;
+    if(typeof closeMapCard==='function') closeMapCard();
+  }, true);
+})();
 document.getElementById('locBtn').addEventListener('click',function(){
   if(!navigator.geolocation){ alert('이 브라우저에서는 위치를 쓸 수 없어요.'); return; }
   navigator.geolocation.getCurrentPosition(function(pos){ MYLOC={lat:pos.coords.latitude,lng:pos.coords.longitude,label:'내 위치'}; SORT='near'; buildSorts(); show('result'); },
