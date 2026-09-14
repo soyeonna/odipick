@@ -83,6 +83,10 @@ if os.path.exists("cover-drop.html"):
     shutil.copy("cover-drop.html","dist/cover-drop.html")
 if os.path.exists("img/princess-mark.png"):
     shutil.copy("img/princess-mark.png","dist/img/princess-mark.png")
+if os.path.isdir("js"):
+    os.makedirs("dist/js",exist_ok=True)
+    for _f in os.listdir("js"):
+        if _f.endswith(".js"): shutil.copy(os.path.join("js",_f),os.path.join("dist/js",_f))
 if os.path.exists("data/public-places.json"):
     shutil.copy("data/public-places.json","dist/data/public-places.json")
 size=os.path.getsize("dist/index.html")
