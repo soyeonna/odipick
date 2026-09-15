@@ -1,0 +1,40 @@
+{
+ "removedAt": "2026-09-16",
+ "why": "소연님 지시로 삭제",
+ "items": [
+  {
+   "n": "포차시그널",
+   "cat": "술집",
+   "cats": [
+    "술집"
+   ],
+   "area": "둔산동",
+   "gu": "서구",
+   "hours": "매일 17:00–06:00",
+   "phone": "0507-1324-1164",
+   "sit": [
+    "술자리"
+   ],
+   "fac": {},
+   "cap": 4,
+   "ig": "DS1wgjtkl9H",
+   "link": null,
+   "mood": [],
+   "v": "둔산동 술집 · 젊은 층이 찾는 술집",
+   "src": "reel",
+   "at": "2025-12-29",
+   "ph": "pic포차시그널6628",
+   "likes": 787,
+   "closed": true,
+   "closedConfirmed": true,
+   "igs": [
+    "DS1wgjtkl9H",
+    "DMe_fPAy4-9"
+   ],
+   "photoSrc": "대전공주",
+   "cover": "DS1wgjtkl9H",
+   "kidCandidates": [],
+   "editorNote": "릴스 후킹 문구 정리 2026-09-16"
+  }
+ ]
+}
