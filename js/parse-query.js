@@ -116,30 +116,38 @@
     return rest;
   }
 
-  /* 예산 — 총액인지 1인당인지 가린다 */
+  /* 예산 — 총액인지 1인당인지 가린다. "2만원대"(2~3만) 와 "2만원 이하"(~2만) 를 구분한다 */
   function parseBudget(text, out) {
     var perHint = /1\s*인|한\s*사람|인당|각자|1인당|일인당/.test(text);
     var totHint = /총|합쳐|다\s*해서|전부|둘이\s*총|모두/.test(text);
-    var won = null;
-    var m = text.match(/(\d+(?:\.\d+)?)\s*만\s*원?\s*(대|정도|이하|미만|안팎|내외)?/);
-    if (m) {
-      won = Math.round(parseFloat(m[1]) * 10000);
-      if (m[2] === '대') won = won + 9999;              // '10만원대' = 10~19만
+    var lo = null, hi = null;
+    var rg = text.match(/(\d+(?:\.\d+)?)\s*[~\-–]\s*(\d+(?:\.\d+)?)\s*만\s*원?/);          // "2~3만원"
+    var m  = text.match(/(\d+(?:\.\d+)?)\s*만\s*원?\s*(대|정도|쯤|안팎|내외|이하|미만|안쪽|이내|까지|이상|넘)?/);
+    if (rg) { lo = Math.round(parseFloat(rg[1]) * 10000); hi = Math.round(parseFloat(rg[2]) * 10000); }
+    else if (m) {
+      var won = Math.round(parseFloat(m[1]) * 10000), tail = m[2] || '';
+      if (tail === '대')                       { lo = won; hi = won + 9999; }            // '2만원대' = 2만~2만9천
+      else if (/정도|쯤|안팎|내외/.test(tail))   { lo = Math.round(won * 0.7); hi = Math.round(won * 1.3); }
+      else if (/이상|넘/.test(tail))            { lo = won; hi = null; }
+      else                                     { lo = null; hi = won; }                  // 이하·미만·안쪽·이내·까지·(없음)
     } else {
       var m2 = text.match(/(\d{1,3}(?:,\d{3})+|\d{4,6})\s*원/);
-      if (m2) won = +m2[1].replace(/,/g, '');
+      if (m2) hi = +m2[1].replace(/,/g, '');
     }
-    if (won == null) return;
-    var isTotal = totHint || (!perHint && out.partySize && out.partySize > 1 && /총|둘이|셋이|넷이/.test(text));
+    if (lo == null && hi == null) return;
+    var tier = !!(m && m[2] === '대');                                   // '2만원대'는 1인 가격대를 말한다
+    var isTotal = totHint || (!perHint && !tier && out.partySize && out.partySize > 1 && /총|둘이|셋이|넷이/.test(text));
+    var n = (isTotal && out.partySize) ? out.partySize : null;
     out.budget.type = isTotal ? 'total' : 'per_person';
-    out.budget.max = won;
-    out.budget.perPerson = (isTotal && out.partySize) ? Math.round(won / out.partySize) : (isTotal ? null : won);
+    out.budget.min = lo; out.budget.max = hi;
+    out.budget.perPerson = n ? (hi != null ? Math.round(hi / n) : null) : (isTotal ? null : hi);
+    out.budget.perPersonMin = n ? (lo != null ? Math.round(lo / n) : null) : (isTotal ? null : lo);
   }
 
   /* 인원 */
   function parseParty(text, out) {
-    var m = text.match(/(\d{1,2})\s*(명|인)(?!분)/);
-    if (m) { out.partySize = +m[1]; return; }
+    var m = text.match(/(\d{1,2})\s*(명|인)(?!분|당)/);
+    if (m && !(m[2] === '인' && m[1] === '1')) { out.partySize = +m[1]; return; }   // '1인 3만원'의 1인은 인원이 아니라 1인당
     var k = text.match(/(둘|두\s*명|셋|세\s*명|넷|네\s*명|다섯)/);
     if (k) { out.partySize = { '둘': 2, '두 명': 2, '셋': 3, '세 명': 3, '넷': 4, '네 명': 4, '다섯': 5 }[k[1].replace(/\s+/g, ' ')] || null; }
     var b = text.match(/(두|세|네|다섯)\s*분/);          // '부모님 두 분' = 본인 포함 3
