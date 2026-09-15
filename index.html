@@ -2353,12 +2353,13 @@ function demoteFamous(arr){
 /* 같은 브랜드(성심당 계열 등)는 상위 3개 안에 하나만 */
 function brandKey(p){ var m=String(p.n).replace(/\s/g,'').match(/^(성심당|투썸|스타벅스|이디야|빽다방|메가커피|컴포즈|파리바게뜨|뚜레쥬르|맘스터치|버거킹|맥도날드|롯데리아|설빙|공차|할리스|폴바셋)/); return m?m[1]:null; }
 function brandSpread(arr){
+  /* 같은 브랜드는 첫 한 곳만 자리를 지키고, 나머지 계열 매장은 목록 끝으로 보낸다 (성심당 6곳이 3·4·6위를 채우던 문제) */
   if(arr.length<4) return arr;
-  var out=[], later=[], seen={};
+  var out=[], dup=[], seen={};
   arr.forEach(function(r){ var k=brandKey(r.p);
-    if(out.length<3 && k && seen[k]){ later.push(r); return; }
-    if(out.length<3){ if(k) seen[k]=1; out.push(r); } else later.push(r); });
-  return out.concat(later);
+    if(k && seen[k]){ dup.push(r); return; }
+    if(k) seen[k]=1; out.push(r); });
+  return out.concat(dup);
 }
 /* 1순위의 장점·단점 — 데이터에 있는 것만 말한다 (추측 금지) */
 function prosCons(r){
