@@ -3771,7 +3771,7 @@ function openWheel(mode, val){
   var pool=wheelPoolBy(WHEEL_MODE, WHEEL_PICK);
   var gus=wheelGu();
   // 자주 누르는 것만 남긴다 — 탭이 많으면 옆으로 넘겨야 해서 불편하다
-  var tabs=[['all','전부'],['eat','맛집'],['cafe','카페'],['bar','술집'],['gu','지역'],['reel','<img class="plogo" src="'+PRINCESS_IMG+'" alt="공주픽" style="width:20px;height:20px;vertical-align:middle">']];
+  var tabs=[['all','전부'],['eat','맛집'],['cafe','카페'],['bar','술집'],['gu','지역'],['reel','<img src="'+PRINCESS_IMG+'" alt="공주픽" style="width:24px;height:24px;display:inline-block;vertical-align:middle;border-radius:50%;object-fit:cover">']];
   var cur=(WHEEL_MODE==='cat') ? 'cat:'+WHEEL_PICK
           : (WHEEL_MODE==='gu' && WHEEL_PICK) ? 'gu:'+WHEEL_PICK
           : (WHEEL_MODE==='gu') ? 'gu' : WHEEL_MODE;
