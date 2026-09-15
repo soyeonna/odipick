@@ -27,6 +27,8 @@ jobs:
         run: python3 scripts/check_closed_google.py --apply || true
       - name: 폐업·정보변경 감지 (표시만, 삭제 안 함)
         run: python3 scripts/check_closed.py --apply || true
+      - name: 인허가(공공데이터) 폐업·휴업 대조 — 검수함에만 쌓고 자동으로 내리지 않음
+        run: python3 scripts/check_closed_public.py || true
       - name: 받은 의견 내려받기 (관리자 목록·docs/받은-의견.md)
         run: python3 scripts/pull_feedback.py || true
       - name: 즐겨찾기 버튼으로 보내둔 릴스 커버 받기
@@ -40,7 +42,7 @@ jobs:
           rm -f .env
           if [ -n "$(git status --porcelain index.html)" ]; then
             git config user.name "odipick-bot"; git config user.email "bot@odipick.local"
-            git add index.html img data/cover-state.json data/cover-done.json
+            git add index.html img data/cover-state.json data/cover-done.json data/review_queue.json docs/검수함.md 2>/dev/null || git add index.html img data/cover-state.json data/cover-done.json
             git commit -m "데이터 정비 $(date +%Y-%m-%d)"
             git push
           else
