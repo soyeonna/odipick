@@ -68,9 +68,9 @@ for p in P:
     if not (p.get('v') or '').strip(): add('설명 없음', p['n'])
     if not p.get('sit'): add('상황 태그 없음', p['n'])
     if not p.get('lat'): add('좌표 없음', p['n'])
-    if not p.get('phone'): add('전화 없음', p['n'])
+    if not p.get('phone') and not p.get('phoneUnavailable'): add('전화 없음', p['n'])
     if not p.get('hours') and not p.get('ghours'): add('영업시간 없음', p['n'])
-    if not (any(T.get(p.get(k)) for k in ('cover','cv','ig','ph')) or (p.get('gpl') and T.get(p['gpl'][0]))): add('사진 없음', p['n'])
+    if not p.get('photoUnavailable') and not (any(T.get(p.get(k)) for k in ('cover','cv','ig','ph')) or (p.get('gpl') and T.get(p['gpl'][0]))): add('사진 없음', p['n'])
     if not p.get('budget') and (FOOD & set(p.get('cats') or [])): add('가격대 없음', p['n'])
 for key, label in (('n', '이름'), ('kid', '카카오번호'), ('ig', '릴스번호'), ('gid', '구글장소')):
     c = collections.Counter(nn(p.get(key)) for p in P if p.get(key))

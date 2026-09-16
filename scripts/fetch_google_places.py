@@ -16,6 +16,10 @@ def call(method,url,body=None,mask=''):
     try: return json.loads(out)
     except Exception: return {'error':out[:200]}
 def km(a,b): return math.sqrt(((a[1]-b[1])*88.8)**2+((a[0]-b[0])*111.1)**2)
+def norm(s): return re.sub(r'[\s\'’"“”&·,.\-()]|본점|직영점|대전점|\d*호?점$', '', str(s or '')).lower()
+def same(a,b):
+    a,b=norm(a),norm(b)
+    return bool(a and b and (a==b or a in b or b in a))
 i=h.find('<script id="places"'); i=h.find('>',i)+1; j=h.find('</script>',i)
 P=json.loads(h[i:j])
 force='--force' in sys.argv; only=[a for a in sys.argv[1:] if not a.startswith('--')]
@@ -41,8 +45,20 @@ for p in P:
         if not cands: miss.append(p['n']+('('+r['error'][:60]+')' if 'error' in r else '')); continue
         cands.sort(); pid=cands[0][1]; p['gid']=pid; p['gname']=cands[0][2]
     d=call('GET','https://places.googleapis.com/v1/places/'+pid+'?languageCode=ko',None,
-           'id,nationalPhoneNumber,regularOpeningHours,parkingOptions,rating,userRatingCount,photos,googleMapsUri,priceLevel,reservable,goodForGroups,allowsDogs,goodForChildren,outdoorSeating,takeout,delivery,restroom,menuForChildren')
+           'id,displayName,location,businessStatus,nationalPhoneNumber,regularOpeningHours,parkingOptions,rating,userRatingCount,photos,googleMapsUri,priceLevel,reservable,goodForGroups,allowsDogs,goodForChildren,outdoorSeating,takeout,delivery,restroom,menuForChildren')
     if 'error' in d or not d.get('id'): miss.append(p['n']+'(상세)'); continue
+    # 기존에 저장된 구글 번호도 매번 상호·좌표를 다시 확인한다.
+    # 비슷한 이름의 다른 지점이나 다리·공원 정보가 붙은 사례가 있었기 때문이다.
+    got_name=(d.get('displayName') or {}).get('text','')
+    got_loc=d.get('location') or {}
+    got_xy=(got_loc.get('latitude'),got_loc.get('longitude'))
+    wanted=norm(p['n']); found=norm(got_name)
+    kind_words=('포차','식당','카페','갈비','막창','횟집','수산','샤브','돈까스')
+    missing_kind=any(w in wanted and w not in found for w in kind_words)
+    too_far=(None not in got_xy and km((p['lat'],p['lng']),got_xy)>0.35)
+    if not same(p['n'],got_name) or missing_kind or too_far:
+        miss.append(f"{p['n']}(다른 장소 연결 의심: {got_name})")
+        continue
     oh=d.get('regularOpeningHours',{})
     if p.get('hoursLock'): oh={}   # 소연님이 직접 넣은 영업시간은 구글로 덮어쓰지 않는다
     if oh.get('weekdayDescriptions'): p['ghours']=oh['weekdayDescriptions']

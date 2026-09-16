@@ -113,6 +113,17 @@ check('룸 미확인 매장을 소개문에서 확정하지 않는다', not bad_
 sparrow = next((p for p in live if p['n'] == '참새집'), {})
 check('참새집에 불량참새 구글 정보가 연결되지 않는다', sparrow.get('gname') != '불량참새')
 
+print('\n=== 지도·폐업 연결 안전장치 ===')
+for nm, wrong in [('우가', '우가돈가'), ('남다른대구막창', '유성점'), ('목척교포차', '목척교')]:
+    hit = next((p for p in live if p['n'] == nm), {})
+    check('%s에 다른 장소가 연결되지 않는다' % nm,
+          bool(hit) and wrong not in str(hit.get('gname') or '') and not hit.get('closedSuspect'))
+check('전화번호가 없으면 공개 번호 없음으로 확인돼 있다',
+      not [p['n'] for p in live if not p.get('phone') and not p.get('phoneUnavailable')])
+check('사진이 없으면 확인 완료 표시가 있다',
+      not [p['n'] for p in live if not (p.get('cover') or p.get('gpl') or p.get('ph'))
+          and not p.get('photoUnavailable')])
+
 print('\n=== 가격 이상 자동 검사 ===')
 odd = []
 for p in live:

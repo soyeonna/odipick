@@ -12,6 +12,13 @@ KEY = re.search(r"GOOGLE_KEY='([^']+)'", h).group(1)
 m = re.search(r'(<script id="places" type="application/json">)(.*?)(</script>)', h, re.S)
 P = json.loads(m.group(2))
 
+def norm(s):
+    return re.sub(r'\s|본점|대전점|직영점|\(.*?\)', '', str(s or '')).lower()
+
+def same_name(a, b):
+    a, b = norm(a), norm(b)
+    return bool(a and b and (a in b or b in a))
+
 def status(gid):
     out = subprocess.run(['curl', '-s', '-m', '20', f'https://places.googleapis.com/v1/places/{gid}?languageCode=ko',
         '-H', 'X-Goog-Api-Key: ' + KEY, '-H', 'Referer: https://soyeonna.github.io/',
@@ -28,17 +35,24 @@ res = {}
 with cf.ThreadPoolExecutor(max_workers=8) as ex:
     for p, r in zip(todo, ex.map(status, [x['gid'] for x in todo])): res[p['n']] = r
 
-shut = [(n, r[0], r[1]) for n, r in res.items() if r[0] in ('CLOSED_PERMANENTLY', 'CLOSED_TEMPORARILY')]
+wrong = [(p['n'], res[p['n']][1]) for p in todo
+         if res.get(p['n']) and res[p['n']][1] and not same_name(p['n'], res[p['n']][1])]
+shut = [(p['n'], res[p['n']][0], res[p['n']][1]) for p in todo
+        if res.get(p['n']) and same_name(p['n'], res[p['n']][1])
+        and res[p['n']][0] in ('CLOSED_PERMANENTLY', 'CLOSED_TEMPORARILY')]
 gone = [n for n, r in res.items() if r[0] is None]
 LABEL = {'CLOSED_PERMANENTLY': '폐업', 'CLOSED_TEMPORARILY': '임시 휴업'}
 print(f'\n폐업·휴업으로 나온 곳 {len(shut)}곳')
 for n, s, g in shut: print(f'  · {n}  →  {LABEL[s]}  ({g})')
+if wrong:
+    print(f'\n다른 상호가 연결돼 폐업 판정에서 제외한 곳 {len(wrong)}곳')
+    for n, g in wrong: print(f'  · {n}  →  {g}')
 if gone: print(f'\n구글에서 응답이 없던 곳 {len(gone)}곳 (키 문제일 수 있음): {gone[:8]}')
 
 if APPLY and shut:
     for p in P:
         r = res.get(p['n'])
-        if not r: continue
+        if not r or not same_name(p['n'], r[1]): continue
         if r[0] == 'CLOSED_PERMANENTLY':
             p['closed'] = True; p['closedWhy'] = '구글에서 폐업으로 확인'
         elif r[0] == 'CLOSED_TEMPORARILY':
