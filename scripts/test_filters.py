@@ -101,6 +101,18 @@ if so:
 rb = [p for p in live if '래인보우' in p['n']]
 check('래인보우가 5만원 이상이다', bool(rb) and rb[0].get('budget') == 5)
 
+food_cats = {'한식','중식','일식','분식','양식','고기','술집','카페','디저트'}
+missing_budget = [p['n'] for p in live if food_cats & set(p.get('cats') or []) and not p.get('budget')]
+check('음식점 가격대가 비어 있지 않다', not missing_budget, ' · '.join(missing_budget))
+
+room_words = ('룸 있는', '개별룸', '단체룸', '룸이 있어')
+bad_room_copy = [p['n'] for p in live
+                 if (p.get('roomInfo') or {}).get('verified') is not True
+                 and any(w in str(p.get('v') or '') for w in room_words)]
+check('룸 미확인 매장을 소개문에서 확정하지 않는다', not bad_room_copy, ' · '.join(bad_room_copy))
+sparrow = next((p for p in live if p['n'] == '참새집'), {})
+check('참새집에 불량참새 구글 정보가 연결되지 않는다', sparrow.get('gname') != '불량참새')
+
 print('\n=== 가격 이상 자동 검사 ===')
 odd = []
 for p in live:

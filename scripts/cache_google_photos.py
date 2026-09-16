@@ -9,6 +9,7 @@ import json, re, os, io, sys, subprocess, datetime, concurrent.futures as cf
 from PIL import Image
 
 DRY = '--dry' in sys.argv
+ONLY = {x for x in sys.argv[1:] if not x.startswith('--')}
 MAXAGE = 25          # 며칠 지난 사진을 다시 받을지 (구글 약관 30일보다 짧게)
 PER_PLACE = 3        # 매장당 받을 장수
 WIDTH = 480          # 저장 크기 (상세 화면 표시 크기에 맞춤)
@@ -27,7 +28,8 @@ def stale(p):
     try: return (today - datetime.date.fromisoformat(d)).days >= MAXAGE
     except Exception: return True
 
-todo = [p for p in P if p.get('gphotos') and not p.get('closed') and stale(p)]
+todo = [p for p in P if p.get('gphotos') and not p.get('closed') and stale(p)
+        and (not ONLY or p.get('n') in ONLY)]
 print(f'구글 사진 있는 매장 중 새로 받을 곳 {len(todo)}곳 (총 {sum(min(PER_PLACE, len(p["gphotos"])) for p in todo)}장)')
 if DRY: raise SystemExit
 
