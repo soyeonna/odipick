@@ -1,0 +1,21 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>오디픽 커버 보내기</title>
+<style>body{font-family:-apple-system,system-ui,sans-serif;padding:24px;background:#F7F8FA;color:#222}.box{background:#fff;border-radius:14px;padding:20px;max-width:420px;margin:40px auto;box-shadow:0 2px 12px rgba(0,0,0,.06)}h1{font-size:20px;margin:0 0 8px}p{margin:6px 0;line-height:1.5}.ok{color:#1a8f4a;font-weight:700}.bad{color:#c0392b}</style></head>
+<body><div class="box"><h1>👑 릴스 커버 보내기</h1><p id="msg">보내는 중…</p><p style="color:#888;font-size:13px">내일 새벽 자동 작업이 이 커버들을 오디픽에 붙여요.</p></div>
+<script>
+(async function(){
+  var SUPA={u:'https://ntmzjsozgxjepwhxsniu.supabase.co',k:'sb_publishable_nrg1ZgAnvhvAODdGHQmN4w_vfzO5_bb'};
+  var msg=document.getElementById('msg');
+  try{
+    var raw=location.hash.slice(1); if(!raw) throw new Error('보낼 내용이 없어요. 인스타 릴스 화면에서 즐겨찾기 버튼을 눌러주세요.');
+    var data=JSON.parse(decodeURIComponent(raw)); var codes=Object.keys(data);
+    var n=0;
+    for(var i=0;i<codes.length;i++){
+      var r=await fetch(SUPA.u+'/rest/v1/recommendation_logs',{method:'POST',headers:{'apikey':SUPA.k,'Authorization':'Bearer '+SUPA.k,'Content-Type':'application/json','Prefer':'return=minimal'},
+        body:JSON.stringify({query:'__cover__',parsed_conditions:{code:codes[i],url:data[codes[i]]},result_count:0,clicked_place:null})});
+      if(r.ok) n++;
+    }
+    msg.innerHTML='<span class="ok">커버 '+n+'개 보냈어요.</span> 이 창은 닫아도 돼요.';
+    history.replaceState(null,'',location.pathname);
+  }catch(e){ msg.innerHTML='<span class="bad">'+e.message+'</span>'; }
+})();
+</script></body></html>
