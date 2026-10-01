@@ -2961,7 +2961,10 @@ document.querySelectorAll('.nb').forEach(function(b){
   b.addEventListener('click',function(){
     var t=b.dataset.sc;
     if(t==='home'){ clearAll(); }   // 홈으로 가면 걸어둔 조건을 모두 비운다
-    if(t==='ai'){ if(nActive()||lastQuery) clearAll(); openWheel('all'); return; }
+    if(t==='ai'){                       // 돌림판은 홈 위에 띄운다 (닫으면 목록이 아니라 홈으로 돌아오게)
+      if(nActive()||lastQuery) clearAll();
+      if(CURSC!=='home') show('home');
+      openWheel('all'); return; }
     show(t);
   });
 });
