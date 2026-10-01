@@ -629,6 +629,7 @@ body.lock{position:fixed;left:0;right:0;width:100%;overflow:hidden}
 </script>
 <script src="js/parse-query.js"></script>
 <script id="reels" type="application/json">{"syncedAt":"2026-10-01T00:00:00","source":"instagram-chrome","items":[
+{"code":"Dd3Q3uEhF2S","hook":"대전역 근처 당일치기 코스 총정리","shop":"원동 대전역 당일치기 코스","desc":"대전여행 · 대전역 → 트래블라운지 → 중앙시장 → 성심당 → 지하상가 → 목척교 포차"},
 {"code":"Dd8bjP7BFam","hook":"현시점 난리난 대흥동 소개팅·데이트 성지","shop":"대흥동 연남","desc":"술집 · 광어소금김밥에 안키모 올려 먹는 이자카야 · 오징어순대 29,000원"},
 {"code":"Dc0T0ttBG1I","hook":"광주에서 난리난 쭈꾸미 대전 상륙","shop":"월평동 김종남쭈꾸미","desc":"한식 · 캡사이신 없이 매운 쭈꾸미볶음 · 쭈꾸미볶음 15,000원"},
 {"code":"DcvLrg1h0YN","hook":"오류시장에 숨겨진 포장마차","shop":"오류동 미로집","desc":"술집 · 하트프렌치토스트와 무뼈닭발 · 무뼈닭발+네모김밥 20,000원"},
@@ -4257,6 +4258,8 @@ var TRIPS=[
  {t:'자연·노포 1박2일',s:'황톳길·대청호·국밥. 걷고 먹는 코스',
   d:[[['11:00','계족산황톳길','맨발로 걷기'],['13:00','오씨칼국수','대전 최고 칼국수'],['15:00','대청호자연생태관','호수 드라이브·산책'],['16:30','명상정원','노을 보기'],['19:00','화로야','월평동 고기 노포'],['21:00','호랑이','둔산동 한잔']],
       [['10:00','뿌리공원','산책·피크닉'],['12:30','광천식당','두부두루치기'],['15:00','엑스포과학공원 한빛탑','한빛탑·엑스포다리'],['17:30','대손관 봉명 본점','봉명동 저녁'],['20:00','키호시','오뎅바에서 마무리']]]},
+ {t:'대전역 당일치기',s:'대전역에 내려 걸어서 도는 코스. 릴스에 올린 그 순서 그대로',
+  d:[[['11:00','신도칼국수 대전역','대전역 앞 웨이팅 칼국수'],['12:30','대전 트래블라운지','짐 맡기고 쉬어 가기'],['14:00','대전중앙시장 야장','시장 구경'],['15:30','성심당','튀김소보로·부추빵'],['17:00','바로그집','중앙로 지하상가 떡볶이'],['19:00','목척교포차','목척교 아래 포장마차에서 마무리']]]},
  {t:'공주픽 데이트 1박2일',s:'대전공주가 다녀온 곳만으로 짠 코스',
   d:[[['11:00','메리캐리','디저트 1위로 시작'],['13:00','왔다떡방','떡 디저트'],['15:00','국립중앙과학관','비 와도 좋은 실내 데이트'],['18:00','파스타바밍','데이트 1위 양식'],['20:30','풍운아','갈마동 이자카야']],
       [['11:00','신성오리주물럭','대전여행 5위'],['14:00','하트티라미수','디저트'],['16:00','유림공원','산책'],['18:30','금수산회센터','제철 1위'],['20:30','또또포차','술집 2위로 마무리']]]}
@@ -4265,10 +4268,11 @@ function openTrips(idx){
   idx=idx||0; var tr=TRIPS[idx];
   var find=function(n){ return P.filter(function(x){ return x.n===n && !x.closed; })[0]; };
   var tabs=TRIPS.map(function(t,k){ return '<button type="button" class="fbtn ttab" data-i="'+k+'" aria-pressed="'+(k===idx)+'">'+E(t.t)+'</button>'; }).join('');
-  var html='<h2 class="dtitle" style="font-size:20px;margin:4px 0 6px">공주가 짠 1박2일</h2>'+
+  var html='<h2 class="dtitle" style="font-size:20px;margin:4px 0 6px">공주가 짠 여행 코스</h2>'+
     '<div class="fbar" style="margin:0 0 8px">'+tabs+'</div><p class="srcline" style="margin:0 0 10px">'+E(tr.s)+'</p>'+
     tr.d.map(function(day,di){
-      return '<div class="dsec" style="margin-top:10px"><h3>'+(di+1)+'일차</h3>'+day.map(function(s){
+      var _dlab = tr.d.length===1 ? '하루 코스' : (di+1)+'일차';
+      return '<div class="dsec" style="margin-top:10px"><h3>'+_dlab+'</h3>'+day.map(function(s){
         var p=find(s[1]); if(!p) return '';
         var im=p.cover?thumbOf(p.cover):(p.gphotos&&p.gphotos.length&&GOOGLE_KEY?gphotoUrl(p.gphotos[0].name,200):null);
         return '<button type="button" class="tleg" data-n="'+E(p.n)+'" style="display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:var(--sub);border:0;border-radius:12px;padding:8px 10px;margin-top:6px">'+
