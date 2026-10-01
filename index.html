@@ -2800,8 +2800,8 @@ function render(){
   }
 }
 
-/* 전체 목록(조건 없음) 상위 4곳 — 소연님이 정한 자리. 5위부터는 점수·날짜 순환 그대로. */
-var TOP_PINS=[/^신성오리주물럭/, /^행운삼겹살/, 'local', /^계인기/];
+/* 전체 목록(조건 없음) 상위 3곳 — 소연님이 정한 자리. 4위부터는 점수·날짜 순환 그대로. */
+var TOP_PINS=[/^신성오리주물럭/, /^행운삼겹살/, 'local'];
 function pinTop(arr){
   var rest=arr.slice(), out=[];
   TOP_PINS.forEach(function(pin){
