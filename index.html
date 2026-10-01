@@ -2716,17 +2716,17 @@ function render(){
     if(A.sit.indexOf('혼밥')>-1) lbl.push('혼밥 근거가 확인된');
     if(A.gu.length) lbl.push(A.gu.join('·'));
     /* 못 알아들어서 빼버린 낱말이 있으면 반드시 말해준다 (오타를 쳐도 맞는 답처럼 보이던 문제) */
-    var courseHint=/코스|당일치기|뚜벅이|하루\s*여행|여행\s*일정/.test(lastQuery||’’) ? ‘<div class="dbox" style="margin:8px 0"><b>대전공주가 짠 코스</b>가 따로 있어요 → <button type="button" class="fc" id="goTripTab">여행 코스 탭 열기</button></div>’ : ‘’;
-    var drop=’’;
+    var courseHint=/코스|당일치기|뚜벅이|하루\s*여행|여행\s*일정/.test(lastQuery||'') ? '<div class="dbox" style="margin:8px 0"><b>대전공주가 짠 코스</b>가 따로 있어요 → <button type="button" class="fc" id="goTripTab">여행 코스 탭 열기</button></div>' : '';
+    var drop='';
     if(DROPPEDQ&&DROPPEDQ.length){
-      drop=’<div style="background:var(--warn-w);border-radius:8px;padding:8px 10px;margin-top:8px;border-left:3px solid var(--warn)">’+
-        ‘<span style="font-size:12px;color:var(--ink2)"><b style="color:var(--warn)">⚠️ 인식 못한 조건</b><br>’+E(DROPPEDQ.join(‘, ‘))+josaEun(DROPPEDQ[DROPPEDQ.length-1])+’ 못 찾아서 빼고 보여드려요</span></div>’;
+      drop='<div style="background:var(--warn-w);border-radius:8px;padding:8px 10px;margin-top:8px;border-left:3px solid var(--warn)">'+
+        '<span style="font-size:12px;color:var(--ink2)"><b style="color:var(--warn)">⚠️ 인식 못한 조건</b><br>'+E(DROPPEDQ.join(', '))+josaEun(DROPPEDQ[DROPPEDQ.length-1])+' 못 찾아서 빼고 보여드려요</span></div>';
     }
-    var spotHint = (!nActive() && PTF!==’play’) ? ‘<div style="color:var(--ink3);font-size:12px;margin-top:4px">💡 공원·미술관은 <button type="button" class="fc" style="padding:0">놀거리 탭</button>에서 보세요</div>’ : ‘’;
+    var spotHint = (!nActive() && PTF!=='play') ? '<div style="color:var(--ink3);font-size:12px;margin-top:4px">💡 공원·미술관은 <button type="button" class="fc" style="padding:0">놀거리 탭</button>에서 보세요</div>' : '';
     rc.innerHTML = (nActive()
-      ? ((lbl.length?lbl.join(‘ · ‘)+’ ‘:’조건에 맞는 ‘)+’<b>’+num+’</b>곳’
-         + ((BUD_UNKNOWN&&BUD_UNKNOWN.length)?’ <span style="color:var(--ink3);font-size:12px">· 가격 모르는 ‘+BUD_UNKNOWN.length+’곳은 대안으로</span>’:’’))
-      : (‘대전 전체 장소 ‘+num+’곳’)) + drop + spotHint + courseHint;
+      ? ((lbl.length?lbl.join(' · ')+' ':'조건에 맞는 ')+'<b>'+num+'</b>곳'
+         + ((BUD_UNKNOWN&&BUD_UNKNOWN.length)?' <span style="color:var(--ink3);font-size:12px">· 가격 모르는 '+BUD_UNKNOWN.length+'곳은 대안으로</span>':''))
+      : ('대전 전체 장소 '+num+'곳')) + drop + spotHint + courseHint;
     var _gt=document.getElementById('goTripTab'); if(_gt) _gt.addEventListener('click',function(){ var b=Array.from(document.querySelectorAll('button')).filter(function(x){ return x.textContent.trim()==='여행 코스'; })[0]; if(b) b.click(); });
     var _sp=rc.querySelectorAll('.fc')[rc.querySelectorAll('.fc').length-1]; /* spotHint의 "놀거리 탭" 버튼 */
     if(spotHint && _sp && _sp.textContent.indexOf('놀거리')>-1) _sp.addEventListener('click',function(){ var b=Array.from(document.querySelectorAll('button')).filter(function(x){ return x.textContent.trim()==='놀거리'; })[0]; if(b) b.click(); }); }
