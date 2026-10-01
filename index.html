@@ -3253,7 +3253,10 @@ function openDetail(p){
     (p.lat&&courseRole(p)?'<button type="button" class="btn s" id="mkCourse" style="width:100%;margin-top:10px">🚶 이 가게로 하루 코스 짜기</button>':'')+
     ((p.gpl&&p.gpl.length)||(p.gphotos&&p.gphotos.length&&GOOGLE_KEY)?'<div class="dsec"><h3>'+((p.spot||p.walk)?'사진':'음식·매장 사진')+'</h3><div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scroll-snap-type:x mandatory">'+
       ((p.gpl&&p.gpl.length)?p.gpl:p.gphotos.slice(0,3)).map(function(x){ var u=(typeof x==='string')?thumbOf(x):gphotoUrl(x.name,480); return u?'<img src="'+u+'" alt="'+E(p.n)+' 사진" loading="lazy" style="height:160px;border-radius:12px;flex:none;object-fit:cover" onerror="this.remove()">':''; }).join('')+
-      '</div><p class="srcline">사진: Google 방문자 · '+E((p.gby&&p.gby.length?p.gby:p.gphotos.slice(0,3).map(function(x){ return x.by; })).filter(Boolean).join(', '))+'</p></div>':'')+
+      '</div>'+(function(){ /* 배포본에는 작성자 정보가 빠져 있다. 없으면 출처 줄을 아예 안 쓴다 */
+         var _by=(p.gby&&p.gby.length?p.gby:(p.gphotos||[]).map(function(x){ return x&&x.by; })).filter(Boolean).slice(0,3);
+         return _by.length ? '<p class="srcline">사진: Google 방문자 · '+E(_by.join(', '))+'</p>' : '<p class="srcline">사진: Google 방문자</p>';
+       })()+'</div>':'')+
     (p.lat&&p.lng?'<div class="dsec" id="rvSec"><h3>위치</h3>'+
       '<div id="dmap" style="position:relative;height:200px;border-radius:12px;overflow:hidden;background:var(--sub)"></div>'+
       '<button type="button" class="btn o" id="rvBtn" style="width:100%;margin-top:8px">가게 앞 로드뷰 보기</button>'+
